@@ -109,7 +109,7 @@ public class Account {
     }
 
     //SETTER
-    public void setPassword(String psw) throws AccountException, NoSuchAlgorithmException, SQLException {
+    protected void setPassword(String psw) throws AccountException, NoSuchAlgorithmException, SQLException {
         checkValidPassword(psw);
         this.hashPsw = hash(psw);
 
@@ -152,7 +152,7 @@ public class Account {
         return saldo;
     }
 
-    public void setSaldo(Double saldo) throws SQLException {
+    protected void setSaldo(Double saldo) throws SQLException {
         this.saldo = saldo;
 
     }

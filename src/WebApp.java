@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.concurrent.TimeoutException;
 
 public class WebApp extends JFrame {
-    private final Insets zero = new Insets(0, 0, 0, 0);
     private final String showPswIconPath = "icons/showpsw.png";
     private final String hidePswIconPath = "icons/hidepsw.png";
     private final String refreshIconPath = "icons/refresh.png";
@@ -60,6 +59,8 @@ public class WebApp extends JFrame {
         UIManager.put("Button.font", new FontUIResource(new Font("Verdana", Font.PLAIN, 15)));
         UIManager.put("TextField.font", new FontUIResource(new Font("Dialog", Font.PLAIN, 14)));
         UIManager.put("PasswordField.font", new FontUIResource(new Font("Dialog", Font.PLAIN, 15)));
+        UIManager.put("Button.margin", new Insets(0, 0, 0, 0));
+
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         try {
@@ -167,7 +168,6 @@ public class WebApp extends JFrame {
         pswLBL.setBounds(userLBL.getX(), userLBL.getY() + userLBL.getHeight() + 5, lblWidth, lblHeight);
         pswFLD.setBounds(pswLBL.getX() + pswLBL.getWidth() + 10, pswLBL.getY(), fldWidth, fldHeight);
         showHideBTN.setBounds(pswFLD.getX() + pswFLD.getWidth() + 5, pswFLD.getY(), BTNHeight, BTNHeight);
-        showHideBTN.setMargin(zero);
 
         loginBTN.setBounds(userLBL.getX(), pswFLD.getY() + 40, 80, fldHeight);
         signupBTN.setBounds(loginBTN.getX() + loginBTN.getWidth() + 10, loginBTN.getY(), BTNWidth, BTNHeight);
@@ -345,7 +345,6 @@ public class WebApp extends JFrame {
         psw2LBL.setBounds(nomeLBL.getX(), psw1LBL.getY() + psw1LBL.getHeight() + 5, lblWidth, lblHeight);
         psw2FLD.setBounds(nomeFLD.getX(), psw2LBL.getY(), fldWidth, fldHeight);
         showHideBTN.setBounds(psw1FLD.getX() + psw1FLD.getWidth() + 5, psw1FLD.getY(), BTNHeight, BTNHeight);
-        showHideBTN.setMargin(zero);
         checkpswLBL.setBounds(showHideBTN.getX() + showHideBTN.getWidth() + 10, psw1FLD.getY(), lblWidth * 2, lblHeight);
         checkpswLBL.setVisible(false);
         checkpswLBL.setForeground(Color.red);
@@ -647,14 +646,6 @@ public class WebApp extends JFrame {
         logoutBTN.setBounds(changePswBTN.getX(), changePswBTN.getY() + changePswBTN.getHeight() + 5, BTNWidth, BTNHeight);
         removeBTN.setBounds(changePswBTN.getX(), logoutBTN.getY() + logoutBTN.getHeight() + 5, BTNWidth, BTNHeight);
 
-        bonificoBTN.setMargin(zero);
-        depositBTN.setMargin(zero);
-        prelievoBTN.setMargin(zero);
-        changePswBTN.setMargin(zero);
-        logoutBTN.setMargin(zero);
-        removeBTN.setMargin(zero);
-        showHideBTN.setMargin(zero);
-        refreshBTN.setMargin(zero);
 
         add(nomeLBL);
         add(nomeFLD);
@@ -770,7 +761,7 @@ public class WebApp extends JFrame {
 //            amount.setAlignmentX(JLabel.RIGHT);
 //            amount.setBorder(BorderFactory.createLineBorder(Color.black));
             amount.setHorizontalAlignment(JLabel.RIGHT);
-            date.setBounds(iconType.getX() + iconType.getWidth() + 10, iconType.getY() + 20, date.getText().length() * 7, 25);
+            date.setBounds(iconType.getX() + iconType.getWidth() + 10, iconType.getY() + 20, 180, 25);
             userFrom.setBounds(date.getX(), iconType.getY(), 230, 25);
             ibanFrom.setBounds(date.getX() + date.getWidth() + 20, date.getY(), 150, 25);
             userDest.setBounds(userFrom.getBounds());
@@ -1031,9 +1022,7 @@ public class WebApp extends JFrame {
         chechNewPswLBL.setBounds(pswLBL.getX(), newPswFLD.getY() + newPswFLD.getHeight() + 5, lblWidth, lblHeight);
         checkNewPswFLD.setBounds(chechNewPswLBL.getX() + chechNewPswLBL.getWidth() + 10, chechNewPswLBL.getY(), fldWidth, fldHeight);
         showHideBTN1.setBounds(newPswFLD.getX() + newPswFLD.getWidth() + 5, newPswFLD.getY(), BTNHeight, BTNHeight);
-        showHideBTN1.setMargin(zero);
         showHideBTN2.setBounds(checkNewPswFLD.getX() + checkNewPswFLD.getWidth() + 5, checkNewPswFLD.getY(), BTNHeight, BTNHeight);
-        showHideBTN2.setMargin(zero);
         checkpswLBL.setBounds(showHideBTN1.getX() + showHideBTN1.getWidth() + 5, newPswFLD.getY(), 100, lblHeight);
         checkpswLBL.setVisible(false);
         checkpswLBL.setForeground(Color.red);
@@ -1255,7 +1244,6 @@ public class WebApp extends JFrame {
         confirmPswLBL.setBounds(pswLBL.getX(), pswFLD.getY() + pswFLD.getHeight() + 5, lblWidth, lblHeight);
         confirmPswFLD.setBounds(confirmPswLBL.getX() + confirmPswLBL.getWidth() + 10, confirmPswLBL.getY(), fldWidth, fldHeight);
         showHideBTN1.setBounds(pswFLD.getX() + pswFLD.getWidth() + 5, pswFLD.getY(), BTNHeight, BTNHeight);
-        showHideBTN1.setMargin(zero);
         showHideBTN2.setBounds(confirmPswFLD.getX() + confirmPswFLD.getWidth() + 5, confirmPswFLD.getY(), BTNHeight, BTNHeight);
         showHideBTN2.setMargin(new Insets(0, 0, 0, 0));
         checkpswLBL.setBounds(showHideBTN1.getX() + showHideBTN1.getWidth() + 5, pswFLD.getY(), 100, lblHeight);
@@ -1579,12 +1567,10 @@ public class WebApp extends JFrame {
         ibanContactFLD.setBounds(nomeLBL.getX() + nomeLBL.getWidth() + 10, cognomeFLD.getY() + cognomeFLD.getHeight() + 5, fldWidth, fldHeight);
 
         prevBTN.setBounds(nomeLBL.getX() + 80, ibanContactFLD.getY() + ibanContactFLD.getHeight() + 20, 40, 40);
-        results.setBounds(prevBTN.getX() + prevBTN.getWidth() + 5, prevBTN.getY()+5, BTNWidth, BTNHeight);
+        results.setBounds(prevBTN.getX() + prevBTN.getWidth() + 5, prevBTN.getY() + 5, BTNWidth, BTNHeight);
         results.setHorizontalAlignment(SwingConstants.CENTER);
         nextBTN.setBounds(results.getX() + results.getWidth() + 5, ibanContactFLD.getY() + ibanContactFLD.getHeight() + 20, 40, 40);
 
-        prevBTN.setMargin(zero);
-        nextBTN.setMargin(zero);
 
         add(searchLBL);
         add(searchFLD);
@@ -1629,7 +1615,7 @@ public class WebApp extends JFrame {
 
         try {
             Image icon = ImageIO.read(new File(nextIconPath));
-            nextBTN.setIcon(new ImageIcon(icon.getScaledInstance(nextBTN.getWidth()-5, nextBTN.getHeight()-5, Image.SCALE_SMOOTH)));
+            nextBTN.setIcon(new ImageIcon(icon.getScaledInstance(nextBTN.getWidth() - 5, nextBTN.getHeight() - 5, Image.SCALE_SMOOTH)));
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -1637,7 +1623,7 @@ public class WebApp extends JFrame {
 
         try {
             Image icon = ImageIO.read(new File(prevIconPath));
-            prevBTN.setIcon(new ImageIcon(icon.getScaledInstance(prevBTN.getWidth()-5, prevBTN.getHeight()-5, Image.SCALE_SMOOTH)));
+            prevBTN.setIcon(new ImageIcon(icon.getScaledInstance(prevBTN.getWidth() - 5, prevBTN.getHeight() - 5, Image.SCALE_SMOOTH)));
 
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -1911,10 +1897,6 @@ public class WebApp extends JFrame {
         logoutBTN.setBounds(balanceBTN.getX() + balanceBTN.getWidth() + 10, balanceBTN.getY(), BTNWidth, BTNHeight);
         homeBTN.setBounds(370, amountLBL.getY(), BTNWidth, BTNHeight);
 
-        depositBTN.setMargin(zero);
-        balanceBTN.setMargin(zero);
-        logoutBTN.setMargin(zero);
-        homeBTN.setMargin(zero);
 
         depositBTN.setFocusable(false);
         balanceBTN.setFocusable(false);
@@ -2057,10 +2039,6 @@ public class WebApp extends JFrame {
         logoutBTN.setBounds(balanceBTN.getX() + balanceBTN.getWidth() + 10, balanceBTN.getY(), BTNWidth, BTNHeight);
         homeBTN.setBounds(370, amountLBL.getY(), BTNWidth, BTNHeight);
 
-        prelievoBTN.setMargin(zero);
-        balanceBTN.setMargin(zero);
-        logoutBTN.setMargin(zero);
-        homeBTN.setMargin(zero);
 
         prelievoBTN.setFocusable(false);
         balanceBTN.setFocusable(false);

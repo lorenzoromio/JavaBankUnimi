@@ -245,7 +245,7 @@ public class Session extends Account {
     }
 
     @Override
-    public void setSaldo(Double saldo) throws SQLException {
+    protected void setSaldo(Double saldo) throws SQLException {
         super.setSaldo(saldo);
         String update = "update accounts set saldo = ? where username = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
@@ -257,7 +257,7 @@ public class Session extends Account {
 
     //
     @Override
-    public void setPassword(String psw) throws NoSuchAlgorithmException, SQLException, AccountException {
+    protected void setPassword(String psw) throws NoSuchAlgorithmException, SQLException, AccountException {
         super.setPassword(psw);
 //        System.out.println("UPDATE PSW ON DATABASE");
         String update = "update accounts set HASHPSW = ? where username = ?";
