@@ -65,6 +65,7 @@ public class WebApp extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         try {
             setIconImage(ImageIO.read(new File(bankIconPath)));
+//            setIconImage(getClass().getClassLoader().getResource(bankIconPath));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -157,6 +158,8 @@ public class WebApp extends JFrame {
 
         try {
             Image icon = ImageIO.read(new File(hidePswIconPath));
+
+
             showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNWidth, BTNHeight, Image.SCALE_SMOOTH)));
 
         } catch (IOException ex) {
