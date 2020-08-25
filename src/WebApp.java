@@ -9,6 +9,7 @@ import java.awt.event.*;
 import java.awt.font.TextAttribute;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -63,12 +64,17 @@ public class WebApp extends JFrame {
 
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        try {
-            setIconImage(ImageIO.read(new File(bankIconPath)));
-//            setIconImage(getClass().getClassLoader().getResource(bankIconPath));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+////            setIconImage(ImageIO.read(new File(bankIconPath)));
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+        URL iconUrl = this.getClass().getResource(bankIconPath);
+        Toolkit tk = this.getToolkit();
+        setIconImage(tk.getImage(iconUrl));
+
+//        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(bankIconPath)));
+
 
         setLayout(null);
 
@@ -204,26 +210,39 @@ public class WebApp extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 pswFLD.setEchoChar('\u0000');  //Password Visibile
-                try {
-                    Image icon = ImageIO.read(new File(showPswIconPath));
-                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNWidth, BTNHeight, Image.SCALE_SMOOTH)));
 
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+//                try {
+////                    Image icon = ImageIO.read(new File(showPswIconPath));
+////                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNWidth, BTNHeight, Image.SCALE_SMOOTH)));
+////                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(bankIconPath)));
+////
+////
+////                } catch (IOException ex) {
+////                    ex.printStackTrace();
+////                }
+
+                URL iconUrl = this.getClass().getResource(showPswIconPath);
+                Toolkit tk = Toolkit.getDefaultToolkit();
+                Image icon = tk.getImage(iconUrl);
+                showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
 
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 pswFLD.setEchoChar('\u2022'); //Dot Echo Char
-                try {
-                    Image icon = ImageIO.read(new File(hidePswIconPath));
-                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNWidth, BTNHeight, Image.SCALE_SMOOTH)));
+//                try {
+//                    Image icon = ImageIO.read(new File(hidePswIconPath));
+//                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNWidth, BTNHeight, Image.SCALE_SMOOTH)));
+//
+//                } catch (IOException ex) {
+//                    ex.printStackTrace();
+//                }
 
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                URL iconUrl = this.getClass().getResource(hidePswIconPath);
+                Toolkit tk = Toolkit.getDefaultToolkit();
+                Image icon = tk.getImage(iconUrl);
+                showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
 
             }
 
@@ -813,13 +832,18 @@ public class WebApp extends JFrame {
             ex.printStackTrace();
         }
 
-        try {
-            Image icon = ImageIO.read(new File(refreshIconPath));
-            refreshBTN.setIcon(new ImageIcon(icon.getScaledInstance(refreshBTN.getWidth(), refreshBTN.getHeight(), Image.SCALE_SMOOTH)));
+//        try {
+//            Image icon = ImageIO.read(new File(refreshIconPath));
+//            refreshBTN.setIcon(new ImageIcon(icon.getScaledInstance(refreshBTN.getWidth(), refreshBTN.getHeight(), Image.SCALE_SMOOTH)));
+//
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        URL iconUrl = this.getClass().getResource(refreshIconPath);
+        System.out.println(iconUrl);
+        Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
+        refreshBTN.setIcon(new ImageIcon(icon.getScaledInstance(refreshBTN.getWidth(), refreshBTN.getHeight(), Image.SCALE_SMOOTH)));
 
 
         incomeFLD.setText(€.format(session.getIncomes()));
