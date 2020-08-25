@@ -1081,8 +1081,7 @@ public class WebApp extends JFrame {
 //        showHideBTN1.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN1.getWidth(), showHideBTN1.getHeight(), Image.SCALE_SMOOTH)));
 //        showHideBTN2.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN2.getWidth(), showHideBTN2.getHeight(), Image.SCALE_SMOOTH)));
 
-        setButtonIcon(showHideBTN1, hidePswIconPath);
-        setButtonIcon(showHideBTN2, hidePswIconPath);
+
 
 
         pswLBL.setBounds(10, 20, lblWidth, lblHeight);
@@ -1100,6 +1099,9 @@ public class WebApp extends JFrame {
         saveBTN.setBounds(pswLBL.getX(), 150, BTNWidth, BTNHeight);
         backBTN.setBounds(saveBTN.getX() + saveBTN.getWidth() + 10, saveBTN.getY(), BTNWidth, BTNHeight);
         logoutBTN.setBounds(backBTN.getX() + backBTN.getWidth() + 10, backBTN.getY(), BTNWidth, BTNHeight);
+
+        setButtonIcon(showHideBTN1, hidePswIconPath);
+        setButtonIcon(showHideBTN2, hidePswIconPath);
 
 
         newPswFLD.addKeyListener(new KeyListener() {
@@ -1134,26 +1136,14 @@ public class WebApp extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 newPswFLD.setEchoChar('\u0000');  //Password Visibile
-                try {
-                    Image icon = ImageIO.read(new File(showPswIconPath));
-                    showHideBTN1.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                setButtonIcon(showHideBTN2, showPswIconPath);
 
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 newPswFLD.setEchoChar('\u2022'); //Dot Echo Char
-                try {
-                    Image icon = ImageIO.read(new File(hidePswIconPath));
-                    showHideBTN1.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                setButtonIcon(showHideBTN2, hidePswIconPath);
 
             }
 
