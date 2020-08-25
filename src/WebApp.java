@@ -1237,7 +1237,7 @@ public class WebApp extends JFrame {
         JLabel confirmPswLBL = new JLabel("Confirm");
         JPasswordField confirmPswFLD = new JPasswordField();
 
-        JLabel checkpswLBL = new JLabel("Invalid Password");
+        JLabel checkpswLBL = new JLabel("Incorrect Passwords");
         JButton showHideBTN1 = new JButton();
         JButton showHideBTN2 = new JButton();
 
@@ -1255,8 +1255,7 @@ public class WebApp extends JFrame {
 //            e.printStackTrace();
 //        }
 //
-        setButtonIcon(showHideBTN1, hidePswIconPath);
-        setButtonIcon(showHideBTN2, hidePswIconPath);
+
 
 
         pswLBL.setBounds(10, 20, lblWidth, lblHeight);
@@ -1266,13 +1265,29 @@ public class WebApp extends JFrame {
         showHideBTN1.setBounds(pswFLD.getX() + pswFLD.getWidth() + 5, pswFLD.getY(), BTNHeight, BTNHeight);
         showHideBTN2.setBounds(confirmPswFLD.getX() + confirmPswFLD.getWidth() + 5, confirmPswFLD.getY(), BTNHeight, BTNHeight);
         showHideBTN2.setMargin(new Insets(0, 0, 0, 0));
-        checkpswLBL.setBounds(showHideBTN1.getX() + showHideBTN1.getWidth() + 5, pswFLD.getY(), 100, lblHeight);
+        checkpswLBL.setBounds(showHideBTN1.getX() + showHideBTN1.getWidth() + 5, pswFLD.getY(), 200, lblHeight);
         checkpswLBL.setVisible(false);
         checkpswLBL.setForeground(Color.red);
+
+        setButtonIcon(showHideBTN1, hidePswIconPath);
+        setButtonIcon(showHideBTN2, hidePswIconPath);
 
         deleteBTN.setBounds(pswLBL.getX(), confirmPswFLD.getY() + confirmPswFLD.getHeight() + 10, BTNWidth, BTNHeight);
         backBTN.setBounds(deleteBTN.getX() + deleteBTN.getWidth() + 10, deleteBTN.getY(), BTNWidth, BTNHeight);
         logoutBTN.setBounds(backBTN.getX() + backBTN.getWidth() + 10, backBTN.getY(), BTNWidth, BTNHeight);
+
+        add(pswLBL);
+        add(pswFLD);
+        add(pswLBL);
+        add(pswFLD);
+        add(confirmPswLBL);
+        add(confirmPswFLD);
+        add(logoutBTN);
+        add(backBTN);
+        add(deleteBTN);
+//        add(showHideBTN1);
+//        add(showHideBTN2);
+        add(checkpswLBL);
 
 
 //        pswFLD.addKeyListener(new KeyListener() {
@@ -1316,6 +1331,7 @@ public class WebApp extends JFrame {
                     confirmPswFLD.setBorder(new JPasswordField().getBorder());
                     pswFLD.setForeground(new JPasswordField().getForeground());
                     pswFLD.setBorder(new JPasswordField().getBorder());
+                    checkpswLBL.setVisible(false);
                 } else {
                     confirmPswFLD.setForeground(Color.red);
                     confirmPswFLD.setBorder(BorderFactory.createLineBorder(Color.red));
@@ -1323,6 +1339,7 @@ public class WebApp extends JFrame {
                     if (pswFLD.getPassword().length == confirmPswFLD.getPassword().length) {
                         pswFLD.setForeground(Color.red);
                         pswFLD.setBorder(BorderFactory.createLineBorder(Color.red));
+                        checkpswLBL.setVisible(true);
                     }
                 }
             }
@@ -1469,19 +1486,6 @@ public class WebApp extends JFrame {
             loginPage();
         });
 
-
-        add(pswLBL);
-        add(pswFLD);
-        add(pswLBL);
-        add(pswFLD);
-        add(confirmPswLBL);
-        add(confirmPswFLD);
-        add(logoutBTN);
-        add(backBTN);
-        add(deleteBTN);
-//        add(showHideBTN1);
-//        add(showHideBTN2);
-        add(checkpswLBL);
 
         setVisible(true);
 
