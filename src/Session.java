@@ -82,7 +82,7 @@ public class Session extends Account {
             throw new AccountNotFoundException("Impossibile eseguire un bonifico \nverso il proprio conto corrente.\nSpecificare un IBAN valido.");
 
 
-        String checkIfToExist = "select * from accounts where IBAN = ?";
+        String checkIfToExist = "select ID from accounts where IBAN = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(checkIfToExist);
         prepStmt.setString(1, iban);
         ResultSet rs = prepStmt.executeQuery();
@@ -151,7 +151,7 @@ public class Session extends Account {
         updateSessionCreation();
         ArrayList<Account> accountsList = new ArrayList<>();
 
-        String showContacts = "select * from accounts order by cognome";
+        String showContacts = "select username from accounts order by cognome";
         try {
             ResultSet rs = DBConnect.getConnection().createStatement().executeQuery(showContacts);
             while (rs.next()) {
