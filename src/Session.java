@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Session extends Account {
-    private final long duration = 60;
+    private final long duration = 60 * 3;
     private Instant sessionCreation;
     private ArrayList<Transaction> transactions;
 
