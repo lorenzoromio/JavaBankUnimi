@@ -1892,7 +1892,7 @@ public class WebApp extends JFrame {
         });
 
         logoutBTN.addActionListener((ActionEvent e) -> {
-            System.out.println("Logout BTN pressed");
+//            System.out.println("Logout BTN pressed");
 
             loginPage();
         });
@@ -2111,7 +2111,7 @@ public class WebApp extends JFrame {
         });
 
         logoutBTN.addActionListener((ActionEvent e) -> {
-            System.out.println("Logout BTN pressed");
+//            System.out.println("Logout BTN pressed");
             loginPage();
         });
 
@@ -2188,7 +2188,7 @@ public class WebApp extends JFrame {
     public void setButtonIcon(JButton button, String iconPath) {
 
         URL iconUrl = this.getClass().getResource(iconPath);
-        System.out.println(iconUrl.toString());
+//        System.out.println(iconUrl.toString());
         Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
         button.setIcon(new ImageIcon(icon.getScaledInstance(button.getWidth(), button.getHeight(), Image.SCALE_SMOOTH)));
 
@@ -2205,7 +2205,7 @@ public class WebApp extends JFrame {
     public void setLabelIcon(JLabel label, String iconPath) {
 
         URL iconUrl = this.getClass().getResource(iconPath);
-        System.out.println(iconUrl.toString());
+//        System.out.println(iconUrl.toString());
         Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
         label.setIcon(new ImageIcon(icon.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH)));
 

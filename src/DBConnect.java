@@ -15,7 +15,7 @@ public class DBConnect {
         if (connection == null || connection.isClosed()) try {
             Class.forName(driver);
             connection = DriverManager.getConnection(DBUrl, user, psw);
-            System.out.println("create new connection to database");
+//            System.out.println("create new connection to database");
 
         } catch (ClassNotFoundException ex) {
             System.out.println("Error on create Load JDBC Driver: " + ex);
@@ -29,7 +29,7 @@ public class DBConnect {
     public static void close() throws SQLException {
         if (connection != null && !connection.isClosed())
             connection.close();
-        System.out.println("Call DBConnect.close()");
+//        System.out.println("Call DBConnect.close()");
         connection = null;
         System.out.println(connection);
 
