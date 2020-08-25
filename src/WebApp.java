@@ -298,17 +298,7 @@ public class WebApp extends JFrame {
             }
         });
 
-        JButton erase = new JButton("Erase");
-        erase.setName("Erase");
-        erase.setBounds(width / 2, height / 2, BTNWidth, BTNHeight);
-        add(erase);
-        erase.addActionListener(e -> {
-            try {
-                DBConnect.eraseBalance();
-            } catch (SQLException ex) {
-                SQLExceptionOccurred(ex);
-            }
-        });
+
 
 
     }
@@ -369,6 +359,7 @@ public class WebApp extends JFrame {
         backBTN.setFocusable(false);
         exitBTN.setFocusable(false);
         showHideBTN.setFocusable(false);
+
 
         SwingUtilities.invokeLater(nomeFLD::requestFocus);
 
@@ -649,6 +640,7 @@ public class WebApp extends JFrame {
         JButton logoutBTN = new JButton("Logout");
         JButton removeBTN = new JButton("Remove");
 
+
         nomeFLD.setEditable(false);
         cognomeFLD.setEditable(false);
         ibanFLD.setEditable(false);
@@ -678,6 +670,23 @@ public class WebApp extends JFrame {
         changePswBTN.setBounds(bonificoBTN.getX() + bonificoBTN.getWidth() + 20, bonificoBTN.getY(), BTNWidth, BTNHeight);
         logoutBTN.setBounds(changePswBTN.getX(), changePswBTN.getY() + changePswBTN.getHeight() + 5, BTNWidth, BTNHeight);
         removeBTN.setBounds(changePswBTN.getX(), logoutBTN.getY() + logoutBTN.getHeight() + 5, BTNWidth, BTNHeight);
+
+        if (session.getUsername().equals("lorenzo.romio")) {
+            JButton erase = new JButton("Erase");
+            erase.setName("Erase");
+            erase.setBounds(removeBTN.getX(), removeBTN.getY() + removeBTN.getHeight() + 15, BTNWidth, BTNHeight);
+            add(erase);
+            erase.addActionListener(e -> {
+                try {
+                    DBConnect.eraseBalance();
+                    home();
+                } catch (SQLException ex) {
+                    SQLExceptionOccurred(ex);
+                } catch (TimeoutException ex) {
+                    sessionExpired();
+                }
+            });
+        }
 
 
         add(nomeLBL);

@@ -33,12 +33,23 @@ public class Account {
         this.timestamp = String.valueOf(new Date().getTime());
         this.salt = timestamp.concat(random(10));
         setPassword(psw);
+        StringBuilder sb = new StringBuilder();
+        for (String x : nome.split(" "))
+            sb.append(x.substring(0, 1).toUpperCase() + x.substring(1));
+        this.nome = sb.toString();
 
-        this.nome = nome.substring(0, 1).toUpperCase() + nome.substring(1);
-        this.cognome = cognome.substring(0, 1).toUpperCase() + cognome.substring(1);
-        this.username = this.nome.toLowerCase() + "." + this.cognome.toLowerCase();
-        this.num_conto = random(3);
-        this.iban = "IT" + Bank.getAbi() + Bank.getCab() + this.num_conto;
+        sb = new StringBuilder();
+        for (String x : cognome.split(" "))
+            sb.append(x.substring(0, 1).toUpperCase() + x.substring(1));
+        this.cognome = sb.toString();
+
+//        this.nome = nome.substring(0, 1).toUpperCase() + nome.substring(1);
+
+//        this.cognome = cognome.substring(0, 1).toUpperCase() + cognome.substring(1);
+        this.cognome =
+                this.username = this.nome.toLowerCase().replace(" ", "") + "." + this.cognome.toLowerCase().replace(" ", "");
+        this.num_conto = random(7);
+        this.iban = "IT" + Bank.getAbi() + "F" + Bank.getCab() + this.num_conto;
         this.saldo = 0.0;
 
     }
