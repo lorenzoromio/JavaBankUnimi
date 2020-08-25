@@ -923,14 +923,6 @@ public class WebApp extends JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-//                balanceFLD.setEchoChar('\u0000');  //Password Visibile
-//                try {
-//                    Image icon = ImageIO.read(new File(showpswpath));
-//                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNHeight, BTNHeight, Image.SCALE_SMOOTH)));
-//
-//                } catch (IOException ex) {
-//                    ex.printStackTrace();
-//                }
 
             }
 
@@ -965,10 +957,6 @@ public class WebApp extends JFrame {
         refreshBTN.addActionListener((ActionEvent e) -> {
 
             try {
-//                incomeFLD.setText(€.format(session.getIncomes()));
-//                outcomeFLD.setText(€.format(session.getOutcomes()));
-//                balanceFLD.setText(€.format(session.getSaldo()));
-
                 home();
             } catch (TimeoutException ex) {
                 sessionExpired();
@@ -1010,17 +998,6 @@ public class WebApp extends JFrame {
             }
 
         });
-
-//        backBTN.addActionListener((ActionEvent e) -> {
-//            System.out.println("Back BTN pressed");
-//
-//            new LoginPage;
-//        });
-//
-//        exitBTN.addActionListener((ActionEvent e) -> {
-//            System.out.println("Exit BTN pressed");
-//            dispose();
-//        });
 
         logoutBTN.addActionListener((ActionEvent e) -> {
             System.out.println("Exit BTN pressed");
@@ -1075,14 +1052,6 @@ public class WebApp extends JFrame {
 //            e.printStackTrace();
 //        }
 
-//        URL iconUrl = this.getClass().getResource(hidePswIconPath);
-//        System.out.println(iconUrl.toString());
-//        Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-//        showHideBTN1.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN1.getWidth(), showHideBTN1.getHeight(), Image.SCALE_SMOOTH)));
-//        showHideBTN2.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN2.getWidth(), showHideBTN2.getHeight(), Image.SCALE_SMOOTH)));
-
-
-
 
         pswLBL.setBounds(10, 20, lblWidth, lblHeight);
         pswFLD.setBounds(pswLBL.getX() + pswLBL.getWidth() + 10, pswLBL.getY(), fldWidth, fldHeight);
@@ -1102,7 +1071,6 @@ public class WebApp extends JFrame {
 
         setButtonIcon(showHideBTN1, hidePswIconPath);
         setButtonIcon(showHideBTN2, hidePswIconPath);
-
 
         newPswFLD.addKeyListener(new KeyListener() {
             @Override
@@ -1167,26 +1135,15 @@ public class WebApp extends JFrame {
             @Override
             public void mousePressed(MouseEvent e) {
                 checkNewPswFLD.setEchoChar('\u0000');  //Password Visibile
-                try {
-                    Image icon = ImageIO.read(new File(showPswIconPath));
-                    showHideBTN2.setIcon(new ImageIcon(icon.getScaledInstance(BTNHeight, BTNHeight, Image.SCALE_SMOOTH)));
-
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-
+                setButtonIcon(showHideBTN2, showPswIconPath);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 checkNewPswFLD.setEchoChar('\u2022'); //Dot Echo Char
-                try {
-                    Image icon = ImageIO.read(new File(hidePswIconPath));
-                    showHideBTN2.setIcon(new ImageIcon(icon.getScaledInstance(BTNHeight, BTNHeight, Image.SCALE_SMOOTH)));
 
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
+                setButtonIcon(showHideBTN2, hidePswIconPath);
+
 
             }
 
@@ -1289,14 +1246,17 @@ public class WebApp extends JFrame {
         JButton logoutBTN = new JButton("Logout");
         getRootPane().setDefaultButton(deleteBTN);
 
-        try {
-            Image icon = ImageIO.read(new File(hidePswIconPath));
-            showHideBTN1.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-            showHideBTN2.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Image icon = ImageIO.read(new File(hidePswIconPath));
+//            showHideBTN1.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
+//            showHideBTN2.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+        setButtonIcon(showHideBTN1, hidePswIconPath);
+        setButtonIcon(showHideBTN2, hidePswIconPath);
 
 
         pswLBL.setBounds(10, 20, lblWidth, lblHeight);
