@@ -41,17 +41,16 @@ public class Account {
             sb.append(x.substring(0, 1).toUpperCase() + x.substring(1));
         this.nome = sb.toString();
 
-        sb = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
         for (String x : cognome.split(" "))
-            sb.append(x.substring(0, 1).toUpperCase() + x.substring(1));
-        this.cognome = sb.toString();
+            sb2.append(x.substring(0, 1).toUpperCase() + x.substring(1));
+        this.cognome = sb2.toString();
 
 
 //        this.nome = nome.substring(0, 1).toUpperCase() + nome.substring(1);
 
 //        this.cognome = cognome.substring(0, 1).toUpperCase() + cognome.substring(1);
-        this.cognome =
-                this.username = this.nome.toLowerCase().replace(" ", "") + "." + this.cognome.toLowerCase().replace(" ", "");
+        this.username = this.nome.toLowerCase().replace(" ", "") + "." + this.cognome.toLowerCase().replace(" ", "");
         this.num_conto = random(7);
         this.iban = "IT" + Bank.getAbi() + "F" + Bank.getCab() + this.num_conto;
         this.saldo = 0.0;
