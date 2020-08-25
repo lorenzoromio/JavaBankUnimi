@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
+ */
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

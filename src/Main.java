@@ -1,5 +1,13 @@
+
+
+/*
+ * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
+ */
+
 public class Main {
-    public static void main(String[] args)   {
+    public static void main(String[] args) {
+
+
 //        DBConnect.populateDB();
 
 //            DBConnect.deleteAll();

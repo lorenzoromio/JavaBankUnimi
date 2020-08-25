@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
+ */
+
 import javax.security.auth.login.AccountException;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.sasl.AuthenticationException;

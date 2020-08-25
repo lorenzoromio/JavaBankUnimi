@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
+ */
+
 import java.sql.*;
 
 public class DBConnect {
