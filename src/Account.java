@@ -33,6 +33,9 @@ public class Account {
         this.timestamp = String.valueOf(new Date().getTime());
         this.salt = timestamp.concat(random(10));
         setPassword(psw);
+
+        //TODO sistemare sta parte
+
         StringBuilder sb = new StringBuilder();
         for (String x : nome.split(" "))
             sb.append(x.substring(0, 1).toUpperCase() + x.substring(1));
@@ -42,6 +45,7 @@ public class Account {
         for (String x : cognome.split(" "))
             sb.append(x.substring(0, 1).toUpperCase() + x.substring(1));
         this.cognome = sb.toString();
+
 
 //        this.nome = nome.substring(0, 1).toUpperCase() + nome.substring(1);
 
