@@ -38,8 +38,12 @@ public class Transaction {
 
     private String setUsername(String iban) throws SQLException {
         DBConnect db = new DBConnect();
-        String query = "select username from accounts where iban = ?";
-        PreparedStatement prepStmt = db.getConnection().prepareStatement(query);
+
+        String query = "select username\n" +
+                "from accounts\n" +
+                "where iban = ?";
+
+        PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
         prepStmt.setString(1, iban);
         ResultSet rs = prepStmt.executeQuery();
         String result = null;
@@ -52,8 +56,12 @@ public class Transaction {
     }
 
     public void push() throws SQLException {
-        try {//
-            String query = "INSERT INTO `transaction` (`TYPE`, `DATE`, `IBAN_FROM`,`USERNAME_FROM`, `IBAN_DEST`,`USERNAME_DEST`, `AMOUNT`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+//            String query = "INSERT INTO `transaction` (`TYPE`, `DATE`, `IBAN_FROM`, `USERNAME_FROM`, `IBAN_DEST`, `USERNAME_DEST`, `AMOUNT`)\n" +
+//                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+            String query = "INSERT INTO transaction (TYPE, DATE, IBAN_FROM, USERNAME_FROM, IBAN_DEST, USERNAME_DEST, AMOUNT)\n" +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
             PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
             prepStmt.setString(1, this.type);
             prepStmt.setString(2, String.valueOf(this.date.getTime()));
