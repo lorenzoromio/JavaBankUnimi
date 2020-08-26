@@ -717,32 +717,40 @@ public class WebApp extends JFrame {
 
         int num = (transactions != null) ? transactions.size() : 0;
 
-        JTextArea textArea = new JTextArea((int) (num * 3.8), 1);
+        JTextArea textArea = new JTextArea((int) (num * 3.8 + 1), 1);
 
         textArea.setEnabled(false);
         textArea.setBackground(Color.gray.brighter());
 
         JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVisible(num != 0);
-
         scrollPane.setBounds(outcomeLBL.getX(), outcomeLBL.getY() + outcomeLBL.getHeight() + 20, 565, 310);
         add(scrollPane);
 
         Locale.setDefault(Locale.ITALIAN);
 
         String iconpath = null;
+        Transaction x;
+        JLabel iconType;
+        JLabel type;
+        JLabel date;
+        JLabel ibanFrom;
+        JLabel ibanDest;
+        JLabel userFrom;
+        JLabel userDest;
+        JLabel amount;
+        String sgn = "";
 
         for (int i = 0; i < num; i++) {
-            Transaction x = transactions.get(i);
-            JLabel iconType = new JLabel();
-            JLabel type = new JLabel(x.getType().toUpperCase());
-            JLabel date = new JLabel();
-            JLabel ibanFrom = new JLabel();
-            JLabel ibanDest = new JLabel();
-            JLabel userFrom = new JLabel();
-            JLabel userDest = new JLabel();
-            JLabel amount = new JLabel();
-            String sgn = "";
+            x = transactions.get(i);
+            iconType = new JLabel();
+            type = new JLabel(x.getType().toUpperCase());
+            date = new JLabel();
+            ibanFrom = new JLabel();
+            ibanDest = new JLabel();
+            userFrom = new JLabel();
+            userDest = new JLabel();
+            amount = new JLabel();
 
 
             if (x.getType().equals("bonifico")) {
@@ -755,9 +763,7 @@ public class WebApp extends JFrame {
                     userDest.setText("BONIFICO ► " + x.getUsernameDest().toUpperCase().replace(".", " "));
                     textArea.add(ibanDest);
                     textArea.add(userDest);
-                }
-
-                if (x.getIbanDest().equals(session.getIban())) {
+                } else {
                     iconpath = bonificoInIconPath;
                     sgn = "+ ";
                     amount.setForeground(Color.green.darker());
@@ -783,9 +789,7 @@ public class WebApp extends JFrame {
                         break;
                     default:
                         break;
-
                 }
-
             }
 
             amount.setText(sgn + euro.format(x.getAmount()));
@@ -795,21 +799,21 @@ public class WebApp extends JFrame {
 //            userFrom.setText(x.getUsernameFrom());
 //            userDest.setText(x.getUsernameDest());
 
-            iconType.setBounds(10, 10 + 60 * i, 40, 40);
+            iconType.setBounds(5, 5 + 60 * i, 50, 50);
             iconType.setForeground(Color.red);
+//            iconType.setBorder(BorderFactory.createLineBorder(Color.black)); //TODO REMOVE BORDER
             amount.setBounds(390, iconType.getY(), 150, 25);
 //            amount.setAlignmentX(JLabel.RIGHT);
 //            amount.setBorder(BorderFactory.createLineBorder(Color.black));
             amount.setHorizontalAlignment(JLabel.RIGHT);
-            date.setBounds(iconType.getX() + iconType.getWidth() + 10, iconType.getY() + 20, 180, 25);
-            userFrom.setBounds(date.getX(), iconType.getY(), 230, 25);
+            date.setBounds(iconType.getX() + iconType.getWidth() + 10, iconType.getY() + 25, 180, 25);
+            userFrom.setBounds(date.getX(), iconType.getY() + 5, 500, 25);
             ibanFrom.setBounds(date.getX() + date.getWidth() + 20, date.getY(), 150, 25);
             userDest.setBounds(userFrom.getBounds());
             ibanDest.setBounds(ibanFrom.getBounds());
             type.setBounds(userFrom.getBounds());
 //            ibanFrom.setBounds(date.getX(),type.getY(),150,25);
 //            ibanFrom.setBounds(date.getX(),type.getY(),150,25);
-
 
 //            try {
 //                Image icon = ImageIO.read(new File(iconpath));
@@ -825,19 +829,16 @@ public class WebApp extends JFrame {
 //            amount.setEditable(false);
 //            date.setEditable(false);
 
-
             amount.setFont(new Font(amount.getFont().getName(), Font.BOLD, 20));
             textArea.add(iconType);
             textArea.add(amount);
             textArea.add(date);
-//
 
             JLabel line = new JLabel();
             line.setBorder(BorderFactory.createLineBorder(Color.black));
-            line.setBounds(0, iconType.getY() - 11, width, 1);
+            line.setBounds(0, iconType.getY() + iconType.getHeight() + 5, width, 1);
             textArea.add(line);
         }
-
 
 //        try {
 //            Image icon = ImageIO.read(new File(hidePswIconPath));
@@ -854,7 +855,6 @@ public class WebApp extends JFrame {
 
         setButtonIcon(showHideBTN, showPswIconPath);
 
-
 //        try {
 //            Image icon = ImageIO.read(new File(refreshIconPath));
 //            refreshBTN.setIcon(new ImageIcon(icon.getScaledInstance(refreshBTN.getWidth(), refreshBTN.getHeight(), Image.SCALE_SMOOTH)));
@@ -870,12 +870,8 @@ public class WebApp extends JFrame {
 
         setButtonIcon(refreshBTN, refreshIconPath);
 
-
         incomeFLD.setText(euro.format(session.getIncomes()));
         outcomeFLD.setText(euro.format(session.getOutcomes()));
-
-
-        setVisible(true);
 
         showHideBTN.addMouseListener(new MouseListener() {
             @Override
@@ -923,6 +919,7 @@ public class WebApp extends JFrame {
 //                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
 
                     setButtonIcon(showHideBTN, showPswIconPath);
+                    setVisible(true);
 
 
                 }
