@@ -38,18 +38,17 @@ public class Account {
 
         StringBuilder sb = new StringBuilder();
         for (String x : nome.split(" "))
-            sb.append(x.substring(0, 1).toUpperCase() + x.substring(1));
+            sb.append(x.substring(0, 1).toUpperCase() + x.substring(1) + " ");
         this.nome = sb.toString();
 
         StringBuilder sb2 = new StringBuilder();
         for (String x : cognome.split(" "))
-            sb2.append(x.substring(0, 1).toUpperCase() + x.substring(1));
+            sb2.append(x.substring(0, 1).toUpperCase() + x.substring(1) + " ");
         this.cognome = sb2.toString();
 
-
 //        this.nome = nome.substring(0, 1).toUpperCase() + nome.substring(1);
-
 //        this.cognome = cognome.substring(0, 1).toUpperCase() + cognome.substring(1);
+
         this.username = this.nome.toLowerCase().replace(" ", "") + "." + this.cognome.toLowerCase().replace(" ", "");
         this.num_conto = random(7);
         this.iban = "IT" + Bank.getAbi() + "F" + Bank.getCab() + this.num_conto;
