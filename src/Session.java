@@ -151,56 +151,92 @@ public class Session extends Account {
     }
 
     public ArrayList<Account> showContacts() throws TimeoutException, SQLException {
-
         updateSessionCreation();
-        ArrayList<Account> accountsList = new ArrayList<>();
 
-        String showContacts = "select username from accounts order by cognome";
+        ArrayList<Account> accountsList = new ArrayList<>();
+        String showContacts = "select username from accounts where username <> ? order by cognome";
         try {
-            ResultSet rs = DBConnect.getConnection().createStatement().executeQuery(showContacts);
+
+            PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(showContacts);
+            prepStmt.setString(1, getUsername());
+            ResultSet rs = prepStmt.executeQuery();
+            Instant check = Instant.now();
             while (rs.next()) {
                 String username = rs.getString("USERNAME");
-                if (!username.equals(getUsername())) {
-                    accountsList.add(new Account(username));
-                }
+                accountsList.add(new Account(username));
             }
+            System.out.println("ShowContacts :" + ChronoUnit.MILLIS.between(check, Instant.now()) + "ms for");
 
         } catch (AccountNotFoundException e) {
 //           IGNORE, EXCEPTION IMPOSSIBILE
         }
 
+
         return accountsList;
 
     }
+
+//    public ArrayList<Transaction> showTransactions() throws TimeoutException, SQLException {
+//
+//        updateSessionCreation();
+//        ArrayList<Transaction> transactionsList = new ArrayList<>();
+//        String showTransactions = "select * from transaction order by ID desc";
+//        ResultSet rs = DBConnect.getConnection().createStatement().executeQuery(showTransactions);
+//        Instant check = Instant.now();
+//        while (rs.next()) {
+//            String ibanFrom = rs.getString("IBAN_FROM");
+//            String ibanDest = rs.getString("IBAN_DEST");
+//            Date date = new Date(Long.parseLong(rs.getString("DATE")));
+//////            System.out.println(date.getTime());
+//////            System.out.println(new Date(date.getTime()));
+//
+//            if (getIban().equals(ibanFrom) || getIban().equals(ibanDest)) {
+//                Double amount = rs.getDouble("AMOUNT");
+//                String type = rs.getString("TYPE");
+//
+//                if (type.equals("bonifico")) {
+//                    transactionsList.add(new Transaction(ibanFrom, ibanDest, amount, date));
+//                } else {
+//                    transactionsList.add(new Transaction(ibanFrom, amount, type, date));
+//                }
+//            }
+//        }
+//        System.out.println("ShowTransaction :" + ChronoUnit.MILLIS.between(check, Instant.now()) + "ms");
+//        transactions = transactionsList;
+//
+//        return transactionsList;
+//
+//
+//    }
+
 
     public ArrayList<Transaction> showTransactions() throws TimeoutException, SQLException {
 
         updateSessionCreation();
         ArrayList<Transaction> transactionsList = new ArrayList<>();
-        String showTransactions = "select * from transaction order by ID desc";
-        ResultSet rs = DBConnect.getConnection().createStatement().executeQuery(showTransactions);
+
+        String showTransactions = "select * from transaction where ? IN ( IBAN_FROM, IBAN_DEST ) order by ID desc ";
+        PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(showTransactions);
+        prepStmt.setString(1, getIban());
+        ResultSet rs = prepStmt.executeQuery();
 
         while (rs.next()) {
             String ibanFrom = rs.getString("IBAN_FROM");
-            String ibanDest = rs.getString("IBAN_DEST");
             Date date = new Date(Long.parseLong(rs.getString("DATE")));
-////            System.out.println(date.getTime());
-////            System.out.println(new Date(date.getTime()));
+            Double amount = rs.getDouble("AMOUNT");
+            String type = rs.getString("TYPE");
 
-            if (getIban().equals(ibanFrom) || getIban().equals(ibanDest)) {
-                Double amount = rs.getDouble("AMOUNT");
-                String type = rs.getString("TYPE");
-
-                if (type.equals("bonifico")) {
-                    transactionsList.add(new Transaction(ibanFrom, ibanDest, amount, date));
-                } else {
-                    transactionsList.add(new Transaction(ibanFrom, amount, type, date));
-                }
+            if (type.equals("bonifico")) {
+                String ibanDest = rs.getString("IBAN_DEST");
+                transactionsList.add(new Transaction(ibanFrom, ibanDest, amount, date));
+            } else {
+                transactionsList.add(new Transaction(ibanFrom, amount, type, date));
             }
         }
-        transactions = transactionsList;
-        return transactionsList;
 
+        transactions = transactionsList;
+
+        return transactionsList;
 
     }
 
