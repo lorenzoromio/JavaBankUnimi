@@ -31,8 +31,8 @@ public class WebApp extends JFrame {
     private final String bankIconPath = "icons/bank.png";
     private final String depositoIconPath = "icons/deposito2.png";
     private final String prelievoIconPath = "icons/prelievo2.png";
-    private final String bonificoInIconPath = "icons/bonificoIn.png";
-    private final String bonificoOutIconPath = "icons/bonificoOut.png";
+    private final String bonificoInIconPath = "icons/bonificoIn2.png";
+    private final String bonificoOutIconPath = "icons/bonificoOut2.png";
     private final String nextIconPath = "icons/next.png";
     private final String prevIconPath = "icons/prev.png";
     private final int width = 600;
