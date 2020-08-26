@@ -8,9 +8,6 @@ public class Main {
     public static void main(String[] args) {
 
 
-
-
-
 //        new WebApp("luca.armaroli","kiara4Lif3!");
         new WebApp();
         new WebApp("lorenzo.romio", "Burton86!");

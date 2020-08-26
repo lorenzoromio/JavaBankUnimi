@@ -299,8 +299,6 @@ public class WebApp extends JFrame {
         });
 
 
-
-
     }
 
     private void signupPage() {
@@ -1264,7 +1262,6 @@ public class WebApp extends JFrame {
 //            e.printStackTrace();
 //        }
 //
-
 
 
         pswLBL.setBounds(10, 20, lblWidth, lblHeight);
