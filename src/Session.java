@@ -113,17 +113,15 @@ public class Session extends Account {
     public Double validateAmount(String amount) throws IllegalArgumentException {
 
         // Regex to check valid password.
-        IllegalArgumentException illegalArgumentException = new IllegalArgumentException("Importo non valido");
-
-        if (amount == null) throw illegalArgumentException;
-        amount = amount.replace(",", ".");
+        IllegalArgumentException validateAmountException = new IllegalArgumentException("Importo non valido");
 
         String regex = "^\\$?[0-9]+(\\.([0-9]{1,2}))?$";
-
-        Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(amount);
-
-        if (!m.matches()) throw illegalArgumentException;
+        amount = amount.replace(",", ".");
+        try {
+            checkRegex(amount,regex);
+        } catch (IllegalArgumentException e) {
+            throw validateAmountException;
+        }
 
         return Double.parseDouble(amount);
     }
