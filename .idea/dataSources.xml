@@ -6,6 +6,9 @@
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
       <jdbc-url>jdbc:mysql://remotemysql.com:3306/</jdbc-url>
+      <keep-alive enable="true" />
+      <auto-close enable="true" />
+      <time-zone>Europe/Rome</time-zone>
     </data-source>
   </component>
 </project>
