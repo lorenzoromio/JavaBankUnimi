@@ -29,29 +29,48 @@ public class Account {
 
 
     //Create a new Account
-    public Account(String nome, String cognome, String psw) throws AccountException, NoSuchAlgorithmException, SQLException {
+    public Account(String nome, String cognome, String psw) throws AccountException, IllegalArgumentException, NoSuchAlgorithmException, SQLException {
+        //language=RegExp
+        String regex = "^[A-Za-z]+((s)?(('|-|.)?([A-Za-z])+))*$"; //nomi singoli, doppi nomi con spazio, apostrofi
+        try {
+            checkRegex(nome, regex);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Nome non valido");
+        }
+        try {
+            checkRegex(cognome, regex);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Cognome non valido");
+
+        }
+
         this.timestamp = String.valueOf(new Date().getTime());
         this.salt = timestamp.concat(random(10));
         setPassword(psw);
 
-        //TODO sistemare sta parte
 
         StringBuilder sb = new StringBuilder();
-        for (String x : nome.split(" "))
-            sb.append(x.substring(0, 1).toUpperCase() + x.substring(1) + " ");
+        String nomi[] = nome.split(" ");
+        for (String x : nomi) {
+            sb.append(x.substring(0, 1).toUpperCase()).append(x.substring(1));
+            if (!x.equals(nomi[nomi.length - 1]))
+                sb.append(" ");
+        }
         this.nome = sb.toString();
 
         StringBuilder sb2 = new StringBuilder();
-        for (String x : cognome.split(" "))
-            sb2.append(x.substring(0, 1).toUpperCase() + x.substring(1) + " ");
+        String cognomi[] = cognome.split(" ");
+        for (String x : cognomi) {
+            sb2.append(x.substring(0, 1).toUpperCase()).append(x.substring(1));
+            if (!x.equals(cognomi[cognomi.length - 1]))
+                sb.append(" ");
+        }
         this.cognome = sb2.toString();
 
-//        this.nome = nome.substring(0, 1).toUpperCase() + nome.substring(1);
-//        this.cognome = cognome.substring(0, 1).toUpperCase() + cognome.substring(1);
 
-        this.username = this.nome.toLowerCase().replace(" ", "") + "." + this.cognome.toLowerCase().replace(" ", "");
+        this.username = (String.format("%s.%s", this.nome.toLowerCase().replace(" ", ""), this.cognome.toLowerCase().replace(" ", ""))).replaceAll("[-+'^:,]", "");
         this.num_conto = random(7);
-        this.iban = "IT" + Bank.getAbi() + "F" + Bank.getCab() + this.num_conto;
+        this.iban = String.format("IT%sF%s%s", Bank.getAbi(), Bank.getCab(), this.num_conto);
         this.saldo = 0.0;
 
     }
@@ -80,13 +99,22 @@ public class Account {
 
     }
 
-    public static void checkValidPassword(String password) throws AccountException {
+    public static void checkRegex(String string, String regex) throws IllegalArgumentException {
+
+        if (string == null) throw new IllegalArgumentException();
+
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(string);
+
+        if (!m.matches()) throw new IllegalArgumentException();
+    }
+
+
+    public static void checkValidPassword(String password) throws IllegalArgumentException {
         // Regex to check valid password.
 
-        AccountException accountException = new AccountException("La password deve contenere un carattere minuscolo, uno maiuscolo, " +
+        IllegalArgumentException invalidPasswordException = new IllegalArgumentException("La password deve contenere un carattere minuscolo, uno maiuscolo, " +
                 "\nun numero, un carattere speciale e deve essere lunga almeno 8 caratteri");
-
-        if (password == null) throw accountException;
 
         String regex = "^(?=.*[0-9])"                     //un numero
                 + "(?=.*[a-z])"                      //una lettere minuscola
@@ -94,10 +122,12 @@ public class Account {
                 + "(?=.*[!£$%&/()=?^*§°çé\"])"       //un caratteri speciale
                 + "(?=\\S+$).{8,20}$";               //lunghezza tra 8 e 20
 
-        Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(password);
+        try {
+            checkRegex(password, regex);
+        } catch (IllegalArgumentException ex) {
+            throw invalidPasswordException;
+        }
 
-        if (!m.matches()) throw accountException;
     }
 
     private String random(int length) {
