@@ -62,27 +62,16 @@ public class WebApp extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(null);
 
-
         UIManager.put("Label.font", new FontUIResource(new Font("Dialog", Font.PLAIN, 15)));
         UIManager.put("Button.font", new FontUIResource(new Font("Verdana", Font.PLAIN, 15)));
         UIManager.put("TextField.font", new FontUIResource(new Font("Dialog", Font.PLAIN, 14)));
         UIManager.put("PasswordField.font", new FontUIResource(new Font("Dialog", Font.PLAIN, 15)));
         UIManager.put("Button.margin", new Insets(0, 0, 0, 0));
 
-
-//        try {
-//            setIconImage(ImageIO.read(new File(bankIconPath)));
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(bankIconPath)));
-
         loginPage();                                                    //CHIAMA LA PAGINA DI LOGIN
 
         addWindowListener(new WindowListener() {
-
-
             @Override
             public void windowClosing(WindowEvent e) {                  // CHIUDE LA CONNESSIONE PRIMA DI CHIUDERE LA FINESTRA
                 try {
@@ -106,7 +95,7 @@ public class WebApp extends JFrame {
                 try {
                     DBConnect.close();
                 } catch (SQLException ex) {
-                    //IGNORE
+                    SQLExceptionOccurred(ex);
                 }
             }
 
@@ -128,8 +117,7 @@ public class WebApp extends JFrame {
         });
     }
 
-//    Pages
-
+    //    Pages
     private void loginPage() {
         try {
             DBConnect.close();              //CHIUDE LA CONNESSIONE PRIMA DI EFFETTUARE UN NUOVO LOGIN
@@ -137,13 +125,9 @@ public class WebApp extends JFrame {
             ex.printStackTrace();
         }
 
-        session = null;
         getContentPane().removeAll();
         repaint();
-
-        JPanel loginPanel = new JPanel();
         setTitle("LoginPage - JavaBank");
-        add(loginPanel);
         setLayout(null);
 
         JLabel userLBL = new JLabel("Username");
@@ -155,8 +139,6 @@ public class WebApp extends JFrame {
         JButton signupBTN = new JButton("Sign Up");
         JButton exitBTN = new JButton("Exit");
         getRootPane().setDefaultButton(loginBTN);               //SELEZIONA IL PULSANTE DI LOGIN
-
-
 
         userLBL.setBounds(10, 20, lblWidth, lblHeight);
         userFLD.setBounds(userLBL.getX() + userLBL.getWidth() + 10, userLBL.getY(), fldWidth, fldHeight);
@@ -186,47 +168,43 @@ public class WebApp extends JFrame {
         userFLD.setText(user);
         pswFLD.setText(psw);
 
-
-
         loginBTN.addActionListener((ActionEvent e) -> {
             if (userFLD.getText().isEmpty())
                 JOptionPane.showInternalMessageDialog(getContentPane(), "Username can't be empty");
-            else {
-                try {
-                    session = Bank.login(userFLD.getText(), String.valueOf(pswFLD.getPassword()));
+            else try {
+                session = Bank.login(userFLD.getText(), String.valueOf(pswFLD.getPassword()));
 
-                    home();
-                    JOptionPane.showInternalMessageDialog(getContentPane(), "Logged in Succesfully as " + session.getNome() + " " + session.getCognome());
+                home();
+                JOptionPane.showInternalMessageDialog(getContentPane(), "Logged in Succesfully as " + session.getNome() + " " + session.getCognome());
 
-                } catch (AccountNotFoundException ex) {
-                    userFLD.setText("");
-                    pswFLD.setText("");
-                    JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
+            } catch (AccountNotFoundException ex) {
+                userFLD.setText("");
+                pswFLD.setText("");
+                JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
 
-                } catch (AuthenticationException ex) {
-                    pswFLD.setText("");
-                    JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
+            } catch (AuthenticationException ex) {
+                pswFLD.setText("");
+                JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
 
-                } catch (SQLException ex) {
-                    switch (ex.getSQLState()) {
-                        case "28000":
-                            JOptionPane.showInternalMessageDialog(getContentPane(), "Invalid Credential to Database");
-                            break;
-                        case "08S01":
-                            JOptionPane.showInternalMessageDialog(getContentPane(), "Database Unreachable");
-                            break;
-                        default:
-                            SQLExceptionOccurred(ex);
-                            break;
-                    }
-
-                } catch (NoSuchAlgorithmException ex) {
-                    JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
-                } catch (TimeoutException ex) {
-                    sessionExpired();
+            } catch (SQLException ex) {
+                switch (ex.getSQLState()) {
+                    case "28000":
+                        JOptionPane.showInternalMessageDialog(getContentPane(), "Invalid Credential to Database");
+                        break;
+                    case "08S01":
+                        JOptionPane.showInternalMessageDialog(getContentPane(), "Database Unreachable");
+                        break;
+                    default:
+                        SQLExceptionOccurred(ex);
+                        break;
                 }
-            }
 
+            } catch (NoSuchAlgorithmException ex) {
+                JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
+
+            } catch (TimeoutException ex) {
+                sessionExpired();
+            }
         });
 
         signupBTN.addActionListener((ActionEvent e) -> {
@@ -234,23 +212,13 @@ public class WebApp extends JFrame {
             signupPage();
         });
 
-        exitBTN.addActionListener((ActionEvent e) -> {
-            System.out.println("Exit BTN pressed");
-            int choice = JOptionPane.showConfirmDialog(getContentPane(), "Do you want to exit?");
-            if (choice == 0) {
-                dispose();
-            }
-        });
-
-
+        exitBTN.addActionListener(this::actionExit);
     }
 
     private void signupPage() {
         getContentPane().removeAll();
         repaint();
-        JPanel signupPanel = new JPanel();
         setTitle("SignupPage - JavaBank");
-        add(signupPanel);
 
         JLabel nomeLBL = new JLabel("Nome");
         JTextField nomeFLD = new JTextField();
@@ -263,20 +231,10 @@ public class WebApp extends JFrame {
         JLabel checkpswLBL = new JLabel("Invalid Password");
         JButton showHideBTN = new JButton();
 
-
         JButton signupBTN = new JButton("Signup");
         JButton backBTN = new JButton("Back");
         JButton exitBTN = new JButton("Exit");
         getRootPane().setDefaultButton(signupBTN);
-
-//        try {
-//            Image icon = ImageIO.read(new File(hidePswIconPath));
-//            showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
 
         nomeLBL.setBounds(10, 20, lblWidth, lblHeight);
         nomeFLD.setBounds(nomeLBL.getX() + nomeLBL.getWidth() + 10, nomeLBL.getY(), fldWidth, fldHeight);
@@ -302,16 +260,9 @@ public class WebApp extends JFrame {
         exitBTN.setFocusable(false);
         showHideBTN.setFocusable(false);
 
-
         SwingUtilities.invokeLater(nomeFLD::requestFocus);
 
-//        URL iconUrl = this.getClass().getResource(hidePswIconPath);
-//        System.out.println(iconUrl.toString());
-//        Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-//        showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
-
         setButtonIcon(showHideBTN, hidePswIconPath);
-
 
         add(nomeLBL);
         add(nomeFLD);
@@ -339,17 +290,14 @@ public class WebApp extends JFrame {
             @Override
             public void mouseClicked(MouseEvent e) {
                 JOptionPane.showInternalMessageDialog(getContentPane(), pswInvalid.getMessage());
-
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
-
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
             }
 
             @Override
@@ -360,10 +308,8 @@ public class WebApp extends JFrame {
 
             @Override
             public void mouseExited(MouseEvent e) {
-
                 attributes.put(TextAttribute.UNDERLINE, -1); //-1
                 checkpswLBL.setFont(font.deriveFont(attributes));
-
             }
         });
 
@@ -374,45 +320,37 @@ public class WebApp extends JFrame {
 
             @Override
             public void keyPressed(KeyEvent e) {
-
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
-                if (String.valueOf(psw1FLD.getPassword()).isEmpty()) {
+                if (String.valueOf(psw1FLD.getPassword()).isEmpty())
                     checkpswLBL.setVisible(false);
-
-                } else {
-                    try {
-                        Account.checkValidPassword(String.valueOf(psw1FLD.getPassword()));
-                        checkpswLBL.setVisible(false);
-                    } catch (IllegalArgumentException ex) {
-                        checkpswLBL.setVisible(true);
-                        pswInvalid.setMessage(ex.getMessage());
-                    }
+                else try {
+                    Account.checkValidPassword(String.valueOf(psw1FLD.getPassword()));
+                    checkpswLBL.setVisible(false);
+                } catch (IllegalArgumentException ex) {
+                    checkpswLBL.setVisible(true);
+                    pswInvalid.setMessage(ex.getMessage());
                 }
 
                 if (!checkpswLBL.isVisible() || String.valueOf(psw1FLD.getPassword()).isEmpty()) {
                     psw1FLD.setForeground(new JPasswordField().getForeground());
                     psw1FLD.setBorder(new JPasswordField().getBorder());
-
                 } else {
                     psw1FLD.setForeground(Color.red);
                     psw1FLD.setBorder(BorderFactory.createLineBorder(Color.red));
                 }
             }
-
         });
 
         psw2FLD.addKeyListener(new KeyListener() {
             @Override
             public void keyTyped(KeyEvent e) {
-
             }
 
             @Override
             public void keyPressed(KeyEvent e) {
-
             }
 
             @Override
@@ -430,60 +368,26 @@ public class WebApp extends JFrame {
         showHideBTN.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-
             }
 
             @Override
             public void mousePressed(MouseEvent e) {
                 psw1FLD.setEchoChar('\u0000');  //Password Visibile
-//                try {
-//                    Image icon = ImageIO.read(new File(showPswIconPath));
-//                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-//
-//                } catch (IOException ex) {
-//                    ex.printStackTrace();
-//                }
-
-
-//                URL iconUrl = this.getClass().getResource(showPswIconPath);
-//                System.out.println(iconUrl.toString());
-//                Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-//                showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
-
                 setButtonIcon(showHideBTN, showPswIconPath);
-
-
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 psw1FLD.setEchoChar('\u2022'); //Dot Echo Char
-//                try {
-//                    Image icon = ImageIO.read(new File(hidePswIconPath));
-//                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-//
-//                } catch (IOException ex) {
-//                    ex.printStackTrace();
-//                }
-
-//                URL iconUrl = this.getClass().getResource(hidePswIconPath);
-//                System.out.println(iconUrl.toString());
-//                Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-//                showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
-
                 setButtonIcon(showHideBTN, hidePswIconPath);
-
-
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
             }
         });
 
@@ -534,14 +438,7 @@ public class WebApp extends JFrame {
             loginPage();
         });
 
-        exitBTN.addActionListener((ActionEvent e) -> {
-            System.out.println("Exit BTN pressed");
-            int choice = JOptionPane.showConfirmDialog(getContentPane(), "Do you want to exit?");
-            if (choice == 0) {
-                dispose();
-            }
-        });
-
+        exitBTN.addActionListener(this::actionExit);
 
     }
 
@@ -549,9 +446,7 @@ public class WebApp extends JFrame {
         session.updateSessionCreation();
         getContentPane().removeAll();
         repaint();
-        JPanel homePanel = new JPanel();
         setTitle("Home - JavaBank");
-        add(homePanel);
         setVisible(true);
 
         JLabel nomeLBL = new JLabel("Nome");
@@ -573,15 +468,12 @@ public class WebApp extends JFrame {
         incomeFLD.setEchoChar('\u0000');
         outcomeFLD.setEchoChar('\u0000');
 
-//        JButton backBTN = new JButton("Back");
-//        JButton exitBTN = new JButton("Exit");
         JButton bonificoBTN = new JButton("Bonifico");
         JButton depositBTN = new JButton("Deposito");
         JButton prelievoBTN = new JButton("Prelievo");
         JButton changePswBTN = new JButton("Change Psw");
         JButton logoutBTN = new JButton("Logout");
         JButton removeBTN = new JButton("Remove");
-
 
         nomeFLD.setEditable(false);
         cognomeFLD.setEditable(false);
@@ -645,7 +537,6 @@ public class WebApp extends JFrame {
                 }
             });
         }
-
 
         add(nomeLBL);
         add(nomeFLD);
@@ -754,17 +645,9 @@ public class WebApp extends JFrame {
 
             amount.setText(sgn + euro.format(x.getAmount()));
             date.setText(sdf.format(x.getDate()));
-//            ibanDest.setText(x.getIbanDest());
-//            ibanFrom.setText(x.getIbanFrom());
-//            userFrom.setText(x.getUsernameFrom());
-//            userDest.setText(x.getUsernameDest());
-
             iconType.setBounds(5, 5 + 60 * i, 50, 50);
             iconType.setForeground(Color.red);
-//            iconType.setBorder(BorderFactory.createLineBorder(Color.black)); //TODO REMOVE BORDER
             amount.setBounds(390, iconType.getY(), 150, 25);
-//            amount.setAlignmentX(JLabel.RIGHT);
-//            amount.setBorder(BorderFactory.createLineBorder(Color.black));
             amount.setHorizontalAlignment(JLabel.RIGHT);
             date.setBounds(iconType.getX() + iconType.getWidth() + 10, iconType.getY() + 25, 180, 25);
             userFrom.setBounds(date.getX(), iconType.getY() + 5, 500, 25);
@@ -772,22 +655,9 @@ public class WebApp extends JFrame {
             userDest.setBounds(userFrom.getBounds());
             ibanDest.setBounds(ibanFrom.getBounds());
             type.setBounds(userFrom.getBounds());
-//            ibanFrom.setBounds(date.getX(),type.getY(),150,25);
-//            ibanFrom.setBounds(date.getX(),type.getY(),150,25);
-
-//            try {
-//                Image icon = ImageIO.read(new File(iconpath));
-//                iconType.setIcon(new ImageIcon(icon.getScaledInstance(iconType.getWidth(), iconType.getHeight(), Image.SCALE_SMOOTH)));
-//
-//            } catch (IOException ex) {
-//                ex.printStackTrace();
-//            }
 
             setLabelIcon(iconType, iconpath);
 
-//            type.setEditable(false);
-//            amount.setEditable(false);
-//            date.setEditable(false);
 
             amount.setFont(new Font(amount.getFont().getName(), Font.BOLD, 20));
             textArea.add(iconType);
@@ -800,34 +670,7 @@ public class WebApp extends JFrame {
             textArea.add(line);
         }
 
-//        try {
-//            Image icon = ImageIO.read(new File(hidePswIconPath));
-//            showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
-//
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-
-//        URL iconUrl = this.getClass().getResource(showPswIconPath);
-//        System.out.println(iconUrl.toString());
-//        Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-//        showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
-
         setButtonIcon(showHideBTN, showPswIconPath);
-
-//        try {
-//            Image icon = ImageIO.read(new File(refreshIconPath));
-//            refreshBTN.setIcon(new ImageIcon(icon.getScaledInstance(refreshBTN.getWidth(), refreshBTN.getHeight(), Image.SCALE_SMOOTH)));
-//
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-
-//        iconUrl = this.getClass().getResource(refreshIconPath);
-//        System.out.println(iconUrl.toString());
-//        icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-//        refreshBTN.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-
         setButtonIcon(refreshBTN, refreshIconPath);
 
         incomeFLD.setText(euro.format(session.getIncomes()));
@@ -843,40 +686,13 @@ public class WebApp extends JFrame {
                     incomeFLD.setEchoChar('x'); //Dot Echo Char
                     scrollPane.setVisible(false);
 
-//                    try {
-//                        Image icon = ImageIO.read(new File(hidePswIconPath));
-//                        showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNHeight, BTNHeight, Image.SCALE_SMOOTH)));
-//
-//                    } catch (IOException ex) {
-//                        ex.printStackTrace();
-//                    }
-
-//                    URL iconUrl = this.getClass().getResource(hidePswIconPath);
-//                    System.out.println(iconUrl.toString());
-//                    Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-//                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
-
                     setButtonIcon(showHideBTN, hidePswIconPath);
-
 
                 } else {
                     balanceFLD.setEchoChar('\u0000');  //Password Visibile
                     incomeFLD.setEchoChar('\u0000');  //Password Visibile
                     outcomeFLD.setEchoChar('\u0000');  //Password Visibile
                     scrollPane.setVisible(true);
-
-//                    try {
-//                        Image icon = ImageIO.read(new File(showPswIconPath));
-//                        showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNHeight, BTNHeight, Image.SCALE_SMOOTH)));
-//
-//                    } catch (IOException ex) {
-//                        ex.printStackTrace();
-//                    }
-
-//                    URL iconUrl = this.getClass().getResource(showPswIconPath);
-//                    System.out.println(iconUrl.toString());
-//                    Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-//                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
 
                     setButtonIcon(showHideBTN, showPswIconPath);
                     setVisible(true);
@@ -963,10 +779,7 @@ public class WebApp extends JFrame {
 
         });
 
-        logoutBTN.addActionListener((ActionEvent e) -> {
-            System.out.println("Exit BTN pressed");
-            loginPage();
-        });
+        logoutBTN.addActionListener(this::actionLogOut);
 
         changePswBTN.addActionListener((ActionEvent e) -> {
 
@@ -1006,16 +819,6 @@ public class WebApp extends JFrame {
         JButton backBTN = new JButton("Back");
         JButton logoutBTN = new JButton("Logout");
         getRootPane().setDefaultButton(saveBTN);
-
-//        try {
-//            Image icon = ImageIO.read(new File(hidePswIconPath));
-//            showHideBTN1.setIcon(new ImageIcon(icon.getScaledInstance(BTNHeight, BTNHeight, Image.SCALE_SMOOTH)));
-//            showHideBTN2.setIcon(new ImageIcon(icon.getScaledInstance(BTNHeight, BTNHeight, Image.SCALE_SMOOTH)));
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
 
         pswLBL.setBounds(10, 20, lblWidth, lblHeight);
         pswFLD.setBounds(pswLBL.getX() + pswLBL.getWidth() + 10, pswLBL.getY(), fldWidth, fldHeight);
@@ -1163,11 +966,7 @@ public class WebApp extends JFrame {
             }
         });
 
-        logoutBTN.addActionListener((ActionEvent e) -> {
-            System.out.println("Exit BTN pressed");
-            loginPage();
-        });
-
+        logoutBTN.addActionListener(this::actionLogOut);
 
         add(pswLBL);
         add(pswFLD);
@@ -1190,10 +989,7 @@ public class WebApp extends JFrame {
         session.updateSessionCreation();
         getContentPane().removeAll();
         repaint();
-        JPanel deletePanel = new JPanel();
         setTitle("Delete Account - JavaBank");
-        add(deletePanel);
-
 
         JLabel pswLBL = new JLabel("Password");
         JPasswordField pswFLD = new JPasswordField();
@@ -1209,17 +1005,6 @@ public class WebApp extends JFrame {
         JButton backBTN = new JButton("Back");
         JButton logoutBTN = new JButton("Logout");
         getRootPane().setDefaultButton(deleteBTN);
-
-//        try {
-//            Image icon = ImageIO.read(new File(hidePswIconPath));
-//            showHideBTN1.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-//            showHideBTN2.setIcon(new ImageIcon(icon.getScaledInstance(25, 25, Image.SCALE_SMOOTH)));
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-
 
         pswLBL.setBounds(10, 20, lblWidth, lblHeight);
         pswFLD.setBounds(pswLBL.getX() + pswLBL.getWidth() + 10, pswLBL.getY(), fldWidth, fldHeight);
@@ -1248,33 +1033,8 @@ public class WebApp extends JFrame {
         add(logoutBTN);
         add(backBTN);
         add(deleteBTN);
-//        add(showHideBTN1);
-//        add(showHideBTN2);
         add(checkpswLBL);
 
-
-//        pswFLD.addKeyListener(new KeyListener() {
-//            @Override
-//            public void keyTyped(KeyEvent e) {
-//            }
-//
-//            @Override
-//            public void keyPressed(KeyEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void keyReleased(KeyEvent e) {
-//                if (!String.valueOf(pswFLD.getPassword()).isEmpty())
-//                    try {
-//                        session.checkValidPassword(String.valueOf(pswFLD.getPassword()));
-//                        checkpswLBL.setVisible(false);
-//                    } catch (AccountException ex) {
-//                        checkpswLBL.setVisible(true);
-//                    }
-//            }
-//
-//        });
 
         confirmPswFLD.addKeyListener(new KeyListener() {
             @Override
@@ -1444,10 +1204,7 @@ public class WebApp extends JFrame {
             }
         });
 
-        logoutBTN.addActionListener((ActionEvent e) -> {
-            System.out.println("Exit BTN pressed");
-            loginPage();
-        });
+        logoutBTN.addActionListener(this::actionLogOut);
 
 
         setVisible(true);
@@ -1807,19 +1564,15 @@ public class WebApp extends JFrame {
 
                 else {
                     amount = session.validateAmount(amountFLD.getText());
-//                    amount = Double.parseDouble(amountFLD.getText());
                     if (ibanFLD.getText().isEmpty()) {
                         JOptionPane.showInternalMessageDialog(getContentPane(), "Iban field can't be empty");
                     } else {
                         session.transfer(ibanFLD.getText().toUpperCase(), amount);
                         amountFLD.setText("");
                         balance.setText(euro.format(session.getSaldo()));
-
                         JOptionPane.showInternalMessageDialog(getContentPane(), "Bonifico Effettuato Correttamente");
                     }
-
                 }
-
 
             } catch (NumberFormatException ex) {
                 amountFLD.setText("");
@@ -1843,8 +1596,6 @@ public class WebApp extends JFrame {
 
         homeBTN.addActionListener((ActionEvent e) -> {
             try {
-//                session.updateSessionCreation();
-//                session.accountBalanceUpdate();
                 home();
             } catch (TimeoutException ex) {
                 sessionExpired();
@@ -1854,12 +1605,7 @@ public class WebApp extends JFrame {
 
         });
 
-        logoutBTN.addActionListener((ActionEvent e) -> {
-//            System.out.println("Logout BTN pressed");
-
-            loginPage();
-        });
-
+        logoutBTN.addActionListener(this::actionLogOut);
 
     }
 
@@ -2073,10 +1819,7 @@ public class WebApp extends JFrame {
 
         });
 
-        logoutBTN.addActionListener((ActionEvent e) -> {
-//            System.out.println("Logout BTN pressed");
-            loginPage();
-        });
+        logoutBTN.addActionListener(this::actionLogOut);
 
         balanceBTN.addActionListener((ActionEvent e) -> {
 
@@ -2130,7 +1873,6 @@ public class WebApp extends JFrame {
         setVisible(true);
     }
 
-
     //Functions
     private void sessionExpired() {
         JOptionPane.showInternalMessageDialog(getContentPane(), "Sessione Scaduta");
@@ -2181,4 +1923,23 @@ public class WebApp extends JFrame {
 
     }
 
+
+    private void actionExit(ActionEvent e) {
+        System.out.println("Exit BTN pressed");
+        int choice = JOptionPane.showConfirmDialog(getContentPane(), "Do you want to exit?");
+        if (choice == 0) {
+            session = null;
+            dispose();
+        }
+    }
+
+    private void actionLogOut(ActionEvent e) {
+
+        System.out.println("LogOut BTN pressed");
+        int choice = JOptionPane.showConfirmDialog(getContentPane(), "Do you want to LogOut?");
+        if (choice == 0) {
+            session = null;
+            loginPage();
+        }
+    }
 }
