@@ -150,7 +150,6 @@ public class WebApp extends JFrame {
         JTextField userFLD = new JTextField();
         JLabel pswLBL = new JLabel("Password");
         JPasswordField pswFLD = new JPasswordField();
-        JButton showHideBTN = new JButton();
 
         JButton loginBTN = new JButton("Login");
         JButton signupBTN = new JButton("Sign Up");
@@ -158,23 +157,11 @@ public class WebApp extends JFrame {
         getRootPane().setDefaultButton(loginBTN);               //SELEZIONA IL PULSANTE DI LOGIN
 
 
-//        try {
-//            Image icon = ImageIO.read(new File(hidePswIconPath));
-//            showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNWidth, BTNHeight, Image.SCALE_SMOOTH)));
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-
-//        URL iconUrl = this.getClass().getResource(hidePswIconPath);
-//        System.out.println(iconUrl.toString());
-//        Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-//        showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(showHideBTN.getWidth(), showHideBTN.getHeight(), Image.SCALE_SMOOTH)));
 
         userLBL.setBounds(10, 20, lblWidth, lblHeight);
         userFLD.setBounds(userLBL.getX() + userLBL.getWidth() + 10, userLBL.getY(), fldWidth, fldHeight);
         pswLBL.setBounds(userLBL.getX(), userLBL.getY() + userLBL.getHeight() + 5, lblWidth, lblHeight);
         pswFLD.setBounds(pswLBL.getX() + pswLBL.getWidth() + 10, pswLBL.getY(), fldWidth, fldHeight);
-//        showHideBTN.setBounds(pswFLD.getX() + pswFLD.getWidth() + 5, pswFLD.getY(), BTNHeight, BTNHeight);
 
         loginBTN.setBounds(userLBL.getX(), pswFLD.getY() + 40, 80, fldHeight);
         signupBTN.setBounds(loginBTN.getX() + loginBTN.getWidth() + 10, loginBTN.getY(), BTNWidth, BTNHeight);
@@ -199,50 +186,7 @@ public class WebApp extends JFrame {
         userFLD.setText(user);
         pswFLD.setText(psw);
 
-//        showHideBTN.addMouseListener(new MouseListener() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void mousePressed(MouseEvent e) {
-//                pswFLD.setEchoChar('\u0000');  //Password Visibile
-//                try {
-//                    Image icon = ImageIO.read(new File(showPswIconPath));
-//                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNWidth, BTNHeight, Image.SCALE_SMOOTH)));
-//                    setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(bankIconPath)));
-//
-//
-//                } catch (IOException ex) {
-//                    ex.printStackTrace();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void mouseReleased(MouseEvent e) {
-//                pswFLD.setEchoChar('\u2022'); //Dot Echo Char
-//                try {
-//                    Image icon = ImageIO.read(new File(hidePswIconPath));
-//                    showHideBTN.setIcon(new ImageIcon(icon.getScaledInstance(BTNWidth, BTNHeight, Image.SCALE_SMOOTH)));
-//
-//                } catch (IOException ex) {
-//                    ex.printStackTrace();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void mouseEntered(MouseEvent e) {
-//
-//            }
-//
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-//
-//            }
-//        });
+
 
         loginBTN.addActionListener((ActionEvent e) -> {
             if (userFLD.getText().isEmpty())
@@ -250,9 +194,9 @@ public class WebApp extends JFrame {
             else {
                 try {
                     session = Bank.login(userFLD.getText(), String.valueOf(pswFLD.getPassword()));
-//                    System.out.println("Logged As '" + userFLD.getText() + "'");
-//                    JOptionPane.showInternalMessageDialog();();(getContentPane(), "Logged in Succesfully as " + session.getNome() + " " + session.getCognome());
+
                     home();
+                    JOptionPane.showInternalMessageDialog(getContentPane(), "Logged in Succesfully as " + session.getNome() + " " + session.getCognome());
 
                 } catch (AccountNotFoundException ex) {
                     userFLD.setText("");
