@@ -21,11 +21,12 @@ public class Bank {
         prepStmt.setString(1, account.getUsername());
         ResultSet rs = prepStmt.executeQuery();
         if (rs.next()) {
+            System.out.println("Account already in database");
             throw new IllegalArgumentException("Account already in database");
         }
 
         if (rs != null) rs.close();
-        if (prepStmt != null) prepStmt.close();
+        prepStmt.close();
 
         String newAccount = "insert into accounts(USERNAME, NOME, COGNOME, HASHPSW, SALT, TIMESTAMP, IBAN, NUM_CONTO, SALDO) " +
                 "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -40,7 +41,7 @@ public class Bank {
         prepStmt.setString(8, account.getNum_conto());
         prepStmt.setDouble(9, account.getSaldo());
         prepStmt.execute();
-        if (prepStmt != null) prepStmt.close();
+        prepStmt.close();
 
     }
 
