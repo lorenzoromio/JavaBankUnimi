@@ -43,8 +43,8 @@ public class WebApp extends JFrame {
     private final int BTNHeight = 30;
     private final int lblWidth = 100;
     private final int lblHeight = 30;
-    private DecimalFormat euro = new DecimalFormat("0.00 €");
-    private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+    private final DecimalFormat euro = new DecimalFormat("0.00 €");
+    private final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     private Session session;
     private String user;
     private String psw;
@@ -386,7 +386,7 @@ public class WebApp extends JFrame {
                     try {
                         Account.checkValidPassword(String.valueOf(psw1FLD.getPassword()));
                         checkpswLBL.setVisible(false);
-                    } catch (AccountException ex) {
+                    } catch (IllegalArgumentException ex) {
                         checkpswLBL.setVisible(true);
                         pswInvalid.setMessage(ex.getMessage());
                     }
@@ -614,14 +614,30 @@ public class WebApp extends JFrame {
         removeBTN.setBounds(changePswBTN.getX(), logoutBTN.getY() + logoutBTN.getHeight() + 5, BTNWidth, BTNHeight);
 
         if (session.getUsername().equals("lorenzo.romio")) {
-            JButton erase = new JButton("Erase");
-            erase.setName("Erase");
-            erase.setBounds(removeBTN.getX(), removeBTN.getY() + removeBTN.getHeight() + 15, BTNWidth, BTNHeight);
-            add(erase);
-            erase.addActionListener(e -> {
+            JButton eraseBTN = new JButton("Erase");
+            eraseBTN.setName("Erase");
+            eraseBTN.setBounds(removeBTN.getX(), removeBTN.getY() + removeBTN.getHeight() + 15, BTNWidth, BTNHeight);
+            add(eraseBTN);
+            eraseBTN.addActionListener(e -> {
                 try {
                     DBConnect.eraseBalance();
                     home();
+                } catch (SQLException ex) {
+                    SQLExceptionOccurred(ex);
+                } catch (TimeoutException ex) {
+                    sessionExpired();
+                }
+            });
+
+            JButton deleteAll = new JButton("deleteAll");
+            deleteAll.setName("deleteAll");
+            deleteAll.setBounds(eraseBTN.getX(), eraseBTN.getY() + eraseBTN.getHeight() + 5, BTNWidth, BTNHeight);
+            add(deleteAll);
+            deleteAll.addActionListener(e -> {
+                try {
+                    session.updateSessionCreation();
+                    DBConnect.deleteAll();
+                    loginPage();
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
                 } catch (TimeoutException ex) {
@@ -1036,7 +1052,7 @@ public class WebApp extends JFrame {
                     try {
                         Session.checkValidPassword(String.valueOf(newPswFLD.getPassword()));
                         checkpswLBL.setVisible(false);
-                    } catch (AccountException ex) {
+                    } catch (IllegalArgumentException ex) {
                         checkpswLBL.setVisible(true);
                     }
             }
@@ -2152,7 +2168,6 @@ public class WebApp extends JFrame {
     public void setLabelIcon(JLabel label, String iconPath) {
 
         URL iconUrl = this.getClass().getResource(iconPath);
-//        System.out.println(iconUrl.toString());
         Image icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
         label.setIcon(new ImageIcon(icon.getScaledInstance(label.getWidth(), label.getHeight(), Image.SCALE_SMOOTH)));
 
