@@ -2,9 +2,8 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
-import javax.security.auth.login.AccountException;
 import javax.security.auth.login.AccountNotFoundException;
-import javax.security.sasl.AuthenticationException;
+import javax.security.auth.login.CredentialException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,14 +12,13 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeoutException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Session extends Account {
     private final long duration = 60 * 3;
     private Instant sessionCreation;
-    private ArrayList<Transaction> transactions;
+    private List<Transaction> transactions;
 
     public Session(String username) throws AccountNotFoundException, SQLException {
         super(username);
@@ -37,12 +35,12 @@ public class Session extends Account {
         this.sessionCreation = Instant.now();
     }
 
-    public void changePassword(String oldPsw, String newPsw, String checkPsw) throws TimeoutException, AuthenticationException, IllegalArgumentException, SQLException, AccountException, NoSuchAlgorithmException {
+    public void changePassword(String oldPsw, String newPsw, String checkPsw) throws TimeoutException, IllegalArgumentException, SQLException, NoSuchAlgorithmException, CredentialException {
 
         updateSessionCreation();
 
         if (!getHashPsw().equals(hash(oldPsw)))
-            throw new AuthenticationException("Password Errata");
+            throw new CredentialException("Password Errata");
 
         if (getHashPsw().equals(hash(newPsw)))
             throw new IllegalArgumentException("La nuova password non può essere uguale a quella precedente");
@@ -54,15 +52,15 @@ public class Session extends Account {
 
     }
 
-    public void deleteAccount(String psw, String confirmPsw) throws TimeoutException, AuthenticationException, SQLException, NoSuchAlgorithmException {
+    public void deleteAccount(String psw, String confirmPsw) throws TimeoutException, IllegalArgumentException, CredentialException, SQLException, NoSuchAlgorithmException {
 
         updateSessionCreation();
 
         if (!psw.equals(confirmPsw))
-            throw new AuthenticationException("Le password non coincidono");
+            throw new IllegalArgumentException("Le password non coincidono");
 
         if (!getHashPsw().equals(hash(psw)))
-            throw new AuthenticationException("Password Errata");
+            throw new CredentialException("Password Errata");
 
         String removeAccount = "DELETE FROM accounts WHERE USERNAME = ? and HASHPSW = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(removeAccount);
@@ -102,8 +100,8 @@ public class Session extends Account {
             setSaldo(getSaldo() - amount);
             new Transaction(this.getIban(), iban, amount, new Date()).push();
 
-            if (rs != null) rs.close();
-            if (prepStmt != null) prepStmt.close();
+            rs.close();
+            prepStmt.close();
 
         } else {
             throw new AccountNotFoundException("Destinatario non trovato");
@@ -118,7 +116,7 @@ public class Session extends Account {
         String regex = "^\\$?[0-9]+(\\.([0-9]{1,2}))?$";
         amount = amount.replace(",", ".");
         try {
-            checkRegex(amount,regex);
+            checkRegex(amount, regex);
         } catch (IllegalArgumentException e) {
             throw validateAmountException;
         }
@@ -148,10 +146,10 @@ public class Session extends Account {
         new Transaction(getIban(), amount, "prelievo", new Date()).push();
     }
 
-    public ArrayList<Account> showContacts() throws TimeoutException, SQLException {
+    public List<Account> showContacts() throws TimeoutException, SQLException {
         updateSessionCreation();
 
-        ArrayList<Account> accountsList = new ArrayList<>();
+        List<Account> accountsList = new ArrayList<>();
         String showContacts = "select username from accounts where username <> ? order by cognome";
         try {
 
@@ -160,7 +158,8 @@ public class Session extends Account {
             ResultSet rs = prepStmt.executeQuery();
             Instant check = Instant.now();
             while (rs.next()) {
-                String username = rs.getString("USERNAME");
+                String username1 = "USERNAME";
+                String username = rs.getString(username1);
                 accountsList.add(new Account(username));
             }
             System.out.println("ShowContacts :" + ChronoUnit.MILLIS.between(check, Instant.now()) + "ms for");
@@ -174,44 +173,11 @@ public class Session extends Account {
 
     }
 
-//    public ArrayList<Transaction> showTransactions() throws TimeoutException, SQLException {
-//
-//        updateSessionCreation();
-//        ArrayList<Transaction> transactionsList = new ArrayList<>();
-//        String showTransactions = "select * from transaction order by ID desc";
-//        ResultSet rs = DBConnect.getConnection().createStatement().executeQuery(showTransactions);
-//        Instant check = Instant.now();
-//        while (rs.next()) {
-//            String ibanFrom = rs.getString("IBAN_FROM");
-//            String ibanDest = rs.getString("IBAN_DEST");
-//            Date date = new Date(Long.parseLong(rs.getString("DATE")));
-//////            System.out.println(date.getTime());
-//////            System.out.println(new Date(date.getTime()));
-//
-//            if (getIban().equals(ibanFrom) || getIban().equals(ibanDest)) {
-//                Double amount = rs.getDouble("AMOUNT");
-//                String type = rs.getString("TYPE");
-//
-//                if (type.equals("bonifico")) {
-//                    transactionsList.add(new Transaction(ibanFrom, ibanDest, amount, date));
-//                } else {
-//                    transactionsList.add(new Transaction(ibanFrom, amount, type, date));
-//                }
-//            }
-//        }
-//        System.out.println("ShowTransaction :" + ChronoUnit.MILLIS.between(check, Instant.now()) + "ms");
-//        transactions = transactionsList;
-//
-//        return transactionsList;
-//
-//
-//    }
 
-
-    public ArrayList<Transaction> showTransactions() throws TimeoutException, SQLException {
+    public List<Transaction> showTransactions() throws TimeoutException, SQLException {
 
         updateSessionCreation();
-        ArrayList<Transaction> transactionsList = new ArrayList<>();
+        List<Transaction> transactionsList = new ArrayList<>();
 
         String showTransactions = "select * from transaction where ? IN ( IBAN_FROM, IBAN_DEST ) order by ID desc ";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(showTransactions);
@@ -295,7 +261,7 @@ public class Session extends Account {
 
     //
     @Override
-    protected void setPassword(String psw) throws NoSuchAlgorithmException, SQLException, AccountException {
+    protected void setPassword(String psw) throws NoSuchAlgorithmException, SQLException {
         super.setPassword(psw);
 //        System.out.println("UPDATE PSW ON DATABASE");
         String update = "update accounts set HASHPSW = ? where username = ?";

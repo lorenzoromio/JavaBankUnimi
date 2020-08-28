@@ -2,6 +2,7 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountException;
 import javax.security.auth.login.AccountNotFoundException;
 import java.security.MessageDigest;
@@ -29,18 +30,18 @@ public class Account {
 
 
     //Create a new Account
-    public Account(String nome, String cognome, String psw) throws AccountException, IllegalArgumentException, NoSuchAlgorithmException, SQLException {
+    public Account(String nome, String cognome, String psw) throws NoSuchAlgorithmException, SQLException, InvalidNameException {
         //language=RegExp
         String regex = "^[A-Za-z]+((s)?(('|-|.)?([A-Za-z])+))*$"; //nomi singoli, doppi nomi con spazio, apostrofi
         try {
             checkRegex(nome, regex);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Nome non valido");
+            throw new InvalidNameException("Nome non valido");
         }
         try {
             checkRegex(cognome, regex);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Cognome non valido");
+            throw new InvalidNameException("Cognome non valido");
 
         }
 
@@ -48,9 +49,8 @@ public class Account {
         this.salt = timestamp.concat(random(10));
         setPassword(psw);
 
-
         StringBuilder sb = new StringBuilder();
-        String nomi[] = nome.split(" ");
+        String[] nomi = nome.split(" ");
         for (String x : nomi) {
             sb.append(x.substring(0, 1).toUpperCase()).append(x.substring(1));
             if (!x.equals(nomi[nomi.length - 1]))
@@ -59,7 +59,7 @@ public class Account {
         this.nome = sb.toString();
 
         StringBuilder sb2 = new StringBuilder();
-        String cognomi[] = cognome.split(" ");
+        String[] cognomi = cognome.split(" ");
         for (String x : cognomi) {
             sb2.append(x.substring(0, 1).toUpperCase()).append(x.substring(1));
             if (!x.equals(cognomi[cognomi.length - 1]))
@@ -156,7 +156,7 @@ public class Account {
     }
 
     //SETTER
-    protected void setPassword(String psw) throws AccountException, NoSuchAlgorithmException, SQLException {
+    protected void setPassword(String psw) throws NoSuchAlgorithmException, SQLException {
         checkValidPassword(psw);
         this.hashPsw = hash(psw);
 

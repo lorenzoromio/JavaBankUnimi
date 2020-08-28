@@ -2,7 +2,9 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+import javax.security.auth.login.AccountException;
 import javax.security.auth.login.AccountNotFoundException;
+import javax.security.auth.login.CredentialException;
 import javax.security.sasl.AuthenticationException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
@@ -15,7 +17,7 @@ public class Bank {
 
 
 
-    public static void addAccount(Account account) throws IllegalArgumentException, SQLException {
+    public static void addAccount(Account account) throws IllegalArgumentException, SQLException, AccountException {
 
 //        DBConnect db = new DBConnect();
         String checkUser = "select ID from accounts where username = ?";
@@ -24,7 +26,7 @@ public class Bank {
         ResultSet rs = prepStmt.executeQuery();
         if (rs.next()) {
             System.out.println("Account already in database");
-            throw new IllegalArgumentException("Account already in database");
+            throw new AccountException("Account already in database");
         }
 
         if (rs != null) rs.close();
@@ -47,11 +49,11 @@ public class Bank {
 
     }
 
-    public static Session login(String username, String login_psw) throws AuthenticationException, AccountNotFoundException, SQLException, NoSuchAlgorithmException {
+    public static Session login(String username, String login_psw) throws CredentialException, AccountNotFoundException, SQLException, NoSuchAlgorithmException {
         Session logging = new Session(username);
         if (!logging.hash(login_psw).equals(logging.getHashPsw())) {
 //            logging = null;
-            throw new AuthenticationException("Invalid Password");
+            throw new CredentialException("Invalid Password");
         }
         return logging;
     }

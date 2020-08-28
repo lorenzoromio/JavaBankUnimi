@@ -2,6 +2,7 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.*;
@@ -33,7 +34,7 @@ public class DBConnect {
             connection.close();
 //        System.out.println("Call DBConnect.close()");
         connection = null;
-        System.out.println(connection);
+//        System.out.println(connection);
 
 
     }
@@ -112,145 +113,67 @@ public class DBConnect {
 
         try {
             Bank.addAccount(new Account("anna","arnaboldi","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("elena","arnaboldi","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("katia","romagnoli","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("roberto","romio","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("maurizio","romio","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("michelangelo","mazzitelli","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("matteo","malusardi","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("lorenzo","romio","Burton86!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("adele rosalia","romio","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("luca","armaroli","kiara4Lif3!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("miranda","radici","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("edoardo","fiorani","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         try {
             Bank.addAccount(new Account("andrea","torresi","Password20!"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (AccountException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

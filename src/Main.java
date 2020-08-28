@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args)  {
 
 //            DBConnect.deleteAll();
-        DBConnect.populateDB();
+//        DBConnect.populateDB();
 
 
 //        new WebApp("luca.armaroli","kiara4Lif3!");
