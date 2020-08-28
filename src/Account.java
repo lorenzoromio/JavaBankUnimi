@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +48,11 @@ public class Account {
 
         this.timestamp = String.valueOf(new Date().getTime());
         this.salt = timestamp.concat(random(10));
-        setPassword(psw);
+        try {
+            setPassword(psw);
+        } catch (TimeoutException e) {
+            //
+        }
 
         StringBuilder sb = new StringBuilder();
         String[] nomi = nome.split(" ");
@@ -156,7 +161,7 @@ public class Account {
     }
 
     //SETTER
-    protected void setPassword(String psw) throws NoSuchAlgorithmException, SQLException {
+    protected void setPassword(String psw) throws NoSuchAlgorithmException, SQLException, TimeoutException {
         checkValidPassword(psw);
         this.hashPsw = hash(psw);
 
@@ -195,11 +200,11 @@ public class Account {
         return iban;
     }
 
-    public Double getSaldo() throws SQLException {
+    public Double getSaldo() throws SQLException, TimeoutException {
         return saldo;
     }
 
-    protected void setSaldo(Double saldo) throws SQLException {
+    protected void setSaldo(Double saldo) throws SQLException, TimeoutException {
         this.saldo = saldo;
 
     }

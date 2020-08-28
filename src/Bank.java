@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.concurrent.TimeoutException;
 
 public class Bank {
     private static final String abi = "02";
@@ -43,7 +44,11 @@ public class Bank {
         prepStmt.setString(6, account.getTimestamp());
         prepStmt.setString(7, account.getIban());
         prepStmt.setString(8, account.getNum_conto());
-        prepStmt.setDouble(9, account.getSaldo());
+        try {
+            prepStmt.setDouble(9, account.getSaldo());
+        } catch (TimeoutException e) {
+            //
+        }
         prepStmt.execute();
         prepStmt.close();
 

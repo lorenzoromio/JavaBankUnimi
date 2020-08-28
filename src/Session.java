@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    private final long duration = 60 * 3;
+    private final long duration = 60;
     private Instant sessionCreation;
     private List<Transaction> transactions;
 
@@ -234,7 +234,8 @@ public class Session extends Account {
     }
 
     @Override
-    public Double getSaldo() throws SQLException {
+    public Double getSaldo() throws SQLException, TimeoutException {
+        updateSessionCreation();
         String update = "select * from accounts where username = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
         prepStmt.setString(1, getUsername());
@@ -249,7 +250,8 @@ public class Session extends Account {
     }
 
     @Override
-    protected void setSaldo(Double saldo) throws SQLException {
+    protected void setSaldo(Double saldo) throws SQLException, TimeoutException {
+        updateSessionCreation();
         super.setSaldo(saldo);
         String update = "update accounts set saldo = ? where username = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
@@ -261,7 +263,8 @@ public class Session extends Account {
 
     //
     @Override
-    protected void setPassword(String psw) throws NoSuchAlgorithmException, SQLException {
+    protected void setPassword(String psw) throws NoSuchAlgorithmException, SQLException, TimeoutException {
+        updateSessionCreation();
         super.setPassword(psw);
 //        System.out.println("UPDATE PSW ON DATABASE");
         String update = "update accounts set HASHPSW = ? where username = ?";
@@ -281,6 +284,11 @@ public class Session extends Account {
         if (rs.next()) {
             return rs.getString("HASHPSW");
         } else return null;
+    }
+
+    @Override
+    public String toString() {
+        return "Logged as"+ getUsername();
     }
 }
 
