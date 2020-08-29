@@ -3,6 +3,7 @@
  */
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
@@ -11,18 +12,16 @@ public class PrelievoForm extends WebApp {
 
 
     private JPanel prelievoPanel;
-    private JPanel operationPanel;
-    private JPanel fieldsPanel;
-    private JLabel amountLBL;
     private JTextField amountFLD;
-    private JPanel buttonsDownPanel;
     private JButton prelievoBTN;
     private JButton balanceBTN;
-    private JButton contactsBTN;
-    private JPanel buttonsLatoPanel;
     private JButton homeBTN;
     private JButton logoutBTN;
-    private JPanel balancePanel;
+    private JPanel credentialPanel;
+    private JLabel amountLBL;
+    private JPanel buttonsPanel;
+    private JLabel icon;
+    private JPanel creditsPanel;
     private JLabel balanceLBL;
     private JLabel balance;
 
@@ -37,15 +36,16 @@ public class PrelievoForm extends WebApp {
         setTitle("Prelievo - JavaBank");
 
         setFrameIcon(moneyIconPath);
+        setLabelIcon(icon, moneyIconPath);
         setResizable(false);
 
         getRootPane().setDefaultButton(prelievoBTN);
         balance.setText(euro.format(session.getSaldo()));
 
         if (balance.isVisible()) {
-            balanceBTN.setText("Nascondi Saldo");
+            setButtonIcon(balanceBTN,showPswIconPath);
         } else {
-            balanceBTN.setText("Mostra Saldo");
+            setButtonIcon(balanceBTN,hidePswIconPath);
         }
 
         SwingUtilities.invokeLater(amountFLD::requestFocus);
@@ -58,15 +58,11 @@ public class PrelievoForm extends WebApp {
                 balance.setText(euro.format(session.getSaldo()));
 
                 if (balance.isVisible()) {
-
-                    balanceBTN.setText("Mostra Saldo");
-                    balanceLBL.setVisible(false);
+                    setButtonIcon(balanceBTN,hidePswIconPath);
                     balance.setVisible(false);
 
                 } else {
-
-                    balanceBTN.setText("Nascondi Saldo");
-                    balanceLBL.setVisible(true);
+                    setButtonIcon(balanceBTN,showPswIconPath);
                     balance.setVisible(true);
 
                 }
@@ -93,10 +89,10 @@ public class PrelievoForm extends WebApp {
                 else {
 //                    amount = ;
                     session.prelievo(session.validateAmount(amountFLD.getText()));
-//                    session.deposit(session.validateAmount(amountFLD.getText()));
+//                    session.prelievo(session.validateAmount(amountFLD.getText()));
                     amountFLD.setText("");
                     balance.setText(euro.format(session.getSaldo()));
-                    JOptionPane.showInternalMessageDialog(getContentPane(), "Deposito Effettuato Correttamente");
+                    JOptionPane.showInternalMessageDialog(getContentPane(), "Prelievo effettuato Correttamente");
                 }
 
 

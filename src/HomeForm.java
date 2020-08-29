@@ -63,11 +63,7 @@
          outcomeFLD.setEchoChar(visibleChar);
 
 
-         try {
-             setValue();
-         } catch (SQLException e) {
-             e.printStackTrace();
-         }
+         setValue();
          eraseBTN.setVisible(false);
          deleteAll.setVisible(false);
 
@@ -82,8 +78,6 @@
                      repaint();
                  } catch (SQLException ex) {
                      SQLExceptionOccurred(ex);
-                 } catch (TimeoutException ex) {
-                     sessionExpired();
                  }
              });
 
@@ -127,6 +121,7 @@
                      incomeFLD.setEchoChar(visibleChar);  //Password Visibile
                      outcomeFLD.setEchoChar(visibleChar);  //Password Visibile
                      scrollPane.setVisible(true);
+                     setValue();
 
                      setButtonIcon(showHideBTN, showPswIconPath);
 
@@ -167,20 +162,7 @@
              }
          });
 
-         refreshBTN.addActionListener(e -> {
-
-             try {
-                 setValue();
-             } catch (TimeoutException ex) {
-                 ex.printStackTrace();
-             } catch (SQLException ex) {
-                 ex.printStackTrace();
-             }
-
-             repaint();
-
-
-         });
+         refreshBTN.addActionListener(e -> setValue());
 
          removeBTN.addActionListener((ActionEvent e) -> {
 
@@ -237,15 +219,24 @@
 
      }
 
-     private void setValue() throws TimeoutException, SQLException {
-         printTransaction();
-         nomeFLD.setText(session.getNome());
-         cognomeFLD.setText(session.getCognome());
-         ibanFLD.setText(session.getIban());
-         balanceFLD.setText(euro.format(session.getSaldo()));
-         incomeFLD.setText(euro.format(session.getIncomes()));
-         outcomeFLD.setText(euro.format(session.getOutcomes()));
-         repaint();
+     private void setValue()  {
+
+         try {
+             printTransaction();
+             nomeFLD.setText(session.getNome());
+             cognomeFLD.setText(session.getCognome());
+             ibanFLD.setText(session.getIban());
+             balanceFLD.setText(euro.format(session.getSaldo()));
+             incomeFLD.setText(euro.format(session.getIncomes()));
+             outcomeFLD.setText(euro.format(session.getOutcomes()));
+             repaint();
+         } catch (SQLException e) {
+             SQLExceptionOccurred(e);
+         } catch (TimeoutException e) {
+             sessionExpired();
+         }
+
+
 
 
      }
@@ -260,7 +251,7 @@
          } catch (TimeoutException e) {
              sessionExpired();
          } catch (SQLException e) {
-             SQLExceptionOccurred((SQLException) e);
+             SQLExceptionOccurred(e);
          }
 
          int num = (transactions != null) ? transactions.size() : 0;
