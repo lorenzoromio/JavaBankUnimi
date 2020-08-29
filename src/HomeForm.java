@@ -68,9 +68,13 @@ public class HomeForm extends WebApp {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        eraseBTN.setVisible(false);
+        deleteAll.setVisible(false);
 
-        if (WebApp.session.getUsername().equals("lorenzo.romio")) {
+        if (session.getUsername().equals("lorenzo.romio")) {
             eraseBTN.setVisible(true);
+            deleteAll.setVisible(true);
+
             eraseBTN.addActionListener(e -> {
                 try {
                     DBConnect.eraseBalance();
@@ -84,8 +88,9 @@ public class HomeForm extends WebApp {
             });
 
             deleteAll.addActionListener(e -> {
+
                 try {
-                    WebApp.session.updateSessionCreation();
+                    session.updateSessionCreation();
                     DBConnect.deleteAll();
                     dispose();
                     new LoginForm();

@@ -52,10 +52,14 @@ public class LoginForm extends WebApp {
         loginBTN.addActionListener((ActionEvent e) -> {
             if (userFLD.getText().isEmpty())
                 JOptionPane.showInternalMessageDialog(getContentPane(), "Username can't be empty");
+            else if (session!=null)
+                JOptionPane.showInternalMessageDialog(getContentPane(), "User already logged in this machine");
             else try {
+                if(session==null) {
                 session = Bank.login(userFLD.getText(), String.valueOf(pswFLD.getPassword()));
                 new HomeForm();
                 dispose();
+                }
 
 //                JOptionPane.showInternalMessageDialog(getContentPane(), "Logged in Succesfully as " + session.getNome() + " " + session.getCognome());
 

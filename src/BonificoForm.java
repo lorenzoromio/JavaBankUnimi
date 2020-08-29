@@ -55,6 +55,7 @@ public class BonificoForm extends WebApp{
 
     public BonificoForm() throws TimeoutException, SQLException {
 //        super();
+        session.updateSessionCreation();
         System.out.println(session);
         setContentPane(bonificoPanel);
 
@@ -65,10 +66,8 @@ public class BonificoForm extends WebApp{
         setFrameIcon(moneyIconPath);
         setResizable(false);
 
-        session.updateSessionCreation();
-
-        balance.setText(euro.format(session.getSaldo()));
         getRootPane().setDefaultButton(transferBTN);
+        balance.setText(euro.format(session.getSaldo()));
 
         if (balance.isVisible()) {
             balanceBTN.setText("Nascondi Saldo");
@@ -82,14 +81,16 @@ public class BonificoForm extends WebApp{
 
         setButtonIcon(nextBTN, nextIconPath);
         setButtonIcon(prevBTN, prevIconPath);
+        ibanFLD.setText("");
         printContacts();
 
 
         contactsBTN.addActionListener((ActionEvent e) -> {
 //            printContacts();
-
             boolean flag = !rubricaPanel.isVisible();
             rubricaPanel.setVisible(flag);
+            if(flag) ibanFLD.setText(ibanContactFLD.getText());
+            else ibanFLD.setText("");
 
         });
 
