@@ -97,8 +97,8 @@ public class LoginForm extends WebApp {
         });
 
         signupBTN.addActionListener((ActionEvent e) -> {
-            System.out.println("register BTN pressed");
-//            signupPage();
+            //TODO
+            JOptionPane.showInternalMessageDialog(getContentPane(),"in progress");
         });
 
         exitBTN.addActionListener(this::actionExit);

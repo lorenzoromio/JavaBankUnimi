@@ -207,11 +207,8 @@
 
          changePswBTN.addActionListener((ActionEvent e) -> {
 
-//            try {
-//                changePassword();
-//            } catch (TimeoutException ex) {
-//                sessionExpired();
-//            }
+             //TODO
+             JOptionPane.showInternalMessageDialog(getContentPane(),"in progress");
 
          });
 
