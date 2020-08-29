@@ -28,7 +28,7 @@ public class Transaction {
         this.date = date;
     }
 
-    public Transaction(String ibanFrom, Double amount, String type, Date date) throws SQLException {
+    public Transaction(String ibanFrom, Double amount, String type, Date date) throws SQLException{
         this.type = type; //prelievo o versamento
         this.ibanFrom = ibanFrom;
         this.amount = amount;

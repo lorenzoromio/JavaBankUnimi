@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-public class BonificoForm extends WebApp{
+public class BonificoForm extends WebApp {
     private JPanel bonificoPanel;
     private JTextField ibanFLD;
     private JTextField amountFLD;
@@ -37,21 +37,14 @@ public class BonificoForm extends WebApp{
     private JLabel ibanContactLBL;
     private JLabel cognomeLBL;
     private JLabel nomeLBL;
-    private JPanel navigationBar;
     private JLabel results;
     private JTabbedPane rubricaTab;
     private JPanel buttonsLatoPanel;
     private JPanel balancePanel;
     private JPanel buttonsDownPanel;
-
-    private class Contacts {
-        public List<Account> list;
-        public int index;
-
-    };
-
     private Contacts contacts = new Contacts();
 
+    ;
 
     public BonificoForm() throws TimeoutException, SQLException {
 //        super();
@@ -81,16 +74,19 @@ public class BonificoForm extends WebApp{
 
         setButtonIcon(nextBTN, nextIconPath);
         setButtonIcon(prevBTN, prevIconPath);
-        ibanFLD.setText("");
+
         printContacts();
+        ibanFLD.setText("");
 
 
         contactsBTN.addActionListener((ActionEvent e) -> {
-//            printContacts();
+
             boolean flag = !rubricaPanel.isVisible();
             rubricaPanel.setVisible(flag);
-            if(flag) ibanFLD.setText(ibanContactFLD.getText());
-            else ibanFLD.setText("");
+            if (flag) {
+//                printContacts();
+                ibanFLD.setText(ibanContactFLD.getText());
+            } else ibanFLD.setText("");
 
         });
 
@@ -266,6 +262,12 @@ public class BonificoForm extends WebApp{
             ibanContactFLD.setText(contacts.list.get(contacts.index).getIban());
             ibanFLD.setText(ibanContactFLD.getText());
         }
+    }
+
+    private class Contacts {
+        public List<Account> list;
+        public int index;
+
     }
 
 }

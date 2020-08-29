@@ -146,9 +146,14 @@ public class Account {
         return String.valueOf(result);
     }
 
-    public String hash(String psw) throws NoSuchAlgorithmException {
+    public String hash(String psw) {
 
-        MessageDigest md = MessageDigest.getInstance("SHA-512");
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-512");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
         md.update((psw + this.salt).getBytes());
         byte[] bytes = md.digest();
         StringBuilder sb = new StringBuilder();
@@ -161,7 +166,7 @@ public class Account {
     }
 
     //SETTER
-    protected void setPassword(String psw) throws NoSuchAlgorithmException, SQLException, TimeoutException {
+    protected void setPassword(String psw) throws SQLException, TimeoutException {
         checkValidPassword(psw);
         this.hashPsw = hash(psw);
 

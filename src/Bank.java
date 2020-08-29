@@ -5,7 +5,6 @@
 import javax.security.auth.login.AccountException;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
-import javax.security.sasl.AuthenticationException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +17,7 @@ public class Bank {
 
 
 
-    public static void addAccount(Account account) throws IllegalArgumentException, SQLException, AccountException {
+    public static void addAccount(Account account) throws IllegalArgumentException, SQLException, AccountException, ClassNotFoundException {
 
 //        DBConnect db = new DBConnect();
         String checkUser = "select ID from accounts where username = ?";

@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    private final long duration = 60;
+    private final long duration = 60*1;
     private Instant sessionCreation;
     private List<Transaction> transactions;
 
@@ -67,6 +67,7 @@ public class Session extends Account {
         prepStmt.setString(1, getUsername());
         prepStmt.setString(2, hash(psw));
         prepStmt.execute();
+
 
     }
 
@@ -164,7 +165,7 @@ public class Session extends Account {
             }
             System.out.println("ShowContacts :" + ChronoUnit.MILLIS.between(check, Instant.now()) + "ms for");
 
-        } catch (AccountNotFoundException e) {
+        } catch (AccountNotFoundException  e) {
 //           IGNORE, EXCEPTION IMPOSSIBILE
         }
 
@@ -263,7 +264,7 @@ public class Session extends Account {
 
     //
     @Override
-    protected void setPassword(String psw) throws NoSuchAlgorithmException, SQLException, TimeoutException {
+    protected void setPassword(String psw) throws SQLException, TimeoutException {
         updateSessionCreation();
         super.setPassword(psw);
 //        System.out.println("UPDATE PSW ON DATABASE");
@@ -288,7 +289,7 @@ public class Session extends Account {
 
     @Override
     public String toString() {
-        return "Logged as"+ getUsername();
+        return "Logged as" + getUsername();
     }
 }
 

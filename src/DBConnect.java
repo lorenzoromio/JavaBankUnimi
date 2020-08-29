@@ -21,7 +21,11 @@ public class DBConnect {
 //            System.out.println("create new connection to database");
 
         } catch (ClassNotFoundException ex) {
-            System.out.println("Error on create Load JDBC Driver: " + ex);
+            new WebApp().SQLExceptionOccurred(new SQLException("Invalid Driver"));
+//            System.exit(-1);
+            System.out.println("Error on create Load JDBC Driver: ");
+            ex.printStackTrace();
+
         } catch (SQLException ex) {
             System.out.println(ex);
             throw ex;
@@ -92,18 +96,14 @@ public class DBConnect {
 
         try {
             DBConnect.getConnection().createStatement().executeUpdate(accounts);
-        } catch (SQLSyntaxErrorException ex) {
-            System.out.println(ex);
-        } catch (SQLException e) {
+        }  catch (SQLException e) {
             e.printStackTrace();
             //testfd
         }
 
         try {
             DBConnect.getConnection().createStatement().executeUpdate(transaction);
-        } catch (SQLSyntaxErrorException ex) {
-            System.out.println(ex);
-        } catch (SQLException e) {
+        }  catch (SQLException e) {
             e.printStackTrace();
         }
     }

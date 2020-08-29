@@ -14,8 +14,8 @@ public class Main {
 
 //        new WebApp("luca.armaroli","kiara4Lif3!");
 //        new WebApp();
-//        new LoginForm("lorenzo.romio", "Burton86!");
-        new LoginForm("marco.anisetti", "Password20!");
+        new LoginForm("lorenzo.romio", "Burton86!");
+//        new LoginForm("marco.anisetti", "Password20!");
 
 //
     }

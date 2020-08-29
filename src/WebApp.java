@@ -14,7 +14,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeoutException;
 
-//import javax.security.sasl.AuthenticationException;
 
 public class WebApp extends JFrame {
     protected static Session session;
@@ -32,14 +31,8 @@ public class WebApp extends JFrame {
     protected final String bonificoOutIconPath = "icons/bonificoOut2.png";
     protected final String nextIconPath = "icons/next.png";
     protected final String prevIconPath = "icons/prev.png";
-    protected final int width = 600;
-    protected final int height = 600;
-    protected final int fldWidth = 190;
-    protected final int fldHeight = 30;
-    protected final int BTNWidth = 100;
-    protected final int BTNHeight = 30;
-    protected final int lblWidth = 100;
-    protected final int lblHeight = 30;
+//    protected final int width = 600;
+
     protected final DecimalFormat euro = new DecimalFormat("0.00 €");
     protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     protected String user;
@@ -67,6 +60,7 @@ public class WebApp extends JFrame {
                     break;
                 }
             }
+
         } catch (Exception e) {
             System.out.println("ninbus not avaiable");
         }
@@ -75,16 +69,15 @@ public class WebApp extends JFrame {
 //        for (int i = 0; i < fonts.length; i++)
 //            System.out.println(fonts[i]);
 
-//        String fontName = "Times New Roman";
+        String fontName = "Times New Roman";
 //        UIManager.put("Label.font", new FontUIResource(new Font(fontName, Font.PLAIN, 18)));
-//        UIManager.put("Button.font", new FontUIResource(new Font(fontName, Font.PLAIN, 15)));
+        UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Lucida Console", Font.PLAIN, 18)));
 //        UIManager.put("TextField.font", new FontUIResource(new Font(fontName, Font.PLAIN, 18)));
 //        UIManager.put("PasswordField.font", new FontUIResource(new Font(fontName, Font.PLAIN, 18)));
 //        UIManager.put("Button.margin", new Insets(0, 0, 0, 0));
 
         setFrameIcon(bankIconPath);
 //        loginPage();                                                    //CHIAMA LA PAGINA DI LOGIN
-
         addWindowListener(new WindowListener() {
             @Override
             public void windowClosing(WindowEvent e) {                  // CHIUDE LA CONNESSIONE PRIMA DI CHIUDERE LA FINESTRA
@@ -1838,25 +1831,32 @@ public class WebApp extends JFrame {
 
     //Functions
     protected void sessionExpired() {
-        JOptionPane.showInternalMessageDialog(getContentPane(), "Sessione Scaduta");
+        String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
+                     "Verrai reindirizzato alla schermata di Login.";
+
+        String title = "Sessione Scaduta";
+        JOptionPane.showMessageDialog(getContentPane(),error_message, title,JOptionPane.ERROR_MESSAGE);
+
+//        JOptionPane.showInternalMessageDialog(getContentPane(), "Sessione Scaduta");
         session = null;
         new LoginForm();
         dispose();
     }
 
     protected void SQLExceptionOccurred(SQLException ex) {
-        String error = "SQL Error\n" +
-                "SQL State : " + ex.getSQLState() +
-                "ErrorCode : " + ex.getErrorCode() +
-                ex.getMessage();
+        String error = "SQL State : " + ex.getSQLState() + "\n" +
+                       "ErrorCode : " + ex.getErrorCode() + "\n" +
+                        ex.getMessage();
         ex.printStackTrace();
 //        System.out.println(ex);
-        JOptionPane.showInternalMessageDialog(getContentPane(), error);
+        JOptionPane.showMessageDialog(getContentPane(),error,"SQL Error",JOptionPane.ERROR_MESSAGE);
+
+//        JOptionPane.showInternalMessageDialog(getContentPane(), error);
         new LoginForm();
         dispose();
     }
 
-    public void setButtonIcon(JButton button, String iconPath) {
+    protected void setButtonIcon(JButton button, String iconPath) {
 
         URL iconUrl;
         Image icon;
@@ -1876,7 +1876,7 @@ public class WebApp extends JFrame {
     }
 
 
-    public void setLabelIcon(JLabel label, String iconPath) {
+    protected void setLabelIcon(JLabel label, String iconPath) {
         URL iconUrl;
         Image icon;
 
