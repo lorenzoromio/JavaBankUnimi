@@ -10,7 +10,6 @@ import java.util.Date;
 public class Transaction {
     private final String type;
     private final Date date;
-    //    private final String timestamp;
     private final String ibanFrom;
     private final String usernameFrom;
     private final Double amount;

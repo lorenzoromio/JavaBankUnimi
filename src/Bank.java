@@ -17,7 +17,7 @@ public class Bank {
 
 
 
-    public static void addAccount(Account account) throws IllegalArgumentException, SQLException, AccountException, ClassNotFoundException {
+    public static void addAccount(Account account) throws IllegalArgumentException, SQLException, AccountException {
 
 //        DBConnect db = new DBConnect();
         String checkUser = "select ID from accounts where username = ?";
@@ -53,7 +53,7 @@ public class Bank {
 
     }
 
-    public static Session login(String username, String login_psw) throws CredentialException, AccountNotFoundException, SQLException, NoSuchAlgorithmException {
+    public static Session login(String username, String login_psw) throws CredentialException, AccountNotFoundException, SQLException {
         Session logging = new Session(username);
         if (!logging.hash(login_psw).equals(logging.getHashPsw())) {
 //            logging = null;

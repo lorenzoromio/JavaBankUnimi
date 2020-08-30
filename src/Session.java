@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    private final long duration = 60*1;
+    private final long duration = 3*60;
     private Instant sessionCreation;
     private List<Transaction> transactions;
 
@@ -26,6 +26,7 @@ public class Session extends Account {
     }
 
     public void isValid() throws TimeoutException {
+        System.out.println("In sessione da " + (ChronoUnit.MILLIS.between(sessionCreation, Instant.now())) + " ms");
         if (ChronoUnit.MILLIS.between(sessionCreation, Instant.now()) > duration * 1000)
             throw new TimeoutException("Sessione Scaduta");
     }
@@ -165,7 +166,7 @@ public class Session extends Account {
             }
             System.out.println("ShowContacts :" + ChronoUnit.MILLIS.between(check, Instant.now()) + "ms for");
 
-        } catch (AccountNotFoundException  e) {
+        } catch (AccountNotFoundException e) {
 //           IGNORE, EXCEPTION IMPOSSIBILE
         }
 
@@ -208,28 +209,28 @@ public class Session extends Account {
     public Double getOutcomes() {
         Double outcomes = 0.0;
         for (Transaction transaction : transactions) {
-            if (transaction.getType().equals("prelievo")) {
+            if (transaction.getType().equals("prelievo") ||
+                    (transaction.getType().equals("bonifico") && transaction.getIbanFrom().equals(getIban()))) {
                 outcomes += transaction.getAmount();
             }
 
-            if (transaction.getType().equals("bonifico") && transaction.getIbanFrom().equals(getIban())) {
-                outcomes += transaction.getAmount();
-            }
+//            if (transaction.getType().equals("bonifico") && transaction.getIbanFrom().equals(getIban()))
+//                outcomes += transaction.getAmount();
         }
         return outcomes;
     }
 
     public Double getIncomes() {
-////        System.out.println("get outcome");
         Double incomes = 0.0;
         for (Transaction transaction : transactions) {
-            if (transaction.getType().equals("deposito")) {
+            if (transaction.getType().equals("deposito") ||
+                    (transaction.getType().equals("bonifico") && transaction.getIbanDest().equals(getIban()))) {
                 incomes += transaction.getAmount();
             }
 
-            if (transaction.getType().equals("bonifico") && transaction.getIbanDest().equals(getIban())) {
-                incomes += transaction.getAmount();
-            }
+//            if (transaction.getType().equals("bonifico") && transaction.getIbanDest().equals(getIban())) {
+//                incomes += transaction.getAmount();
+//            }
         }
         return incomes;
     }

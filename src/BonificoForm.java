@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
-public class BonificoForm extends WebApp {
+public class BonificoForm extends MainApp {
     private JPanel bonificoPanel;
     private JTextField ibanFLD;
     private JTextField amountFLD;
@@ -44,10 +44,8 @@ public class BonificoForm extends WebApp {
     private JPanel buttonsDownPanel;
     private Contacts contacts = new Contacts();
 
-    ;
 
     public BonificoForm() throws TimeoutException, SQLException {
-//        super();
         session.updateSessionCreation();
         System.out.println(session);
         setContentPane(bonificoPanel);
@@ -79,7 +77,7 @@ public class BonificoForm extends WebApp {
         ibanFLD.setText("");
 
 
-        contactsBTN.addActionListener((ActionEvent e) -> {
+        contactsBTN.addActionListener(e -> {
 
             boolean flag = !rubricaPanel.isVisible();
             rubricaPanel.setVisible(flag);
@@ -119,7 +117,7 @@ public class BonificoForm extends WebApp {
             }
         });
 
-        prevBTN.addActionListener((ActionEvent e1) -> {
+        prevBTN.addActionListener(e -> {
             if (contacts.index > 0) contacts.index--;
             results.setText(contacts.index + 1 + " of " + contacts.list.size());
 
@@ -129,7 +127,7 @@ public class BonificoForm extends WebApp {
             ibanFLD.setText(ibanContactFLD.getText());
         });
 
-        nextBTN.addActionListener((ActionEvent e1) -> {
+        nextBTN.addActionListener(e -> {
             if (contacts.index < contacts.list.size() - 1) contacts.index++;
             results.setText(contacts.index + 1 + " of " + contacts.list.size());
 
@@ -139,23 +137,21 @@ public class BonificoForm extends WebApp {
             ibanFLD.setText(ibanContactFLD.getText());
         });
 
-        searchBTN.addActionListener((ActionEvent e) -> {          //FUNZIONA
+        searchBTN.addActionListener(e -> {          //FUNZIONA
 
             printContacts();
 
 
         });
 
-        clearBTN.addActionListener((ActionEvent e) -> {
+        clearBTN.addActionListener(e -> {
             searchFLD.setText("");
-//            searchBTN.doClick();
         });
 
-        balanceBTN.addActionListener((ActionEvent e) -> {
+        balanceBTN.addActionListener(e -> {
 
             try {
                 session.updateSessionCreation();
-//                session.accountBalanceUpdate();
                 balance.setText(euro.format(session.getSaldo()));
 
                 if (balance.isVisible()) {
@@ -180,48 +176,11 @@ public class BonificoForm extends WebApp {
 
         });
 
-        transferBTN.addActionListener((ActionEvent e) -> {
-            try {
-                Double amount;
-                session.updateSessionCreation();
-                if (amountFLD.getText().isEmpty())
-                    JOptionPane.showInternalMessageDialog(getContentPane(), "Amount field can't be empty");
-
-                else {
-                    amount = session.validateAmount(amountFLD.getText());
-                    if (ibanFLD.getText().isEmpty()) {
-                        JOptionPane.showInternalMessageDialog(getContentPane(), "Iban field can't be empty");
-                    } else {
-                        session.transfer(ibanFLD.getText().toUpperCase(), amount);
-                        amountFLD.setText("");
-                        balance.setText(euro.format(session.getSaldo()));
-                        JOptionPane.showInternalMessageDialog(getContentPane(), "Bonifico Effettuato Correttamente");
-                    }
-                }
-
-            } catch (NumberFormatException ex) {
-                amountFLD.setText("");
-                JOptionPane.showInternalMessageDialog(getContentPane(), "Amount can be only numeric");
-
-            } catch (IllegalArgumentException ex) {
-                amountFLD.setText("");
-                JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
-
-            } catch (AccountNotFoundException ex) {
-                ibanFLD.setText("");
-                JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
-
-            } catch (TimeoutException ex) {
-                sessionExpired();
-            } catch (SQLException ex) {
-                SQLExceptionOccurred(ex);
-            }
-
-        });
+        transferBTN.addActionListener(this::bonifico);
 
         homeBTN.addActionListener(this::homeAction);
 
-        logoutBTN.addActionListener(this::actionLogOut);
+        logoutBTN.addActionListener(this::logOutAction);
         setVisible(true);
 
     }
@@ -261,6 +220,44 @@ public class BonificoForm extends WebApp {
             cognomeFLD.setText(contacts.list.get(contacts.index).getCognome());
             ibanContactFLD.setText(contacts.list.get(contacts.index).getIban());
             ibanFLD.setText(ibanContactFLD.getText());
+        }
+    }
+
+    private void bonifico(ActionEvent e) {
+        try {
+            Double amount;
+            session.updateSessionCreation();
+            if (amountFLD.getText().isEmpty())
+                JOptionPane.showInternalMessageDialog(getContentPane(), "Amount field can't be empty");
+
+            else {
+                amount = session.validateAmount(amountFLD.getText());
+                if (ibanFLD.getText().isEmpty()) {
+                    JOptionPane.showInternalMessageDialog(getContentPane(), "Iban field can't be empty");
+                } else {
+                    session.transfer(ibanFLD.getText().toUpperCase(), amount);
+                    amountFLD.setText("");
+                    balance.setText(euro.format(session.getSaldo()));
+                    JOptionPane.showInternalMessageDialog(getContentPane(), "Bonifico Effettuato Correttamente");
+                }
+            }
+
+        } catch (NumberFormatException ex) {
+            amountFLD.setText("");
+            JOptionPane.showInternalMessageDialog(getContentPane(), "Amount can be only numeric");
+
+        } catch (IllegalArgumentException ex) {
+            amountFLD.setText("");
+            JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
+
+        } catch (AccountNotFoundException ex) {
+            ibanFLD.setText("");
+            JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
+
+        } catch (TimeoutException ex) {
+            sessionExpired();
+        } catch (SQLException ex) {
+            SQLExceptionOccurred(ex);
         }
     }
 

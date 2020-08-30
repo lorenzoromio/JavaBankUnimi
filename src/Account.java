@@ -31,19 +31,16 @@ public class Account {
 
 
     //Create a new Account
-    public Account(String nome, String cognome, String psw) throws NoSuchAlgorithmException, SQLException, InvalidNameException {
-        //language=RegExp
-        String regex = "^[A-Za-z]+((s)?(('|-|.)?([A-Za-z])+))*$"; //nomi singoli, doppi nomi con spazio, apostrofi
+    public Account(String nome, String cognome, String psw) throws SQLException, InvalidNameException, IllegalArgumentException {
         try {
-            checkRegex(nome, regex);
-        } catch (IllegalArgumentException e) {
+            checkNome(nome);
+        } catch (InvalidNameException e) {
             throw new InvalidNameException("Nome non valido");
         }
         try {
-            checkRegex(cognome, regex);
-        } catch (IllegalArgumentException e) {
+            checkNome(cognome);
+        } catch (InvalidNameException e) {
             throw new InvalidNameException("Cognome non valido");
-
         }
 
         this.timestamp = String.valueOf(new Date().getTime());
@@ -51,7 +48,7 @@ public class Account {
         try {
             setPassword(psw);
         } catch (TimeoutException e) {
-            //
+            e.printStackTrace();
         }
 
         StringBuilder sb = new StringBuilder();
@@ -77,6 +74,17 @@ public class Account {
         this.num_conto = random(7);
         this.iban = String.format("IT%sF%s%s", Bank.getAbi(), Bank.getCab(), this.num_conto);
         this.saldo = 0.0;
+
+    }
+
+    public static void checkNome(String nome) throws InvalidNameException {
+        //language=RegExp
+        String regex = "^[A-Za-z]+((s)?(('|-|.)?([A-Za-z])+))*$"; //nomi singoli, doppi nomi con spazio, apostrofi
+        try {
+            checkRegex(nome, regex);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidNameException();
+        }
 
     }
 
@@ -166,7 +174,7 @@ public class Account {
     }
 
     //SETTER
-    protected void setPassword(String psw) throws SQLException, TimeoutException {
+    protected void setPassword(String psw) throws SQLException, IllegalArgumentException, TimeoutException {
         checkValidPassword(psw);
         this.hashPsw = hash(psw);
 

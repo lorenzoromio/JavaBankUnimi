@@ -3,12 +3,11 @@
  */
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
-public class DepositoForm extends WebApp {
+public class DepositoForm extends MainApp {
 
 
     private JPanel depositoPanel;
@@ -42,9 +41,9 @@ public class DepositoForm extends WebApp {
         balance.setText(euro.format(session.getSaldo()));
 
         if (balance.isVisible()) {
-            setButtonIcon(balanceBTN,showPswIconPath);
+            setButtonIcon(balanceBTN, showPswIconPath);
         } else {
-            setButtonIcon(balanceBTN,hidePswIconPath);
+            setButtonIcon(balanceBTN, hidePswIconPath);
         }
 
         SwingUtilities.invokeLater(amountFLD::requestFocus);
@@ -57,11 +56,11 @@ public class DepositoForm extends WebApp {
                 balance.setText(euro.format(session.getSaldo()));
 
                 if (balance.isVisible()) {
-                    setButtonIcon(balanceBTN,hidePswIconPath);
+                    setButtonIcon(balanceBTN, hidePswIconPath);
                     balance.setVisible(false);
 
                 } else {
-                    setButtonIcon(balanceBTN,showPswIconPath);
+                    setButtonIcon(balanceBTN, showPswIconPath);
                     balance.setVisible(true);
 
                 }
@@ -77,36 +76,37 @@ public class DepositoForm extends WebApp {
 
         homeBTN.addActionListener(this::homeAction);
 
-        logoutBTN.addActionListener(this::actionLogOut);
+        logoutBTN.addActionListener(this::logOutAction);
 
-        depositBTN.addActionListener((ActionEvent e) -> {
-            try {
-//                Double amount = 0.0;
-                session.updateSessionCreation();
-                if (amountFLD.getText().isEmpty())
-                    JOptionPane.showInternalMessageDialog(getContentPane(), "Amount field can't be empty");
-                else {
-//                    amount = ;
-                    session.deposit(session.validateAmount(amountFLD.getText()));
-//                    session.deposit(session.validateAmount(amountFLD.getText()));
-                    amountFLD.setText("");
-                    balance.setText(euro.format(session.getSaldo()));
-                    JOptionPane.showInternalMessageDialog(getContentPane(), "Deposito Effettuato Correttamente");
-                }
-
-
-            } catch (IllegalArgumentException ex) {
-                amountFLD.setText("");
-                JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
-
-            } catch (TimeoutException ex) {
-                sessionExpired();
-            } catch (SQLException ex) {
-                SQLExceptionOccurred(ex);
-            }
-
-        });
+        depositBTN.addActionListener(this::deposito);
 
         setVisible(true);
+    }
+
+    private void deposito(ActionEvent e) {
+        try {
+//                Double amount = 0.0;
+            session.updateSessionCreation();
+            if (amountFLD.getText().isEmpty())
+                JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
+            else {
+//                    amount = ;
+                session.deposit(session.validateAmount(amountFLD.getText()));
+//                    session.deposit(session.validateAmount(amountFLD.getText()));
+                amountFLD.setText("");
+                balance.setText(euro.format(session.getSaldo()));
+                JOptionPane.showMessageDialog(getContentPane(), "Deposito Effettuato Correttamente");
+            }
+
+
+        } catch (IllegalArgumentException ex) {
+            amountFLD.setText("");
+            JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
+
+        } catch (TimeoutException ex) {
+            sessionExpired();
+        } catch (SQLException ex) {
+            SQLExceptionOccurred(ex);
+        }
     }
 }

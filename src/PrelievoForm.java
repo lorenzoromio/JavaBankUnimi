@@ -3,12 +3,11 @@
  */
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
-public class PrelievoForm extends WebApp {
+public class PrelievoForm extends MainApp {
 
 
     private JPanel prelievoPanel;
@@ -54,7 +53,6 @@ public class PrelievoForm extends WebApp {
 
             try {
                 session.updateSessionCreation();
-//                session.accountBalanceUpdate();
                 balance.setText(euro.format(session.getSaldo()));
 
                 if (balance.isVisible()) {
@@ -78,36 +76,34 @@ public class PrelievoForm extends WebApp {
 
         homeBTN.addActionListener(this::homeAction);
 
-        logoutBTN.addActionListener(this::actionLogOut);
+        logoutBTN.addActionListener(this::logOutAction);
 
-        prelievoBTN.addActionListener((ActionEvent e) -> {
-            try {
-//                Double amount = 0.0;
-                session.updateSessionCreation();
-                if (amountFLD.getText().isEmpty())
-                    JOptionPane.showInternalMessageDialog(getContentPane(), "Amount field can't be empty");
-                else {
-//                    amount = ;
-                    session.prelievo(session.validateAmount(amountFLD.getText()));
-//                    session.prelievo(session.validateAmount(amountFLD.getText()));
-                    amountFLD.setText("");
-                    balance.setText(euro.format(session.getSaldo()));
-                    JOptionPane.showInternalMessageDialog(getContentPane(), "Prelievo effettuato Correttamente");
-                }
-
-
-            } catch (IllegalArgumentException ex) {
-                amountFLD.setText("");
-                JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
-
-            } catch (TimeoutException ex) {
-                sessionExpired();
-            } catch (SQLException ex) {
-                SQLExceptionOccurred(ex);
-            }
-
-        });
+        prelievoBTN.addActionListener(this::prelievo);
 
         setVisible(true);
+    }
+
+    private void prelievo(ActionEvent e) {
+        try {
+            session.updateSessionCreation();
+            if (amountFLD.getText().isEmpty())
+                JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
+            else {
+                session.prelievo(session.validateAmount(amountFLD.getText()));
+                amountFLD.setText("");
+                balance.setText(euro.format(session.getSaldo()));
+                JOptionPane.showMessageDialog(getContentPane(), "Prelievo effettuato Correttamente");
+            }
+
+
+        } catch (IllegalArgumentException ex) {
+            amountFLD.setText("");
+            JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
+
+        } catch (TimeoutException ex) {
+            sessionExpired();
+        } catch (SQLException ex) {
+            SQLExceptionOccurred(ex);
+        }
     }
 }

@@ -2,9 +2,6 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
-import javax.naming.InvalidNameException;
-import javax.security.auth.login.AccountException;
-import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 public class DBConnect {
@@ -21,7 +18,7 @@ public class DBConnect {
 //            System.out.println("create new connection to database");
 
         } catch (ClassNotFoundException ex) {
-            new WebApp().SQLExceptionOccurred(new SQLException("Invalid Driver"));
+            new MainApp().SQLExceptionOccurred(new SQLException("Invalid Driver"));
 //            System.exit(-1);
             System.out.println("Error on create Load JDBC Driver: ");
             ex.printStackTrace();
@@ -36,17 +33,12 @@ public class DBConnect {
     public static void close() throws SQLException {
         if (connection != null && !connection.isClosed())
             connection.close();
-//        System.out.println("Call DBConnect.close()");
         connection = null;
-//        System.out.println(connection);
-
-
     }
 
     public static void deleteAll() throws SQLException, NullPointerException {
         DBConnect.getConnection().createStatement().executeUpdate("TRUNCATE accounts");
         eraseBalance();
-
         System.out.println("All Database Deleted!");
 
 
