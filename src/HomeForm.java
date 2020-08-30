@@ -42,6 +42,7 @@
      private JLabel nomeLBL;
      private JPanel informationPanel;
      private JTextArea transictionArea;
+     private JPanel creditsPanel;
      private JPanel areaTransaction;
 
      public HomeForm() throws TimeoutException {
@@ -75,8 +76,8 @@
          }
          Locale.setDefault(Locale.ITALIAN);
 
-         setButtonIcon(showHideBTN, showPswIconPath);
-         setButtonIcon(refreshBTN, refreshIconPath);
+         setCustomIcon(showHideBTN, showPswIconPath);
+         setCustomIcon(refreshBTN, refreshIconPath);
 
          setVisible(true);
 
@@ -92,7 +93,7 @@
                      incomeFLD.setEchoChar(echochar); //* Echo Char
                      scrollPane.setVisible(false);
 
-                     setButtonIcon(showHideBTN, hidePswIconPath);
+                     setCustomIcon(showHideBTN, hidePswIconPath);
 
                  } else {
                      balanceFLD.setEchoChar(visibleChar);  //Password Visibile
@@ -101,7 +102,7 @@
                      scrollPane.setVisible(true);
                      setValue();
 
-                     setButtonIcon(showHideBTN, showPswIconPath);
+                     setCustomIcon(showHideBTN, showPswIconPath);
 
 
                  }
@@ -206,7 +207,7 @@
          try {
              // print transaction
              transictionArea.removeAll();
-             List<Transaction> transactions = null;
+             List<Transaction> transactions;
              transactions = session.showTransactions();
 
              int num = (transactions != null) ? transactions.size() : 0;
@@ -288,7 +289,7 @@
                  ibanDest.setBounds(ibanFrom.getBounds());
                  type.setBounds(userFrom.getBounds());
 
-                 setLabelIcon(iconType, iconpath);
+                 setCustomIcon(iconType, iconpath);
 
                  amount.setFont(new Font(amount.getFont().getName(), Font.BOLD, 20));
                  transictionArea.add(iconType);

@@ -6,6 +6,7 @@ import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
@@ -36,7 +37,7 @@ public class LoginForm extends MainApp {
 
         setTitle("LoginPage - JavaBank");
         setFrameIcon(bankIconPath);
-        setLabelIcon(icon, bankIconPath);
+        setCustomIcon(icon, bankIconPath);
         getRootPane().setDefaultButton(loginBTN);               //SELEZIONA IL PULSANTE DI LOGIN
         SwingUtilities.invokeLater(userFLD::requestFocus);       //FOCUS SUL CAMPO USERNAME
 
