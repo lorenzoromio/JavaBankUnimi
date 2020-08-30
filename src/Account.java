@@ -3,7 +3,6 @@
  */
 
 import javax.naming.InvalidNameException;
-import javax.security.auth.login.AccountException;
 import javax.security.auth.login.AccountNotFoundException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -17,7 +16,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Account {
+public class Account implements Comparable<Account> {
     private final String nome;
     private final String cognome;
     private final String salt;
@@ -29,26 +28,26 @@ public class Account {
     private String hashPsw;
     private Double saldo;
 
-
     //Create a new Account
     public Account(String nome, String cognome, String psw) throws SQLException, InvalidNameException, IllegalArgumentException {
         try {
-            checkNome(nome);
-        } catch (InvalidNameException e) {
+            checkValidName(nome);
+        } catch (InvalidNameException ex) {
             throw new InvalidNameException("Nome non valido");
         }
+
         try {
-            checkNome(cognome);
-        } catch (InvalidNameException e) {
+            checkValidName(cognome);
+        } catch (InvalidNameException ex) {
             throw new InvalidNameException("Cognome non valido");
         }
 
         this.timestamp = String.valueOf(new Date().getTime());
-        this.salt = timestamp.concat(random(10));
+        this.salt = timestamp.concat(randomString(10));
         try {
             setPassword(psw);
         } catch (TimeoutException e) {
-            e.printStackTrace();
+            //
         }
 
         StringBuilder sb = new StringBuilder();
@@ -69,31 +68,21 @@ public class Account {
         }
         this.cognome = sb2.toString();
 
-
         this.username = (String.format("%s.%s", this.nome.toLowerCase().replace(" ", ""), this.cognome.toLowerCase().replace(" ", ""))).replaceAll("[-+'^:,]", "");
-        this.num_conto = random(7);
+        this.num_conto = randomString(7);
         this.iban = String.format("IT%sF%s%s", Bank.getAbi(), Bank.getCab(), this.num_conto);
         this.saldo = 0.0;
 
     }
 
-    public static void checkNome(String nome) throws InvalidNameException {
-        //language=RegExp
-        String regex = "^[A-Za-z]+((s)?(('|-|.)?([A-Za-z])+))*$"; //nomi singoli, doppi nomi con spazio, apostrofi
-        try {
-            checkRegex(nome, regex);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidNameException();
-        }
-
-    }
-
     //Create ad Account Obj from Database only by Username
     public Account(String username) throws AccountNotFoundException, SQLException {
-        PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement("select * from accounts where username = ?");
 
+        String query = "select * from accounts where username = ?";
+        PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
         prepStmt.setString(1, username);
         ResultSet rs = prepStmt.executeQuery();
+
         if (rs.next()) {
             this.ID = rs.getInt("ID");
             this.username = rs.getString("USERNAME");
@@ -108,8 +97,6 @@ public class Account {
         } else {
             throw new AccountNotFoundException("Account not in database");
         }
-
-
     }
 
     public static void checkRegex(String string, String regex) throws IllegalArgumentException {
@@ -122,6 +109,16 @@ public class Account {
         if (!m.matches()) throw new IllegalArgumentException();
     }
 
+    public static void checkValidName(String nome) throws InvalidNameException {
+        //language=RegExp
+        String regex = "^[A-Za-z]+((s)?(('|-|.)?([A-Za-z])+))*$"; //nomi singoli, doppi nomi con spazio, apostrofi
+        try {
+            checkRegex(nome, regex);
+        } catch (IllegalArgumentException e) {
+            throw new InvalidNameException();
+        }
+
+    }
 
     public static void checkValidPassword(String password) throws IllegalArgumentException {
         // Regex to check valid password.
@@ -143,8 +140,8 @@ public class Account {
 
     }
 
-    private String random(int length) {
-        //Use cryptographically secure random number generator
+    private String randomString(int length) {
+        //Use cryptographically secure randomString number generator
         Random random = new SecureRandom();
         StringBuilder result = new StringBuilder();
 
@@ -156,21 +153,20 @@ public class Account {
 
     public String hash(String psw) {
 
-        MessageDigest md = null;
         try {
-            md = MessageDigest.getInstance("SHA-512");
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+            md.update((psw + this.salt).getBytes());
+            byte[] bytes = md.digest();
+            StringBuilder sb = new StringBuilder();
+            for (byte aByte : bytes) {
+                sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+            }
+
+            return sb.toString();
+
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            return null;
         }
-        md.update((psw + this.salt).getBytes());
-        byte[] bytes = md.digest();
-        StringBuilder sb = new StringBuilder();
-        for (byte aByte : bytes) {
-            sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
-        }
-        return sb.toString();
-
-
     }
 
     //SETTER
@@ -222,5 +218,15 @@ public class Account {
 
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "username='" + username + '\'' +
+                '}';
+    }
 
+    @Override
+    public int compareTo(Account o) {
+        return this.getCognome().compareTo(o.getCognome());
+    }
 }
