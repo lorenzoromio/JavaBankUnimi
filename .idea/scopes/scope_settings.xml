@@ -1,8 +1,0 @@
-<component name="DependencyValidationManager">
-  <state>
-    <unnamed_scope value="src:PrelievoForm" />
-    <unnamed_scope value="src:Session" />
-    <deny_rule from_scope="src:PrelievoForm" to_scope="src:Session" is_deny="true" />
-    <deny_rule from_scope="src:PrelievoForm" to_scope="src:Session" is_deny="true" />
-  </state>
-</component>

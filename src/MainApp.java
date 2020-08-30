@@ -141,6 +141,7 @@ public class MainApp extends JFrame {
 
     }
 
+    @SuppressWarnings("DuplicatedCode")
     protected void setButtonIcon(JButton button, String iconPath) {
 
         URL iconUrl;
@@ -161,6 +162,7 @@ public class MainApp extends JFrame {
     }
 
 
+    @SuppressWarnings("DuplicatedCode")
     protected void setLabelIcon(JLabel label, String iconPath) {
         URL iconUrl;
         Image icon;

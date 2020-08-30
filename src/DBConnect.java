@@ -23,9 +23,6 @@ public class DBConnect {
             System.out.println("Error on create Load JDBC Driver: ");
             ex.printStackTrace();
 
-        } catch (SQLException ex) {
-            System.out.println(ex);
-            throw ex;
         }
         return connection;
     }

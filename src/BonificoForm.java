@@ -42,7 +42,7 @@ public class BonificoForm extends MainApp {
     private JPanel buttonsLatoPanel;
     private JPanel balancePanel;
     private JPanel buttonsDownPanel;
-    private Contacts contacts = new Contacts();
+    private Contacts contacts;
 
 
     public BonificoForm() throws TimeoutException, SQLException {
@@ -261,7 +261,7 @@ public class BonificoForm extends MainApp {
         }
     }
 
-    private class Contacts {
+    private static class Contacts {
         public List<Account> list;
         public int index;
 
