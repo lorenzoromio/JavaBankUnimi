@@ -6,8 +6,8 @@ import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -31,18 +31,11 @@ public class MainApp extends JFrame {
     protected final String bonificoOutIconPath = "icons/bonificoOut2.png";
     protected final String nextIconPath = "icons/next.png";
     protected final String prevIconPath = "icons/prev.png";
-
     protected final DecimalFormat euro = new DecimalFormat("0.00 €");
     protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+    protected final char echochar = '*';
     protected String user;
     protected String psw;
-    protected char echochar = '*';
-
-    public MainApp(String user, String psw) {
-        this.user = user;
-        this.psw = psw;
-        new LoginForm();
-    }
 
     public MainApp() {
         System.out.println("new MainApp()");
@@ -61,12 +54,11 @@ public class MainApp extends JFrame {
             System.out.println("ninbus not avaiable");
         }
 
-
-        String fontName = "Times New Roman";
         UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Lucida Console", Font.PLAIN, 16)));
 
         setFrameIcon(bankIconPath);
-        addWindowListener(new WindowListener() {
+
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {              // CHIUDE LA CONNESSIONE PRIMA DI CHIUDERE LA FINESTRA
                 try {
@@ -95,82 +87,62 @@ public class MainApp extends JFrame {
                     SQLExceptionOccurred(ex);
                 }
             }
-
-            @Override
-            public void windowOpened(WindowEvent e) {
-            }
-
-            @Override
-            public void windowClosed(WindowEvent e) {
-            }
-
-            @Override
-            public void windowIconified(WindowEvent e) {
-            }
-
-            @Override
-            public void windowDeiconified(WindowEvent e) {
-            }
         });
     }
 
-
+    public static void main(String[] args) {
+        new LoginForm();
+    }
 
     //Functions
     protected void sessionExpired() {
         String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
-                     "Verrai reindirizzato alla schermata di Login.";
+                "Verrai reindirizzato alla schermata di Login.";
 
         String title = "Sessione Scaduta";
         dispose();
-        JOptionPane.showMessageDialog(getContentPane(),error_message, title,JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(getContentPane(), error_message, title, JOptionPane.ERROR_MESSAGE);
         session = null;
         new LoginForm();
-
     }
 
     protected void SQLExceptionOccurred(SQLException ex) {
         String error = "SQL State : " + ex.getSQLState() + "\n" +
-                       "ErrorCode : " + ex.getErrorCode() + "\n" +
-                        ex.getMessage();
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(getContentPane(),error,"SQL Error",JOptionPane.ERROR_MESSAGE);
+                "ErrorCode : " + ex.getErrorCode() + "\n" +
+                ex.getMessage();
 
+        JOptionPane.showMessageDialog(getContentPane(), error, "SQL Error", JOptionPane.ERROR_MESSAGE);
         dispose();
         new LoginForm();
 
     }
 
-    @SuppressWarnings("DuplicatedCode")
-    protected void setButtonIcon(JButton button, String iconPath) {
+    protected void setCustomIcon(JButton button, String iconPath) {
 
-        URL iconUrl;
         Image icon;
+        int margin = 5;
 
         try {
-            iconUrl = this.getClass().getResource(iconPath);
+            URL iconUrl = this.getClass().getResource(iconPath);
             icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
         } catch (Exception e) {
             icon = new ImageIcon(iconPath).getImage();
         }
 
         try {
-            button.setIcon(new ImageIcon(icon.getScaledInstance(button.getWidth() - 5, button.getHeight() - 5, Image.SCALE_SMOOTH)));
+            button.setIcon(new ImageIcon(icon.getScaledInstance(button.getWidth() - margin, button.getHeight() - margin, Image.SCALE_SMOOTH)));
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-
-    @SuppressWarnings("DuplicatedCode")
-    protected void setLabelIcon(JLabel label, String iconPath) {
-        URL iconUrl;
+    protected void setCustomIcon(JLabel label, String iconPath) {
         Image icon;
 
         try {
-            iconUrl = this.getClass().getResource(iconPath);
+            URL iconUrl = this.getClass().getResource(iconPath);
             icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-        } catch (Exception e) {
+        } catch (Exception ex) {
             icon = new ImageIcon(iconPath).getImage();
         }
         try {
@@ -181,9 +153,10 @@ public class MainApp extends JFrame {
     }
 
     protected void setFrameIcon(String iconPath) {
+
         try {
             setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(iconPath)));
-        } catch (NullPointerException e) {
+        } catch (Exception ex) {
             ImageIcon imageIcon = new ImageIcon(iconPath);
             setIconImage(imageIcon.getImage());
         }
@@ -191,9 +164,8 @@ public class MainApp extends JFrame {
 
 
     protected void exitAction(ActionEvent e) {
-        System.out.println("Exit BTN pressed");
-        int choice = JOptionPane.showConfirmDialog(getContentPane(), "Do you want to exit?");
-        if (choice == 0) {
+
+        if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to exit?") == 0) {
             session = null;
             dispose();
         }
@@ -201,9 +173,7 @@ public class MainApp extends JFrame {
 
     protected void logOutAction(ActionEvent e) {
 
-        System.out.println("LogOut BTN pressed");
-        int choice = JOptionPane.showConfirmDialog(getContentPane(), "Do you want to LogOut?");
-        if (choice == 0) {
+        if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to LogOut?") == 0) {
             dispose();
             session = null;
             new LoginForm();
@@ -217,7 +187,5 @@ public class MainApp extends JFrame {
         } catch (TimeoutException ex) {
             sessionExpired();
         }
-
     }
-
 }
