@@ -115,6 +115,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value=""/>
                 </properties>
               </component>
@@ -127,6 +128,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <text value=""/>
                 </properties>
               </component>
@@ -158,6 +160,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <font size="14"/>
                   <text value="Signup"/>
                 </properties>
@@ -169,6 +172,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <font size="14"/>
                   <text value="Back"/>
                 </properties>
@@ -180,6 +184,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <focusable value="false"/>
                   <font size="14"/>
                   <text value="Exit"/>
                 </properties>
@@ -212,7 +217,7 @@
           </vspacer>
         </children>
       </grid>
-      <grid id="78382" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="78382" binding="creditsPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="5" right="10"/>
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
