@@ -7,10 +7,10 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
+@SuppressWarnings("ConstantConditions")
 public class DeleteAccountForm extends MainApp {
     private JPasswordField confirmPswFLD;
     private JPanel removePanel;
@@ -26,7 +26,6 @@ public class DeleteAccountForm extends MainApp {
     private JButton showHideBTN2;
     private JLabel pswLBL;
     private JLabel confirmPswLBL;
-    private JLabel checkpswLBL;
 
     public DeleteAccountForm() throws TimeoutException {
         session.updateSessionCreation();
@@ -37,33 +36,39 @@ public class DeleteAccountForm extends MainApp {
         setLocationRelativeTo(null);
         setTitle("Delete Account - JavaBank");
         setFrameIcon(deleteAccountIconPath);
-        setLabelIcon(icon, deleteAccountIconPath);
+        setCustomIcon(icon, deleteAccountIconPath);
 
         setResizable(false);
         setVisible(true);
 
         getRootPane().setDefaultButton(deleteBTN);
-        checkpswLBL.setVisible(false);
-        checkpswLBL.setForeground(Color.red);
-        setButtonIcon(showHideBTN1, hidePswIconPath);
-        setButtonIcon(showHideBTN2, hidePswIconPath);
+        setCustomIcon(showHideBTN1, hidePswIconPath);
+        setCustomIcon(showHideBTN2, hidePswIconPath);
         pswFLD.setEchoChar(echochar);
         confirmPswFLD.setEchoChar(echochar);
 
-
-        confirmPswFLD.addKeyListener(new KeyListener() {
+        pswFLD.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyTyped(KeyEvent e) {
-
+            public void keyReleased(KeyEvent e) {
+                try {
+                    if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(String.valueOf(pswFLD.getPassword())).equals(session.getHashPsw())) {
+                        pswFLD.setForeground(new JPasswordField().getForeground());
+                        pswFLD.setBorder(new JPasswordField().getBorder());
+                    } else {
+                        pswFLD.setForeground(Color.red);
+                        pswFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                    }
+                } catch (SQLException ex) {
+                    SQLExceptionOccurred(ex);
+                }
             }
+        });
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
+        confirmPswFLD.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyReleased(KeyEvent e) {
+
                 int lenghtPsw1 = pswFLD.getPassword().length;
                 int lenghtPsw2 = confirmPswFLD.getPassword().length;
 
@@ -71,9 +76,9 @@ public class DeleteAccountForm extends MainApp {
 
                 String subPsw1 = String.valueOf(pswFLD.getPassword()).substring(0, lenghtPsw2);
 
-                if (subPsw1.equals(String.valueOf(confirmPswFLD.getPassword())) || lenghtPsw2 > lenghtPsw1) {
-                    confirmPswFLD.setForeground(pswFLD.getForeground());
-                    confirmPswFLD.setBorder(pswFLD.getBorder());
+                if (String.valueOf(confirmPswFLD.getPassword()).isEmpty() || (lenghtPsw2 > lenghtPsw1) || subPsw1.equals(String.valueOf(confirmPswFLD.getPassword()))) {
+                    confirmPswFLD.setForeground(new JPasswordField().getForeground());
+                    confirmPswFLD.setBorder(new JPasswordField().getBorder());
                 } else {
                     confirmPswFLD.setForeground(Color.red);
                     confirmPswFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
@@ -82,62 +87,33 @@ public class DeleteAccountForm extends MainApp {
         });
 
 
-        showHideBTN1.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-
-            }
+        showHideBTN1.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent e) {
                 pswFLD.setEchoChar('\u0000');  //Password Visibile
-                setButtonIcon(showHideBTN1, showPswIconPath);
-
-
+                setCustomIcon(showHideBTN1, showPswIconPath);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 pswFLD.setEchoChar(echochar);
-//                pswFLD.setEchoChar('\u2022'); //Dot Echo Char
-                setButtonIcon(showHideBTN1, hidePswIconPath);
-
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-
+                setCustomIcon(showHideBTN1, hidePswIconPath);
             }
         });
-        showHideBTN2.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
+
+        showHideBTN2.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent e) {
                 confirmPswFLD.setEchoChar('\u0000');  //Password Visibile
-                setButtonIcon(showHideBTN2, showPswIconPath);
+                setCustomIcon(showHideBTN2, showPswIconPath);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 confirmPswFLD.setEchoChar(echochar);
-//                confirmPswFLD.setEchoChar('\u2022'); //Dot Echo Char
-                setButtonIcon(showHideBTN2, hidePswIconPath);
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
+                setCustomIcon(showHideBTN2, hidePswIconPath);
             }
         });
 
@@ -146,7 +122,34 @@ public class DeleteAccountForm extends MainApp {
         logoutBTN.addActionListener(this::logOutAction);
         backBTN.addActionListener(this::homeAction);
 
+        pswFLD.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
 
+                System.out.println("Psw1: " + session.hash(String.valueOf(pswFLD.getPassword())));
+                try {
+                    System.out.println("Psw2: " + session.getHashPsw());
+                    System.out.println();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+
+                try {
+
+                    if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(String.valueOf(pswFLD.getPassword())).equals(session.getHashPsw())) {
+                        pswFLD.setForeground(new JPasswordField().getForeground());
+                        pswFLD.setBorder(new JPasswordField().getBorder());
+                    } else {
+                        pswFLD.setForeground(Color.red);
+                        pswFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                    }
+                } catch (SQLException ex) {
+                    SQLExceptionOccurred(ex);
+                }
+            }
+
+
+        });
     }
 
     private void deleteAccount(ActionEvent e) {
@@ -171,8 +174,13 @@ public class DeleteAccountForm extends MainApp {
             } catch (SQLException ex) {
                 SQLExceptionOccurred(ex);
 
-            } catch (NoSuchAlgorithmException ex) {
-                JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
+            } finally {
+
+                pswFLD.setForeground(new JPasswordField().getForeground());
+                pswFLD.setBorder(new JPasswordField().getBorder());
+                confirmPswFLD.setForeground(new JPasswordField().getForeground());
+                confirmPswFLD.setBorder(new JPasswordField().getBorder());
+
             }
         }
     }
