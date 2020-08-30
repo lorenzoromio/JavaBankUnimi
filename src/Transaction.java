@@ -36,11 +36,8 @@ public class Transaction {
     }
 
     private String setUsername(String iban) throws SQLException {
-        DBConnect db = new DBConnect();
 
-        String query = "select username\n" +
-                "from accounts\n" +
-                "where iban = ?";
+        String query = "select username from accounts where iban = ?";
 
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
         prepStmt.setString(1, iban);
@@ -49,35 +46,24 @@ public class Transaction {
         if (rs.next()) {
             result = rs.getString("USERNAME");
         }
-        if (rs != null) rs.close();
-        if (prepStmt != null) prepStmt.close();
         return result;
     }
 
     public void push() throws SQLException {
-        try {
-//            String query = "INSERT INTO `transaction` (`TYPE`, `DATE`, `IBAN_FROM`, `USERNAME_FROM`, `IBAN_DEST`, `USERNAME_DEST`, `AMOUNT`)\n" +
-//                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-            String query = "INSERT INTO transaction (TYPE, DATE, IBAN_FROM, USERNAME_FROM, IBAN_DEST, USERNAME_DEST, AMOUNT)\n" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?)";
-            PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
-            prepStmt.setString(1, this.type);
-            prepStmt.setString(2, String.valueOf(this.date.getTime()));
-            prepStmt.setString(3, this.ibanFrom);
-            prepStmt.setString(4, this.usernameFrom);
-            prepStmt.setString(5, this.ibanDest);
-            prepStmt.setString(6, this.usernameDest);
-            prepStmt.setDouble(7, this.amount);
-            prepStmt.execute();
-            if (prepStmt != null) prepStmt.close();
+        String query = "INSERT INTO transaction (TYPE, DATE, IBAN_FROM, USERNAME_FROM, IBAN_DEST, USERNAME_DEST, AMOUNT)\n" +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+        PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
+        prepStmt.setString(1, this.type);
+        prepStmt.setString(2, String.valueOf(this.date.getTime()));
+        prepStmt.setString(3, this.ibanFrom);
+        prepStmt.setString(4, this.usernameFrom);
+        prepStmt.setString(5, this.ibanDest);
+        prepStmt.setString(6, this.usernameDest);
+        prepStmt.setDouble(7, this.amount);
+        prepStmt.execute();
+
     }
 
     @Override

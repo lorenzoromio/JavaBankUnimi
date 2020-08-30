@@ -4,7 +4,6 @@
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
-import java.security.NoSuchAlgorithmException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    private final long duration = 3*60;
+    private final long duration = 3 * 60;
     private Instant sessionCreation;
     private List<Transaction> transactions;
 
@@ -26,7 +25,6 @@ public class Session extends Account {
     }
 
     public void isValid() throws TimeoutException {
-        System.out.println("In sessione da " + (ChronoUnit.MILLIS.between(sessionCreation, Instant.now())) + " ms");
         if (ChronoUnit.MILLIS.between(sessionCreation, Instant.now()) > duration * 1000)
             throw new TimeoutException("Sessione Scaduta");
     }
@@ -36,7 +34,7 @@ public class Session extends Account {
         this.sessionCreation = Instant.now();
     }
 
-    public void changePassword(String oldPsw, String newPsw, String checkPsw) throws TimeoutException, IllegalArgumentException, SQLException, NoSuchAlgorithmException, CredentialException {
+    public void changePassword(String oldPsw, String newPsw, String checkPsw) throws TimeoutException, IllegalArgumentException, SQLException, CredentialException {
 
         updateSessionCreation();
 
@@ -53,7 +51,7 @@ public class Session extends Account {
 
     }
 
-    public void deleteAccount(String psw, String confirmPsw) throws TimeoutException, IllegalArgumentException, CredentialException, SQLException, NoSuchAlgorithmException {
+    public void deleteAccount(String psw, String confirmPsw) throws TimeoutException, IllegalArgumentException, CredentialException, SQLException {
 
         updateSessionCreation();
 
@@ -91,7 +89,9 @@ public class Session extends Account {
         prepStmt.setString(1, iban);
         ResultSet rs = prepStmt.executeQuery();
 
-        if (rs.next()) {
+        if (!rs.next()) {
+            throw new AccountNotFoundException("Destinatario non trovato");
+        } else {
 
             String transferMoney = "update accounts set saldo = saldo + ? where iban = ?";
             prepStmt = DBConnect.getConnection().prepareStatement(transferMoney);
@@ -105,8 +105,6 @@ public class Session extends Account {
             rs.close();
             prepStmt.close();
 
-        } else {
-            throw new AccountNotFoundException("Destinatario non trovato");
         }
     }
 
@@ -148,29 +146,39 @@ public class Session extends Account {
         new Transaction(getIban(), amount, "prelievo", new Date()).push();
     }
 
-    public List<Account> showContacts() throws TimeoutException, SQLException {
+    public List<Account> showContacts(String search) throws TimeoutException, SQLException {
         updateSessionCreation();
-
         List<Account> accountsList = new ArrayList<>();
         String showContacts = "select username from accounts where username <> ? order by cognome";
+
         try {
+            Instant check = Instant.now();
 
             PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(showContacts);
             prepStmt.setString(1, getUsername());
             ResultSet rs = prepStmt.executeQuery();
-            Instant check = Instant.now();
             while (rs.next()) {
-                String username1 = "USERNAME";
-                String username = rs.getString(username1);
-                accountsList.add(new Account(username));
+                String username = rs.getString("USERNAME");
+                String[] words = search.split(" ");
+
+                boolean searchMatch = true;
+                for (String word : words) {
+                    if (!username.toLowerCase().contains(word.toLowerCase())) {
+                        searchMatch = false;
+                        break;
+                    }
+                }
+                if (searchMatch) {
+                    accountsList.add(new Account(username));
+                }
             }
+
             System.out.println("ShowContacts :" + ChronoUnit.MILLIS.between(check, Instant.now()) + "ms for");
 
-        } catch (AccountNotFoundException e) {
-//           IGNORE, EXCEPTION IMPOSSIBILE
-        }
 
+        } catch (AccountNotFoundException e) { /*IGNORE*/ }
 
+//        Collections.sort(accountsList);
         return accountsList;
 
     }
