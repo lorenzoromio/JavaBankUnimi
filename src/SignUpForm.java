@@ -26,7 +26,7 @@ public class SignUpForm extends MainApp {
     private JButton showHideBTN2;
     private JLabel psw1LBL;
     private JLabel psw2LBL;
-
+    private JPanel creditsPanel;
 
     public SignUpForm() {
 
@@ -38,76 +38,28 @@ public class SignUpForm extends MainApp {
         setTitle("SignUP - JavaBank");
 
         setFrameIcon(signUpIconPath);
-        setLabelIcon(icon, signUpIconPath);
+        setCustomIcon(icon, signUpIconPath);
         setResizable(false);
         setVisible(true);
         getRootPane().setDefaultButton(signupBTN);
 
-//        checkpswLBL.setVisible(false);
-//        checkpswLBL.setForeground(Color.red);
-//        matchPswLBL.setVisible(false);
-//        matchPswLBL.setForeground(Color.red);
-//
-//        checkpswLBL.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         showHideBTN1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         showHideBTN2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         signupBTN.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         exitBTN.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         backBTN.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-
         psw1FLD.setEchoChar(echochar);
         psw2FLD.setEchoChar(echochar);
 
         SwingUtilities.invokeLater(nomeFLD::requestFocus);
 
-        setButtonIcon(showHideBTN1, hidePswIconPath);
-        setButtonIcon(showHideBTN2, hidePswIconPath);
-
+        setCustomIcon(showHideBTN1, hidePswIconPath);
+        setCustomIcon(showHideBTN2, hidePswIconPath);
 
         JOptionPane pswInvalid = new JOptionPane();
 
-//        psw1FLD.addMouseListener(new MouseListener() {
-//
-////            final Font font = checkpswLBL.getFont();
-////            final Map attributes = font.getAttributes();
-//
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                JOptionPane.showMessageDialog(getContentPane(), pswInvalid.getMessage());
-//            }
-//
-//            @Override
-//            public void mousePressed(MouseEvent e) {
-//            }
-//
-//            @Override
-//            public void mouseReleased(MouseEvent e) {
-//            }
-//
-//            @Override
-//            public void mouseEntered(MouseEvent e) {
-////                attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON); //COSTANTE UNDERLINE_ON =_0
-////                checkpswLBL.setFont(font.deriveFont(attributes));
-//            }
-//
-//            @Override
-//            public void mouseExited(MouseEvent e) {
-////                attributes.put(TextAttribute.UNDERLINE, -1); //-1
-////                checkpswLBL.setFont(font.deriveFont(attributes));
-//            }
-//        });
-
-        nomeFLD.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
+        nomeFLD.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyReleased(KeyEvent e) {
@@ -115,26 +67,17 @@ public class SignUpForm extends MainApp {
                     nomeFLD.setForeground(new JPasswordField().getForeground());
                     nomeFLD.setBorder(new JPasswordField().getBorder());
                 } else try {
-                    Account.checkNome(nomeFLD.getText());
+                    Account.checkValidName(nomeFLD.getText());
                     nomeFLD.setForeground(new JPasswordField().getForeground());
                     nomeFLD.setBorder(new JPasswordField().getBorder());
                 } catch (InvalidNameException ex) {
                     nomeFLD.setForeground(Color.red);
-                    nomeFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,Color.red,Color.red));
+                    nomeFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
                 }
             }
         });
 
-        cognomeFLD.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
+        cognomeFLD.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyReleased(KeyEvent e) {
@@ -142,12 +85,12 @@ public class SignUpForm extends MainApp {
                     cognomeFLD.setForeground(new JPasswordField().getForeground());
                     cognomeFLD.setBorder(new JPasswordField().getBorder());
                 } else try {
-                    Account.checkNome(cognomeFLD.getText());
+                    Account.checkValidName(cognomeFLD.getText());
                     cognomeFLD.setForeground(new JPasswordField().getForeground());
                     cognomeFLD.setBorder(new JPasswordField().getBorder());
                 } catch (InvalidNameException ex) {
                     cognomeFLD.setForeground(Color.red);
-                    cognomeFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,Color.red,Color.red));
+                    cognomeFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
                 }
             }
         });
@@ -174,7 +117,7 @@ public class SignUpForm extends MainApp {
                 } catch (IllegalArgumentException ex) {
                     pswInvalid.setMessage(ex.getMessage());
                     psw1FLD.setForeground(Color.red);
-                    psw1FLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,Color.red,Color.red));
+                    psw1FLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
                 }
             }
         });
@@ -202,120 +145,104 @@ public class SignUpForm extends MainApp {
                     psw2FLD.setBorder(psw1FLD.getBorder());
                 } else {
                     psw2FLD.setForeground(Color.red);
-                    psw2FLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED,Color.red,Color.red));
+                    psw2FLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
                 }
             }
         });
 
-        showHideBTN1.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
+        showHideBTN1.addMouseListener(new MouseAdapter() {
+
 
             @Override
             public void mousePressed(MouseEvent e) {
                 psw1FLD.setEchoChar('\u0000');  //Password Visibile
-                setButtonIcon(showHideBTN1, showPswIconPath);
+                setCustomIcon(showHideBTN1, showPswIconPath);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 psw1FLD.setEchoChar(echochar);
-                setButtonIcon(showHideBTN1, hidePswIconPath);
+                setCustomIcon(showHideBTN1, hidePswIconPath);
             }
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
         });
 
-        showHideBTN2.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            }
+        showHideBTN2.addMouseListener(new MouseAdapter() { //todo sistemare mouse adapter
 
             @Override
             public void mousePressed(MouseEvent e) {
                 psw2FLD.setEchoChar('\u0000');  //Password Visibile
-                setButtonIcon(showHideBTN2, showPswIconPath);
+                setCustomIcon(showHideBTN2, showPswIconPath);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 psw2FLD.setEchoChar(echochar);
-                setButtonIcon(showHideBTN2, hidePswIconPath);
+                setCustomIcon(showHideBTN2, hidePswIconPath);
             }
 
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
         });
 
-        signupBTN.addActionListener((ActionEvent e) -> {
-            if (nomeFLD.getText().isEmpty() || cognomeFLD.getText().isEmpty() || String.valueOf(psw1FLD.getPassword()).isEmpty() || String.valueOf(psw2FLD.getPassword()).isEmpty()) {
-                JOptionPane.showMessageDialog(getContentPane(), "Tutti i campi devono essere compilati");
-            } else if (String.valueOf(psw1FLD.getPassword()).equals(String.valueOf(psw2FLD.getPassword()))) {
-                int choice = JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Sign Up?");
-                if (choice == 0) {
+        signupBTN.addActionListener(this::signUpAction);
 
-                    try {
-                        Bank.addAccount(new Account(nomeFLD.getText(), cognomeFLD.getText(), String.valueOf(psw1FLD.getPassword())));
-                        new LoginForm();
-                        dispose();
-
-                    } catch (IllegalArgumentException ex) {
-                        JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-                        psw1FLD.setText("");
-                        psw2FLD.setText("");
-                        psw1FLD.setForeground(new JPasswordField().getForeground());
-                        psw2FLD.setForeground(new JPasswordField().getForeground());
-
-                    } catch (InvalidNameException ex) {
-                        JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-                        nomeFLD.setText("");
-                        cognomeFLD.setText("");
-                        nomeFLD.setForeground(new JLabel().getForeground());
-                        cognomeFLD.setForeground(new JLabel().getForeground());
-
-                    } catch (AccountException ex) {
-                        JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-                        nomeFLD.setText("");
-                        cognomeFLD.setText("");
-                        psw1FLD.setText("");
-                        psw2FLD.setText("");
-                        nomeFLD.setForeground(new JLabel().getForeground());
-                        cognomeFLD.setForeground(new JLabel().getForeground());
-                        psw1FLD.setForeground(new JPasswordField().getForeground());
-                        psw2FLD.setForeground(new JPasswordField().getForeground());
-
-                    } catch (SQLException ex) {
-                        SQLExceptionOccurred(ex);
-                    }
-                }
-
-            } else {
-                psw1FLD.setText("");
-                psw2FLD.setText("");
-                psw1FLD.setForeground(new JPasswordField().getForeground());
-                psw2FLD.setForeground(new JPasswordField().getForeground());
-                JOptionPane.showMessageDialog(getContentPane(), "Password non corrette");
-            }
-        });
-
-        backBTN.addActionListener((ActionEvent e) -> {
-            new LoginForm();
-            dispose();
-        });
+        backBTN.addActionListener(this::logInAction);
 
         exitBTN.addActionListener(this::exitAction);
 
+    }
+
+    private void signUpAction(ActionEvent e) {
+        if (nomeFLD.getText().isEmpty() || cognomeFLD.getText().isEmpty() || String.valueOf(psw1FLD.getPassword()).isEmpty() || String.valueOf(psw2FLD.getPassword()).isEmpty()) {
+            JOptionPane.showMessageDialog(getContentPane(), "Tutti i campi devono essere compilati");
+        } else if (String.valueOf(psw1FLD.getPassword()).equals(String.valueOf(psw2FLD.getPassword()))) {
+            int choice = JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Sign Up?");
+            if (choice == 0) {
+
+                try {
+                    Bank.addAccount(new Account(nomeFLD.getText(), cognomeFLD.getText(), String.valueOf(psw1FLD.getPassword())));
+                    logInAction(null);
+
+                } catch (IllegalArgumentException ex) {
+                    JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
+                    psw1FLD.setText("");
+                    psw2FLD.setText("");
+                    psw1FLD.setForeground(new JPasswordField().getForeground());
+                    psw2FLD.setForeground(new JPasswordField().getForeground());
+
+                } catch (InvalidNameException ex) {
+                    JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
+                    nomeFLD.setText("");
+                    cognomeFLD.setText("");
+                    nomeFLD.setForeground(new JLabel().getForeground());
+                    cognomeFLD.setForeground(new JLabel().getForeground());
+
+                } catch (AccountException ex) {
+                    JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
+                    nomeFLD.setText("");
+                    cognomeFLD.setText("");
+                    psw1FLD.setText("");
+                    psw2FLD.setText("");
+                    nomeFLD.setForeground(new JLabel().getForeground());
+                    cognomeFLD.setForeground(new JLabel().getForeground());
+                    psw1FLD.setForeground(new JPasswordField().getForeground());
+                    psw2FLD.setForeground(new JPasswordField().getForeground());
+
+                } catch (SQLException ex) {
+                    SQLExceptionOccurred(ex);
+                }
+            }
+
+        } else {
+            psw1FLD.setText("");
+            psw2FLD.setText("");
+            psw1FLD.setForeground(new JPasswordField().getForeground());
+            psw2FLD.setForeground(new JPasswordField().getForeground());
+            JOptionPane.showMessageDialog(getContentPane(), "Password non corrette");
+        }
+    }
+
+    private void logInAction(ActionEvent e) {
+        new LoginForm();
+        dispose();
     }
 }

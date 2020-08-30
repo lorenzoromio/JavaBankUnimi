@@ -35,16 +35,16 @@ public class PrelievoForm extends MainApp {
         setTitle("Prelievo - JavaBank");
 
         setFrameIcon(moneyIconPath);
-        setLabelIcon(icon, moneyIconPath);
+        setCustomIcon(icon, moneyIconPath);
         setResizable(false);
 
         getRootPane().setDefaultButton(prelievoBTN);
         balance.setText(euro.format(session.getSaldo()));
 
         if (balance.isVisible()) {
-            setButtonIcon(balanceBTN,showPswIconPath);
+            setCustomIcon(balanceBTN,showPswIconPath);
         } else {
-            setButtonIcon(balanceBTN,hidePswIconPath);
+            setCustomIcon(balanceBTN,hidePswIconPath);
         }
 
         SwingUtilities.invokeLater(amountFLD::requestFocus);
@@ -56,11 +56,11 @@ public class PrelievoForm extends MainApp {
                 balance.setText(euro.format(session.getSaldo()));
 
                 if (balance.isVisible()) {
-                    setButtonIcon(balanceBTN,hidePswIconPath);
+                    setCustomIcon(balanceBTN,hidePswIconPath);
                     balance.setVisible(false);
 
                 } else {
-                    setButtonIcon(balanceBTN,showPswIconPath);
+                    setCustomIcon(balanceBTN,showPswIconPath);
                     balance.setVisible(true);
 
                 }
