@@ -42,8 +42,8 @@ public class BonificoForm extends MainApp {
     private JPanel buttonsLatoPanel;
     private JPanel balancePanel;
     private JPanel buttonsDownPanel;
-    private Contacts contacts;
-
+    private JPanel creditsPanel;
+    private final Contacts contacts = new Contacts();
 
     public BonificoForm() throws TimeoutException, SQLException {
         session.updateSessionCreation();
@@ -58,34 +58,26 @@ public class BonificoForm extends MainApp {
         setResizable(false);
 
         getRootPane().setDefaultButton(transferBTN);
-        balance.setText(euro.format(session.getSaldo()));
-
-        if (balance.isVisible()) {
-            balanceBTN.setText("Nascondi Saldo");
-        } else {
-            balanceBTN.setText("Mostra Saldo");
-        }
 
         SwingUtilities.invokeLater(amountFLD::requestFocus);
 
+        setCustomIcon(nextBTN, nextIconPath);
+        setCustomIcon(prevBTN, prevIconPath);
+
         rubricaPanel.setVisible(false);
-
-        setButtonIcon(nextBTN, nextIconPath);
-        setButtonIcon(prevBTN, prevIconPath);
-
-        printContacts();
+        printContacts(searchFLD.getText());
         ibanFLD.setText("");
-
+        balance.setText(euro.format(session.getSaldo()));
 
         contactsBTN.addActionListener(e -> {
 
-            boolean flag = !rubricaPanel.isVisible();
-            rubricaPanel.setVisible(flag);
-            if (flag) {
-//                printContacts();
+            if (rubricaPanel.isVisible()) {
+                rubricaPanel.setVisible(false);
+                ibanFLD.setText("");
+            } else {
+                rubricaPanel.setVisible(true);
                 ibanFLD.setText(ibanContactFLD.getText());
-            } else ibanFLD.setText("");
-
+            }
         });
 
         searchFLD.addFocusListener(new FocusListener() {
@@ -100,52 +92,31 @@ public class BonificoForm extends MainApp {
             }
         });
 
-        searchFLD.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
+        searchFLD.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyReleased(KeyEvent e) {
-
+                printContacts(searchFLD.getText());
             }
         });
 
         prevBTN.addActionListener(e -> {
-            if (contacts.index > 0) contacts.index--;
-            results.setText(contacts.index + 1 + " of " + contacts.list.size());
-
-            nomeFLD.setText(contacts.list.get(contacts.index).getNome());
-            cognomeFLD.setText(contacts.list.get(contacts.index).getCognome());
-            ibanContactFLD.setText(contacts.list.get(contacts.index).getIban());
-            ibanFLD.setText(ibanContactFLD.getText());
+            if (contacts.index > 0)
+                contacts.index--;
+            populateRubrica();
         });
 
         nextBTN.addActionListener(e -> {
-            if (contacts.index < contacts.list.size() - 1) contacts.index++;
-            results.setText(contacts.index + 1 + " of " + contacts.list.size());
-
-            nomeFLD.setText(contacts.list.get(contacts.index).getNome());
-            cognomeFLD.setText(contacts.list.get(contacts.index).getCognome());
-            ibanContactFLD.setText(contacts.list.get(contacts.index).getIban());
-            ibanFLD.setText(ibanContactFLD.getText());
+            if (contacts.index < contacts.list.size() - 1)
+                contacts.index++;
+            populateRubrica();
         });
 
-        searchBTN.addActionListener(e -> {          //FUNZIONA
-
-            printContacts();
-
-
-        });
+        searchBTN.addActionListener(e -> printContacts(searchFLD.getText()));
 
         clearBTN.addActionListener(e -> {
             searchFLD.setText("");
+            printContacts(searchFLD.getText());
         });
 
         balanceBTN.addActionListener(e -> {
@@ -163,7 +134,6 @@ public class BonificoForm extends MainApp {
                 } else {
                     balanceBTN.setText("Nascondi Saldo");
                     System.out.println(balanceBTN.getWidth());
-
                     balanceLBL.setVisible(true);
                     balance.setVisible(true);
                 }
@@ -185,26 +155,23 @@ public class BonificoForm extends MainApp {
 
     }
 
-    private void printContacts() {
+    private void populateRubrica() {
+        results.setText(contacts.index + 1 + " of " + contacts.list.size());
+        nomeFLD.setText(contacts.list.get(contacts.index).getNome());
+        cognomeFLD.setText(contacts.list.get(contacts.index).getCognome());
+        ibanContactFLD.setText(contacts.list.get(contacts.index).getIban());
+        ibanFLD.setText(ibanContactFLD.getText());
+    }
+
+    private void printContacts(String search) {
 
         try {
-            contacts.list = session.showContacts();
+            contacts.list = session.showContacts(search);
         } catch (TimeoutException ex) {
             sessionExpired();
 
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
-        }
-
-        String[] words = searchFLD.getText().split(" ");
-        for (int i = 0; i < contacts.list.size(); i++) {
-            for (String word : words) {
-                if (!contacts.list.get(i).getUsername().toLowerCase().contains(word.toLowerCase())) {
-                    contacts.list.remove(i);
-                    i--;
-                    break;
-                }
-            }
         }
 
         contacts.index = 0;
@@ -215,11 +182,7 @@ public class BonificoForm extends MainApp {
             ibanContactFLD.setText("");
             ibanFLD.setText("");
         } else {
-            results.setText(contacts.index + 1 + " of " + contacts.list.size());
-            nomeFLD.setText(contacts.list.get(contacts.index).getNome());
-            cognomeFLD.setText(contacts.list.get(contacts.index).getCognome());
-            ibanContactFLD.setText(contacts.list.get(contacts.index).getIban());
-            ibanFLD.setText(ibanContactFLD.getText());
+            populateRubrica();
         }
     }
 
