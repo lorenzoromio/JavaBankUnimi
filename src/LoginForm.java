@@ -21,13 +21,9 @@ public class LoginForm extends MainApp {
     private JButton signupBTN;
     private JButton exitBTN;
 
-    public LoginForm() {
-        new LoginForm("", "");
-    }
 
-    public LoginForm(String user, String psw) {
-        this.user = user; //todo remove user e pass, just for testing
-        this.psw = psw;
+    public LoginForm() {
+
 
         setContentPane(loginPanel);
 
