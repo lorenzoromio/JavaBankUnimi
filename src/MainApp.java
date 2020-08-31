@@ -79,8 +79,10 @@ public class MainApp extends JFrame {
             @Override
             public void windowActivated(WindowEvent e) {            //CONTROLLA LA VALIDITA' DELLA SESSIONE QUANDO LA FINESTRA SI RIATTIVA
                 System.out.println("gain focus");
-                if (session != null) {
+                if (session != null) try {
                     session.updateSessionCreation();
+                } catch (TimeoutException ex) {
+                    sessionExpired();
                 }
             }
 
