@@ -160,7 +160,7 @@ public class DeleteAccountForm extends MainApp {
             try {
                 session.deleteAccount(String.valueOf(pswFLD.getPassword()), String.valueOf(confirmPswFLD.getPassword()));
                 JOptionPane.showMessageDialog(getContentPane(), "Account Eliminato");
-//                    new LoginForm();
+                new LoginForm();
                 dispose();
 
             } catch (IllegalArgumentException | CredentialException ex) {
@@ -184,5 +184,4 @@ public class DeleteAccountForm extends MainApp {
             }
         }
     }
-//
 }
