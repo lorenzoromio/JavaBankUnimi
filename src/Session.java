@@ -47,6 +47,8 @@ public class Session extends Account {
         if (!newPsw.equals(checkPsw))
             throw new IllegalArgumentException("Le password non coincidono");
 
+        setTimestamp(String.valueOf(new Date().getTime()));
+        setSalt(getTimestamp().concat(randomString(10)));
         setPassword(newPsw);
 
     }
@@ -93,7 +95,7 @@ public class Session extends Account {
             throw new AccountNotFoundException("Destinatario non trovato");
         } else {
 
-            String transferMoney = "update accounts set saldo = saldo + ? where iban = ?";
+            String transferMoney = "update accounts set SALDO = SALDO + ? where IBAN = ?";
             prepStmt = DBConnect.getConnection().prepareStatement(transferMoney);
             prepStmt.setDouble(1, amount);
             prepStmt.setString(2, iban);
@@ -149,7 +151,7 @@ public class Session extends Account {
     public List<Account> showContacts(String search) throws TimeoutException, SQLException {
         updateSessionCreation();
         List<Account> accountsList = new ArrayList<>();
-        String showContacts = "select username from accounts where username <> ? order by cognome";
+        String showContacts = "select USERNAME from accounts where USERNAME <> ? order by COGNOME";
 
         try {
             Instant check = Instant.now();
@@ -172,17 +174,12 @@ public class Session extends Account {
                     accountsList.add(new Account(username));
                 }
             }
-
             System.out.println("ShowContacts :" + ChronoUnit.MILLIS.between(check, Instant.now()) + "ms for");
 
-
         } catch (AccountNotFoundException e) { /*IGNORE*/ }
-
 //        Collections.sort(accountsList);
         return accountsList;
-
     }
-
 
     public List<Transaction> showTransactions() throws TimeoutException, SQLException {
 
@@ -207,11 +204,8 @@ public class Session extends Account {
                 transactionsList.add(new Transaction(ibanFrom, amount, type, date));
             }
         }
-
         transactions = transactionsList;
-
         return transactionsList;
-
     }
 
     public Double getOutcomes() {
@@ -221,9 +215,6 @@ public class Session extends Account {
                     (transaction.getType().equals("bonifico") && transaction.getIbanFrom().equals(getIban()))) {
                 outcomes += transaction.getAmount();
             }
-
-//            if (transaction.getType().equals("bonifico") && transaction.getIbanFrom().equals(getIban()))
-//                outcomes += transaction.getAmount();
         }
         return outcomes;
     }
@@ -235,10 +226,6 @@ public class Session extends Account {
                     (transaction.getType().equals("bonifico") && transaction.getIbanDest().equals(getIban()))) {
                 incomes += transaction.getAmount();
             }
-
-//            if (transaction.getType().equals("bonifico") && transaction.getIbanDest().equals(getIban())) {
-//                incomes += transaction.getAmount();
-//            }
         }
         return incomes;
     }
@@ -246,7 +233,7 @@ public class Session extends Account {
     @Override
     public Double getSaldo() throws SQLException, TimeoutException {
         updateSessionCreation();
-        String update = "select * from accounts where username = ?";
+        String update = "select * from accounts where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
         prepStmt.setString(1, getUsername());
         ResultSet rs = prepStmt.executeQuery();
@@ -263,7 +250,7 @@ public class Session extends Account {
     protected void setSaldo(Double saldo) throws SQLException, TimeoutException {
         updateSessionCreation();
         super.setSaldo(saldo);
-        String update = "update accounts set saldo = ? where username = ?";
+        String update = "update accounts set SALDO = ? where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
         prepStmt.setDouble(1, super.getSaldo());
         prepStmt.setString(2, getUsername());
@@ -277,7 +264,7 @@ public class Session extends Account {
         updateSessionCreation();
         super.setPassword(psw);
 //        System.out.println("UPDATE PSW ON DATABASE");
-        String update = "update accounts set HASHPSW = ? where username = ?";
+        String update = "update accounts set HASHPSW = ? where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
         prepStmt.setString(1, super.getHashPsw());
         prepStmt.setString(2, getUsername());
@@ -287,7 +274,7 @@ public class Session extends Account {
     //
     @Override
     public String getHashPsw() throws SQLException {
-        String query = "select hashpsw from accounts where username = ?";
+        String query = "select HASHPSW from accounts where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
         prepStmt.setString(1, getUsername());
         ResultSet rs = prepStmt.executeQuery();
@@ -297,8 +284,31 @@ public class Session extends Account {
     }
 
     @Override
+    public void setSalt(String salt) throws TimeoutException, SQLException {
+        updateSessionCreation();
+        super.setSalt(salt);
+        String update = "update accounts set SALT = ? where USERNAME = ?";
+        PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
+        prepStmt.setString(1, super.getSalt());
+        prepStmt.setString(2, getUsername());
+        prepStmt.executeUpdate();
+    }
+
+    @Override
+    public void setTimestamp(String timestamp) throws TimeoutException, SQLException {
+        updateSessionCreation();
+        super.setTimestamp(timestamp);
+        String update = "update accounts set TIMESTAMP = ? where USERNAME = ?";
+        PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
+        prepStmt.setString(1, super.getTimestamp());
+        prepStmt.setString(2, getUsername());
+        prepStmt.executeUpdate();
+
+    }
+
+    @Override
     public String toString() {
-        return "Logged as" + getUsername();
+        return "Logged as " + getUsername();
     }
 }
 

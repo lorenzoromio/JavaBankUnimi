@@ -19,8 +19,8 @@ import java.util.regex.Pattern;
 public class Account implements Comparable<Account> {
     private final String nome;
     private final String cognome;
-    private final String salt;
-    private final String timestamp;
+    private String salt;
+    private String timestamp;
     private final String num_conto;
     private final String iban;
     private final String username;
@@ -140,7 +140,7 @@ public class Account implements Comparable<Account> {
 
     }
 
-    private String randomString(int length) {
+    protected String randomString(int length) {
         //Use cryptographically secure randomString number generator
         Random random = new SecureRandom();
         StringBuilder result = new StringBuilder();
@@ -216,6 +216,14 @@ public class Account implements Comparable<Account> {
     protected void setSaldo(Double saldo) throws SQLException, TimeoutException {
         this.saldo = saldo;
 
+    }
+
+    public void setSalt(String salt) throws TimeoutException, SQLException {
+        this.salt = salt;
+    }
+
+    public void setTimestamp(String timestamp) throws TimeoutException, SQLException {
+        this.timestamp = timestamp;
     }
 
     @Override
