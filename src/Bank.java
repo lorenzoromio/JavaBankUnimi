@@ -16,7 +16,7 @@ public class Bank {
 
 
     public static void addAccount(Account account) throws IllegalArgumentException, SQLException, AccountException {
-        String checkUser = "select ID from accounts where username = ?";
+        String checkUser = "select ID from accounts where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(checkUser);
         prepStmt.setString(1, account.getUsername());
         ResultSet rs = prepStmt.executeQuery();

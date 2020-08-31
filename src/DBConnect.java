@@ -10,7 +10,8 @@ public class DBConnect {
     private static final String driver = "com.mysql.cj.jdbc.Driver";
     private static final String user = "XVqjqK5y2F";
     private static final String psw = "Pjb9JBb2v3";
-    private static final String DBUrl = "jdbc:mysql://remotemysql.com:3306/" + user + "?autoReconnect=true&useUnicode=yes";
+    private static final String DBUrl = "jdbc:mysql://remotemysql.com:3306/" + user +
+                                        "?autoReconnect=true&useUnicode=yes";
     private static Connection connection = null;
 
     public static Connection getConnection() throws SQLException {
@@ -40,8 +41,8 @@ public class DBConnect {
     }
 
     public static void eraseBalance() throws SQLException, NullPointerException {
-        DBConnect.getConnection().createStatement().executeUpdate("update accounts set saldo = 0");
-        DBConnect.getConnection().createStatement().executeUpdate("TRUNCATE transaction");
+        DBConnect.getConnection().createStatement().executeUpdate(  "update accounts set SALT = 0; " +
+                                                                        "TRUNCATE transaction");
         System.out.println("All Balance Deleted!");
     }
 }

@@ -2,6 +2,7 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+import javax.print.DocFlavor;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
 import java.sql.PreparedStatement;
@@ -258,12 +259,10 @@ public class Session extends Account {
 
     }
 
-    //
     @Override
     protected void setPassword(String psw) throws SQLException, TimeoutException {
         updateSessionCreation();
         super.setPassword(psw);
-//        System.out.println("UPDATE PSW ON DATABASE");
         String update = "update accounts set HASHPSW = ? where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
         prepStmt.setString(1, super.getHashPsw());
@@ -271,7 +270,6 @@ public class Session extends Account {
         prepStmt.executeUpdate();
     }
 
-    //
     @Override
     public String getHashPsw() throws SQLException {
         String query = "select HASHPSW from accounts where USERNAME = ?";
