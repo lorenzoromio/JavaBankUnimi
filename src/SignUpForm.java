@@ -4,6 +4,7 @@
 
 import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountException;
+import javax.security.auth.login.CredentialException;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
@@ -167,7 +168,7 @@ public class SignUpForm extends MainApp {
 
         });
 
-        showHideBTN2.addMouseListener(new MouseAdapter() { //todo sistemare mouse adapter
+        showHideBTN2.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent e) {
@@ -195,12 +196,17 @@ public class SignUpForm extends MainApp {
         if (nomeFLD.getText().isEmpty() || cognomeFLD.getText().isEmpty() || String.valueOf(psw1FLD.getPassword()).isEmpty() || String.valueOf(psw2FLD.getPassword()).isEmpty()) {
             JOptionPane.showMessageDialog(getContentPane(), "Tutti i campi devono essere compilati");
         } else if (String.valueOf(psw1FLD.getPassword()).equals(String.valueOf(psw2FLD.getPassword()))) {
-            int choice = JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Sign Up?");
-            if (choice == 0) {
+            if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Sign Up?") == 0) {
 
                 try {
-                    Bank.addAccount(new Account(nomeFLD.getText(), cognomeFLD.getText(), String.valueOf(psw1FLD.getPassword())));
-                    logInAction(null);
+                    Account account = new Account(nomeFLD.getText(), cognomeFLD.getText(), String.valueOf(psw1FLD.getPassword()));
+                    Bank.addAccount(account);
+                    if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Login as " + account.getNome() + " " + account.getCognome() + "?") == 0) {
+                        session = Bank.login(account.getUsername(), String.valueOf(psw1FLD.getPassword()));
+                        homeAction(null);
+                    } else {
+                        logInAction(null);
+                    }
 
                 } catch (IllegalArgumentException ex) {
                     JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
@@ -229,6 +235,9 @@ public class SignUpForm extends MainApp {
 
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
+
+                } catch (CredentialException ex) {
+                    //
                 }
             }
 
