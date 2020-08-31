@@ -11,25 +11,17 @@ import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
 
 public class ChangePswForm extends MainApp {
-    private JPanel credentialPanel;
-    private JLabel pswLBL;
-    private JLabel newPswLBL;
+    private JPanel changePswPanel;
+    private JLabel icon;
     private JPasswordField pswFLD;
+    private JPasswordField newPswFLD;
     private JPasswordField confirmNewPswFLD;
     private JButton showHideBTN1;
     private JButton showHideBTN2;
-    private JLabel checkpswLBL;
-    private JPanel buttonsPanel;
+    private JButton showHideBTN3;
     private JButton saveBTN;
     private JButton backBTN;
     private JButton logoutBTN;
-    private JLabel icon;
-    private JPanel creditsPanel;
-    private JLabel chechNewPswLBL;
-    private JButton showHideBTN3;
-    private JPanel changePswPanel;
-    private JPasswordField newPswFLD;
-
 
     public ChangePswForm() throws TimeoutException {
         session.updateSessionCreation();
@@ -37,10 +29,8 @@ public class ChangePswForm extends MainApp {
         pack();
         setLocationRelativeTo(null);
         setTitle("Change Password - JavaBank");
-
         setFrameIcon(changePswIconPath);
         setCustomIcon(icon, changePswIconPath);
-        setResizable(false);
         setVisible(true);
         getRootPane().setDefaultButton(saveBTN);
 

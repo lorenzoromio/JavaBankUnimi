@@ -12,20 +12,15 @@ import java.util.concurrent.TimeoutException;
 
 @SuppressWarnings("ConstantConditions")
 public class DeleteAccountForm extends MainApp {
-    private JPasswordField confirmPswFLD;
     private JPanel removePanel;
-    private JPanel credentialPanel;
+    private JLabel icon;
+    private JPasswordField confirmPswFLD;
     private JPasswordField pswFLD;
-    private JPanel buttonsPanel;
+    private JButton showHideBTN1;
+    private JButton showHideBTN2;
     private JButton deleteBTN;
     private JButton backBTN;
     private JButton logoutBTN;
-    private JLabel icon;
-    private JPanel creditsPanel;
-    private JButton showHideBTN1;
-    private JButton showHideBTN2;
-    private JLabel pswLBL;
-    private JLabel confirmPswLBL;
 
     public DeleteAccountForm() throws TimeoutException {
         session.updateSessionCreation();

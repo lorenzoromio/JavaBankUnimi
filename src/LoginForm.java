@@ -6,8 +6,11 @@ import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeoutException;
 
 public class LoginForm extends MainApp {
@@ -20,17 +23,18 @@ public class LoginForm extends MainApp {
     private JButton loginBTN;
     private JButton signupBTN;
     private JButton exitBTN;
+    private JLabel clockLBL;
 
 
     public LoginForm() {
-
-
         setContentPane(loginPanel);
-
         pack();
-        setLocationRelativeTo(null);
+        if (location == null) {
+            setLocationRelativeTo(null);
+            location = getLocation();
+        } else
+            setLocation(location);
         setVisible(true);
-
         setTitle("LoginPage - JavaBank");
         setFrameIcon(bankIconPath);
         setCustomIcon(icon, bankIconPath);
@@ -54,6 +58,23 @@ public class LoginForm extends MainApp {
         });
 
         exitBTN.addActionListener(this::exitAction);
+
+        Runnable r = new Runnable() {
+            public void run() {
+                while (true) {
+                    try {
+                        clockLBL.setText(String.valueOf(sdf.format(new Date().getTime())));
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+
+        new Thread(r).start();
+
+
     }
 
     private void login(ActionEvent e) {
@@ -64,6 +85,7 @@ public class LoginForm extends MainApp {
         } else try {
 
             session = Bank.login(userFLD.getText(), String.valueOf(pswFLD.getPassword()));
+            location = this.getLocation();
             new HomeForm();
             dispose();
 
@@ -89,10 +111,8 @@ public class LoginForm extends MainApp {
                     SQLExceptionOccurred(ex);
                     break;
             }
-
         } catch (TimeoutException ex) {
             sessionExpired();
         }
     }
-
 }

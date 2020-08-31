@@ -10,13 +10,11 @@
  import java.awt.event.MouseListener;
  import java.sql.SQLException;
  import java.util.List;
- import java.util.Locale;
  import java.util.concurrent.TimeoutException;
 
  public class HomeForm extends MainApp {
 
      private JPanel homePanel;
-     private JPanel buttonsPanel;
      private JTextField nomeFLD;
      private JTextField cognomeFLD;
      private JTextField ibanFLD;
@@ -24,26 +22,17 @@
      private JPasswordField incomeFLD;
      private JPasswordField outcomeFLD;
      private JButton bonificoBTN;
-     private JButton changePswBTN;
      private JButton depositBTN;
      private JButton prelievoBTN;
+     private JButton changePswBTN;
      private JButton logoutBTN;
      private JButton removeBTN;
      private JButton eraseBTN;
-     private JButton deleteAll;
+     private JButton deleteAllBTN;
      private JButton refreshBTN;
      private JButton showHideBTN;
      private JScrollPane scrollPane;
-     private JLabel outcomeLBL;
-     private JLabel incomeLBL;
-     private JLabel balanceLBL;
-     private JLabel ibanLBL;
-     private JLabel cognomeLBL;
-     private JLabel nomeLBL;
-     private JPanel informationPanel;
      private JTextArea transictionArea;
-     private JPanel creditsPanel;
-     private JPanel areaTransaction;
 
      public HomeForm() throws TimeoutException {
          session.updateSessionCreation();
@@ -51,8 +40,8 @@
          setContentPane(homePanel);
 
          pack();
-         setLocationRelativeTo(null); //appare in centro allo schermo
-
+         System.out.println(location);
+         setLocation(location);
          setTitle("Home - JavaBank");
          setFrameIcon(bankIconPath);
 
@@ -61,26 +50,22 @@
          incomeFLD.setEchoChar(visibleChar);
          outcomeFLD.setEchoChar(visibleChar);
 
-
          setValue();
          eraseBTN.setVisible(false);
-         deleteAll.setVisible(false);
+         deleteAllBTN.setVisible(false);
 
          if (session.getUsername().equals("lorenzo.romio")) {
              eraseBTN.setVisible(true);
-             deleteAll.setVisible(true);
+             deleteAllBTN.setVisible(true);
 
              eraseBTN.addActionListener(this::eraseBalance);
-
-             deleteAll.addActionListener(this::deleteAllDatabase);
+             deleteAllBTN.addActionListener(this::deleteAllDatabase);
          }
-         Locale.setDefault(Locale.ITALIAN);
 
          setCustomIcon(showHideBTN, showPswIconPath);
          setCustomIcon(refreshBTN, refreshIconPath);
 
          setVisible(true);
-
 
          showHideBTN.addMouseListener(new MouseListener() {
              @Override
@@ -330,6 +315,7 @@
              DBConnect.eraseBalance();
              setValue();
              repaint();
+             JOptionPane.showMessageDialog(getContentPane(),"All transaction was deleted!");
          } catch (SQLException ex) {
              SQLExceptionOccurred(ex);
          }
@@ -348,4 +334,3 @@
          }
      }
  }
-

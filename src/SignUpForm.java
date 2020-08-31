@@ -205,33 +205,23 @@ public class SignUpForm extends MainApp {
                         session = Bank.login(account.getUsername(), String.valueOf(psw1FLD.getPassword()));
                         homeAction(null);
                     } else {
-                        logInAction(null);
+                        //logInAction(null);
+                        clearNamesFields();
+                        clearPasswordFields();
                     }
 
                 } catch (IllegalArgumentException ex) {
                     JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-                    psw1FLD.setText("");
-                    psw2FLD.setText("");
-                    psw1FLD.setForeground(new JPasswordField().getForeground());
-                    psw2FLD.setForeground(new JPasswordField().getForeground());
+                    clearPasswordFields();
 
                 } catch (InvalidNameException ex) {
                     JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-                    nomeFLD.setText("");
-                    cognomeFLD.setText("");
-                    nomeFLD.setForeground(new JLabel().getForeground());
-                    cognomeFLD.setForeground(new JLabel().getForeground());
+                    clearNamesFields();
 
                 } catch (AccountException ex) {
                     JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-                    nomeFLD.setText("");
-                    cognomeFLD.setText("");
-                    psw1FLD.setText("");
-                    psw2FLD.setText("");
-                    nomeFLD.setForeground(new JLabel().getForeground());
-                    cognomeFLD.setForeground(new JLabel().getForeground());
-                    psw1FLD.setForeground(new JPasswordField().getForeground());
-                    psw2FLD.setForeground(new JPasswordField().getForeground());
+                    clearNamesFields();
+                    clearPasswordFields();
 
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
@@ -242,12 +232,23 @@ public class SignUpForm extends MainApp {
             }
 
         } else {
-            psw1FLD.setText("");
-            psw2FLD.setText("");
-            psw1FLD.setForeground(new JPasswordField().getForeground());
-            psw2FLD.setForeground(new JPasswordField().getForeground());
+            clearPasswordFields();
             JOptionPane.showMessageDialog(getContentPane(), "Password non corrette");
         }
+    }
+
+    private void clearNamesFields() {
+        nomeFLD.setText("");
+        cognomeFLD.setText("");
+        nomeFLD.setForeground(new JLabel().getForeground());
+        cognomeFLD.setForeground(new JLabel().getForeground());
+    }
+
+    private void clearPasswordFields() {
+        psw1FLD.setText("");
+        psw2FLD.setText("");
+        psw1FLD.setForeground(new JPasswordField().getForeground());
+        psw2FLD.setForeground(new JPasswordField().getForeground());
     }
 
     private void logInAction(ActionEvent e) {

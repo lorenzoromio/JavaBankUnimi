@@ -27,7 +27,7 @@
               <text value="Change Password"/>
             </properties>
           </component>
-          <grid id="8612e" binding="credentialPanel" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="8612e" layout-manager="GridLayoutManager" row-count="3" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -35,23 +35,23 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="b8b46" class="javax.swing.JLabel" binding="pswLBL">
+              <component id="b8b46" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <font size="14"/>
-                  <labelFor value="b62ae"/>
+                  <labelFor value="d7732"/>
                   <text value="Actual"/>
                 </properties>
               </component>
-              <component id="75f95" class="javax.swing.JLabel" binding="newPswLBL">
+              <component id="75f95" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <font size="14"/>
-                  <labelFor value="d27b2"/>
+                  <labelFor value="a7717"/>
                   <text value="New Password"/>
                 </properties>
               </component>
@@ -94,13 +94,13 @@
                   <text value=""/>
                 </properties>
               </component>
-              <component id="34a26" class="javax.swing.JLabel" binding="chechNewPswLBL">
+              <component id="34a26" class="javax.swing.JLabel">
                 <constraints>
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <font size="14"/>
-                  <labelFor value="d27b2"/>
+                  <labelFor value="129f2"/>
                   <text value="Confirm Password"/>
                 </properties>
               </component>
@@ -139,7 +139,7 @@
               </component>
             </children>
           </grid>
-          <grid id="e0d2d" binding="buttonsPanel" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="e0d2d" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <grid row="5" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -200,7 +200,7 @@
           </vspacer>
         </children>
       </grid>
-      <grid id="bd19e" binding="creditsPanel" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+      <grid id="bd19e" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
         <margin top="0" left="0" bottom="5" right="10"/>
         <constraints>
           <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>

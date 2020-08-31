@@ -2,7 +2,6 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
-import javax.print.DocFlavor;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
 import java.sql.PreparedStatement;
@@ -16,23 +15,23 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    private final long duration = 3 * 60;
-    private Instant sessionCreation;
+    private final long duration = 5;
+    private Instant creation;
     private List<Transaction> transactions;
 
     public Session(String username) throws AccountNotFoundException, SQLException {
         super(username);
-        sessionCreation = Instant.now();
+        creation = Instant.now();
     }
 
     public void isValid() throws TimeoutException {
-        if (ChronoUnit.MILLIS.between(sessionCreation, Instant.now()) > duration * 1000)
+        if (ChronoUnit.SECONDS.between(creation, Instant.now()) > duration)
             throw new TimeoutException("Sessione Scaduta");
     }
 
     public void updateSessionCreation() throws TimeoutException {
         isValid();
-        this.sessionCreation = Instant.now();
+        this.creation = Instant.now();
     }
 
     public void changePassword(String oldPsw, String newPsw, String checkPsw) throws TimeoutException, IllegalArgumentException, SQLException, CredentialException {
@@ -302,6 +301,10 @@ public class Session extends Account {
         prepStmt.setString(2, getUsername());
         prepStmt.executeUpdate();
 
+    }
+
+    public Instant getCreation() {
+        return creation;
     }
 
     @Override

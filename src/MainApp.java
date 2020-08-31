@@ -12,11 +12,14 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Locale;
 import java.util.concurrent.TimeoutException;
-
 
 public class MainApp extends JFrame {
     protected static Session session;
+    protected static Point location;
     protected final String deleteAccountIconPath = "icons/deleteAccount.png";
     protected final String changePswIconPath = "icons/changePsw.png";
     protected final String moneyIconPath = "icons/money.png";
@@ -38,10 +41,16 @@ public class MainApp extends JFrame {
     protected String psw;
 
     public MainApp() {
-        System.out.println("new MainApp()");
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setResizable(false);
+        setFrameIcon(bankIconPath);
+        if (location != null)
+            System.out.println("Main location: " + location.x + "," + location.y);
+
+        Locale.setDefault(Locale.ITALIAN);
+        Thread checkValidSession = new Thread(this::backgroundCheckSession);
+        checkValidSession.start();
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -51,12 +60,11 @@ public class MainApp extends JFrame {
                 }
             }
         } catch (Exception e) {
-            System.out.println("ninbus not avaiable");
+            System.out.println("Ninbus not avaiable");
         }
 
         UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Lucida Console", Font.PLAIN, 16)));
 
-        setFrameIcon(bankIconPath);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -71,10 +79,8 @@ public class MainApp extends JFrame {
             @Override
             public void windowActivated(WindowEvent e) {            //CONTROLLA LA VALIDITA' DELLA SESSIONE QUANDO LA FINESTRA SI RIATTIVA
                 System.out.println("gain focus");
-                if (session != null) try {
+                if (session != null) {
                     session.updateSessionCreation();
-                } catch (TimeoutException ex) {
-                    sessionExpired();
                 }
             }
 
@@ -82,13 +88,34 @@ public class MainApp extends JFrame {
             public void windowDeactivated(WindowEvent e) {          //CHIUDE LA CONNESSIONE QUANDO LA FINESTRA SI DISATTIVA
                 try {
                     System.out.println("lost focus");
+//                    checkValidSession.interrupt();
+//                    checkValidSession.stop();
                     DBConnect.close();
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
                 }
             }
         });
+
+
+
     }
+
+    private void backgroundCheckSession() {
+
+        while (session != null)
+            try {
+                Thread.sleep(1000);
+
+                session.isValid();
+            } catch (TimeoutException ex) {
+                sessionExpired();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        System.out.println("session null");
+    }
+
 
     public static void main(String[] args) {
         new LoginForm();
@@ -96,8 +123,8 @@ public class MainApp extends JFrame {
 
     //Functions
     protected void sessionExpired() {
-        String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
-                "Verrai reindirizzato alla schermata di Login.";
+        String error_message =  "Sei rimasto inattivo per troppo tempo.\n" +
+                                "Verrai reindirizzato alla schermata di Login.";
 
         String title = "Sessione Scaduta";
         dispose();
@@ -112,9 +139,8 @@ public class MainApp extends JFrame {
                 ex.getMessage();
 
         JOptionPane.showMessageDialog(getContentPane(), error, "SQL Error", JOptionPane.ERROR_MESSAGE);
-        dispose();
-        new LoginForm();
-
+//        dispose();
+//        new LoginForm();
     }
 
     protected void setCustomIcon(JButton button, String iconPath) {

@@ -41,8 +41,8 @@ public class DBConnect {
     }
 
     public static void eraseBalance() throws SQLException, NullPointerException {
-        DBConnect.getConnection().createStatement().executeUpdate(  "update accounts set SALT = 0; " +
-                                                                        "TRUNCATE transaction");
+        DBConnect.getConnection().createStatement().executeUpdate("update accounts set SALDO = 0");
+        DBConnect.getConnection().createStatement().executeUpdate("TRUNCATE transaction");
         System.out.println("All Balance Deleted!");
     }
 }

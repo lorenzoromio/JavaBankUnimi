@@ -11,18 +11,13 @@ public class DepositoForm extends MainApp {
 
 
     private JPanel depositoPanel;
+    private JLabel icon;
     private JTextField amountFLD;
+    private JLabel balance;
     private JButton depositBTN;
     private JButton balanceBTN;
     private JButton homeBTN;
     private JButton logoutBTN;
-    private JPanel credentialPanel;
-    private JLabel amountLBL;
-    private JPanel buttonsPanel;
-    private JLabel icon;
-    private JPanel creditsPanel;
-    private JLabel balanceLBL;
-    private JLabel balance;
 
 
     public DepositoForm() throws TimeoutException, SQLException {
