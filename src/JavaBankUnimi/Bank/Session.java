@@ -2,6 +2,8 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+package JavaBankUnimi.Bank;
+import JavaBankUnimi.DBConnect;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
 import java.sql.PreparedStatement;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    private final long duration = 5;
+    private final long duration = 50;
     private Instant creation;
     private List<Transaction> transactions;
 

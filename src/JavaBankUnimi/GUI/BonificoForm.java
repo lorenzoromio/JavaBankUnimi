@@ -2,6 +2,10 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved. test
  */
 
+package JavaBankUnimi.GUI;
+
+import JavaBankUnimi.Bank.Account;
+
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.*;
 import java.awt.event.*;
@@ -10,6 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class BonificoForm extends MainApp {
+    private final Contacts contacts = new Contacts();
     private JPanel bonificoPanel;
     private JTextField ibanFLD;
     private JTextField amountFLD;
@@ -43,7 +48,6 @@ public class BonificoForm extends MainApp {
     private JPanel balancePanel;
     private JPanel buttonsDownPanel;
     private JPanel creditsPanel;
-    private final Contacts contacts = new Contacts();
 
     public BonificoForm() throws TimeoutException, SQLException {
         session.updateSessionCreation();
@@ -51,7 +55,7 @@ public class BonificoForm extends MainApp {
         setContentPane(bonificoPanel);
 
         pack();
-        setLocationRelativeTo(null);
+        setLocation(location);
         setTitle("Bonifico - JavaBank");
 
         setFrameIcon(moneyIconPath);
@@ -64,8 +68,17 @@ public class BonificoForm extends MainApp {
         setCustomIcon(nextBTN, nextIconPath);
         setCustomIcon(prevBTN, prevIconPath);
 
+        setVisible(true);
+
         rubricaPanel.setVisible(false);
-        printContacts(searchFLD.getText());
+
+        Runnable search = new Runnable() {
+            @Override
+            public synchronized void run() {
+                printContacts(searchFLD.getText());
+            }
+        };
+
         ibanFLD.setText("");
         balance.setText(euro.format(session.getSaldo()));
 
@@ -75,8 +88,9 @@ public class BonificoForm extends MainApp {
                 rubricaPanel.setVisible(false);
                 ibanFLD.setText("");
             } else {
+                backgroundTask(search);
                 rubricaPanel.setVisible(true);
-                ibanFLD.setText(ibanContactFLD.getText());
+//                ibanFLD.setText(ibanContactFLD.getText());
             }
         });
 
@@ -96,19 +110,22 @@ public class BonificoForm extends MainApp {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                printContacts(searchFLD.getText());
+                backgroundTask(search);
+
             }
         });
 
         prevBTN.addActionListener(e -> {
-            if (contacts.index > 0)
-                contacts.index--;
+            contacts.index--;
+            if (contacts.index < 0)
+                contacts.index = contacts.list.size()-1;
             populateRubrica();
         });
 
         nextBTN.addActionListener(e -> {
-            if (contacts.index < contacts.list.size() - 1)
-                contacts.index++;
+            contacts.index++;
+            if (contacts.index > contacts.list.size() - 1)
+                contacts.index=0;
             populateRubrica();
         });
 
@@ -116,7 +133,8 @@ public class BonificoForm extends MainApp {
 
         clearBTN.addActionListener(e -> {
             searchFLD.setText("");
-            printContacts(searchFLD.getText());
+            backgroundTask(search);
+//            printContacts(searchFLD.getText());
         });
 
         balanceBTN.addActionListener(e -> {
@@ -151,9 +169,9 @@ public class BonificoForm extends MainApp {
         homeBTN.addActionListener(this::homeAction);
 
         logoutBTN.addActionListener(this::logOutAction);
-        setVisible(true);
 
     }
+
 
     private void populateRubrica() {
         results.setText(contacts.index + 1 + " of " + contacts.list.size());

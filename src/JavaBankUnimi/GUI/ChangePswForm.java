@@ -2,6 +2,10 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+package JavaBankUnimi.GUI;
+
+import JavaBankUnimi.Bank.Account;
+
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -27,7 +31,7 @@ public class ChangePswForm extends MainApp {
         session.updateSessionCreation();
         setContentPane(changePswPanel);
         pack();
-        setLocationRelativeTo(null);
+        setLocation(location);
         setTitle("Change Password - JavaBank");
         setFrameIcon(changePswIconPath);
         setCustomIcon(icon, changePswIconPath);

@@ -2,6 +2,9 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+package JavaBankUnimi.Bank;
+
+import JavaBankUnimi.DBConnect;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,7 +40,7 @@ public class Transaction {
 
     private String setUsername(String iban) throws SQLException {
 
-        String query = "select username from accounts where iban = ?";
+        String query = "select USERNAME from accounts where IBAN = ?";
 
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
         prepStmt.setString(1, iban);

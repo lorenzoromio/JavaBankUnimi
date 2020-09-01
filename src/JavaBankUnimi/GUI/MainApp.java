@@ -2,6 +2,11 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+package JavaBankUnimi.GUI;
+
+import JavaBankUnimi.DBConnect;
+import JavaBankUnimi.Bank.Session;
+
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
@@ -12,8 +17,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Locale;
 import java.util.concurrent.TimeoutException;
 
@@ -42,15 +45,13 @@ public class MainApp extends JFrame {
 
     public MainApp() {
 
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setFrameIcon(bankIconPath);
-        if (location != null)
-            System.out.println("Main location: " + location.x + "," + location.y);
+        System.out.println("Main location: " + location);
 
         Locale.setDefault(Locale.ITALIAN);
-        Thread checkValidSession = new Thread(this::backgroundCheckSession);
-        checkValidSession.start();
+//
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -82,7 +83,7 @@ public class MainApp extends JFrame {
                 if (session != null) try {
                     session.updateSessionCreation();
                 } catch (TimeoutException ex) {
-                    sessionExpired();
+//                    sessionExpired();
                 }
             }
 
@@ -90,34 +91,13 @@ public class MainApp extends JFrame {
             public void windowDeactivated(WindowEvent e) {          //CHIUDE LA CONNESSIONE QUANDO LA FINESTRA SI DISATTIVA
                 try {
                     System.out.println("lost focus");
-//                    checkValidSession.interrupt();
-//                    checkValidSession.stop();
                     DBConnect.close();
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
                 }
             }
         });
-
-
-
     }
-
-    private void backgroundCheckSession() {
-
-        while (session != null)
-            try {
-                Thread.sleep(1000);
-
-                session.isValid();
-            } catch (TimeoutException ex) {
-                sessionExpired();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        System.out.println("session null");
-    }
-
 
     public static void main(String[] args) {
         new LoginForm();
@@ -125,17 +105,17 @@ public class MainApp extends JFrame {
 
     //Functions
     protected void sessionExpired() {
-        String error_message =  "Sei rimasto inattivo per troppo tempo.\n" +
-                                "Verrai reindirizzato alla schermata di Login.";
+        String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
+                "Verrai reindirizzato alla schermata di Login.";
 
         String title = "Sessione Scaduta";
-        dispose();
         JOptionPane.showMessageDialog(getContentPane(), error_message, title, JOptionPane.ERROR_MESSAGE);
+        dispose();
         session = null;
         new LoginForm();
     }
 
-    protected void SQLExceptionOccurred(SQLException ex) {
+    public void SQLExceptionOccurred(SQLException ex) {
         String error = "SQL State : " + ex.getSQLState() + "\n" +
                 "ErrorCode : " + ex.getErrorCode() + "\n" +
                 ex.getMessage();
@@ -151,7 +131,7 @@ public class MainApp extends JFrame {
         int margin = 5;
 
         try {
-            URL iconUrl = this.getClass().getResource(iconPath);
+            URL iconUrl = this.getClass().getResource("/"+iconPath);
             icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
         } catch (Exception e) {
             icon = new ImageIcon(iconPath).getImage();
@@ -168,7 +148,7 @@ public class MainApp extends JFrame {
         Image icon;
 
         try {
-            URL iconUrl = this.getClass().getResource(iconPath);
+            URL iconUrl = this.getClass().getResource("/"+iconPath);
             icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
         } catch (Exception ex) {
             icon = new ImageIcon(iconPath).getImage();
@@ -183,7 +163,7 @@ public class MainApp extends JFrame {
     protected void setFrameIcon(String iconPath) {
 
         try {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource(iconPath)));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/"+iconPath)));
         } catch (Exception ex) {
             ImageIcon imageIcon = new ImageIcon(iconPath);
             setIconImage(imageIcon.getImage());
@@ -192,7 +172,7 @@ public class MainApp extends JFrame {
 
 
     protected void exitAction(ActionEvent e) {
-
+        location = getLocation();
         if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to exit?") == 0) {
             session = null;
             dispose();
@@ -200,7 +180,7 @@ public class MainApp extends JFrame {
     }
 
     protected void logOutAction(ActionEvent e) {
-
+        location = getLocation();
         if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to LogOut?") == 0) {
             dispose();
             session = null;
@@ -210,10 +190,26 @@ public class MainApp extends JFrame {
 
     protected void homeAction(ActionEvent e) {
         try {
+            location = getLocation();
             new HomeForm();
             dispose();
         } catch (TimeoutException ex) {
             sessionExpired();
         }
     }
+
+    protected void backgroundTask(Runnable runnable) {
+        Thread thread = new Thread(runnable);
+        thread.start();
+        try {
+            thread.join(150);
+        } catch (InterruptedException interruptedException) {
+            System.out.println("interrupt");
+            interruptedException.printStackTrace();
+        }
+        System.out.println("ID: "+thread.getId());
+        System.out.println("Count : "+Thread.activeCount());
+        System.out.println();
+    }
+
 }

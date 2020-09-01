@@ -2,6 +2,7 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+package JavaBankUnimi.GUI;
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -28,7 +29,7 @@ public class DeleteAccountForm extends MainApp {
         setContentPane(removePanel);
 
         pack();
-        setLocationRelativeTo(null);
+        setLocation(location);
         setTitle("Delete Account - JavaBank");
         setFrameIcon(deleteAccountIconPath);
         setCustomIcon(icon, deleteAccountIconPath);

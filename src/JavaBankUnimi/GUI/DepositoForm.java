@@ -2,7 +2,7 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
-import javax.swing.*;
+package JavaBankUnimi.GUI;import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
@@ -26,7 +26,7 @@ public class DepositoForm extends MainApp {
         setContentPane(depositoPanel);
 
         pack();
-        setLocationRelativeTo(null);
+        setLocation(location);
         setTitle("Deposito - JavaBank");
         setFrameIcon(moneyIconPath);
         setCustomIcon(icon, moneyIconPath);

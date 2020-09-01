@@ -2,18 +2,23 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+package JavaBankUnimi.GUI;
+
+import JavaBankUnimi.Bank.Bank;
+import JavaBankUnimi.DBConnect;
+
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
 public class LoginForm extends MainApp {
+    private static Timer timer;
+    private static TimerTask task;
     private JPanel loginPanel;
     private JPanel credentialPanel;
     private JLabel icon;
@@ -31,7 +36,6 @@ public class LoginForm extends MainApp {
         pack();
         if (location == null) {
             setLocationRelativeTo(null);
-            location = getLocation();
         } else
             setLocation(location);
         setVisible(true);
@@ -40,6 +44,25 @@ public class LoginForm extends MainApp {
         setCustomIcon(icon, bankIconPath);
         getRootPane().setDefaultButton(loginBTN);               //SELEZIONA IL PULSANTE DI LOGIN
         SwingUtilities.invokeLater(userFLD::requestFocus);       //FOCUS SUL CAMPO USERNAME
+
+//        timer = new Timer();
+//        task = new TimerTask() {
+//            @Override
+//            public void run() {
+//                String date = sdf.format(new Date());
+//                clockLBL.setText(date);
+//                System.out.println(date);
+//                try {
+//                    if(session!=null)
+//                    session.isValid();
+//                } catch (TimeoutException e) {
+//                    System.out.println("aaaaaaaaaaaaa");
+//                    sessionExpired();
+//                }
+//            }
+//        };
+//        timer.schedule(task,0,1000);
+
 
         try {
             DBConnect.close();              //CHIUDE LA CONNESSIONE PRIMA DI EFFETTUARE UN NUOVO LOGIN
@@ -52,28 +75,9 @@ public class LoginForm extends MainApp {
 
         loginBTN.addActionListener(this::login);
 
-        signupBTN.addActionListener(e -> {
-            new SignUpForm();
-            dispose();
-        });
+        signupBTN.addActionListener(this::signupForm);
 
         exitBTN.addActionListener(this::exitAction);
-
-        Runnable r = new Runnable() {
-            public void run() {
-                while (true) {
-                    try {
-                        clockLBL.setText(String.valueOf(sdf.format(new Date().getTime())));
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        };
-
-        new Thread(r).start();
-
 
     }
 
@@ -86,6 +90,7 @@ public class LoginForm extends MainApp {
 
             session = Bank.login(userFLD.getText(), String.valueOf(pswFLD.getPassword()));
             location = this.getLocation();
+//            timer.cancel();
             new HomeForm();
             dispose();
 
@@ -111,8 +116,14 @@ public class LoginForm extends MainApp {
                     SQLExceptionOccurred(ex);
                     break;
             }
-        } catch (TimeoutException ex) {
+        } catch (TimeoutException timeoutException) {
             sessionExpired();
         }
+    }
+
+    private void signupForm(ActionEvent e) {
+        location = getLocation();
+        new SignUpForm();
+        dispose();
     }
 }

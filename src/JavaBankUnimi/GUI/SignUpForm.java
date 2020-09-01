@@ -2,6 +2,11 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+package JavaBankUnimi.GUI;
+
+import JavaBankUnimi.Bank.Account;
+import JavaBankUnimi.Bank.Bank;
+
 import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountException;
 import javax.security.auth.login.CredentialException;
@@ -35,7 +40,7 @@ public class SignUpForm extends MainApp {
         setContentPane(signupPanel);
 
         pack();
-        setLocationRelativeTo(null);
+        setLocation(location);
         setTitle("SignUP - JavaBank");
 
         setFrameIcon(signUpIconPath);

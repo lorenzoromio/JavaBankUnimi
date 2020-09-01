@@ -1,13 +1,17 @@
- /*
-  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
-  */
+/*
+ * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
+ */
 
+package JavaBankUnimi.GUI;
 
- import javax.swing.*;
+import JavaBankUnimi.DBConnect;
+import JavaBankUnimi.Bank.Transaction;
+
+import javax.swing.*;
  import java.awt.*;
  import java.awt.event.ActionEvent;
+ import java.awt.event.MouseAdapter;
  import java.awt.event.MouseEvent;
- import java.awt.event.MouseListener;
  import java.sql.SQLException;
  import java.util.List;
  import java.util.concurrent.TimeoutException;
@@ -50,7 +54,13 @@
          incomeFLD.setEchoChar(visibleChar);
          outcomeFLD.setEchoChar(visibleChar);
 
-         setValue();
+         Runnable setValue = new Runnable() {
+             @Override
+             public synchronized void run() {
+                 setValue();
+             }
+         };
+
          eraseBTN.setVisible(false);
          deleteAllBTN.setVisible(false);
 
@@ -65,9 +75,12 @@
          setCustomIcon(showHideBTN, showPswIconPath);
          setCustomIcon(refreshBTN, refreshIconPath);
 
+//        backgroundTask(setValue);
+        setValue();
          setVisible(true);
 
-         showHideBTN.addMouseListener(new MouseListener() {
+//
+         showHideBTN.addMouseListener(new MouseAdapter() {
              @Override
              public void mouseClicked(MouseEvent e) {
 
@@ -85,6 +98,7 @@
                      incomeFLD.setEchoChar(visibleChar);  //Password Visibile
                      outcomeFLD.setEchoChar(visibleChar);  //Password Visibile
                      scrollPane.setVisible(true);
+//                     backgroundTask(setValue);
                      setValue();
 
                      setCustomIcon(showHideBTN, showPswIconPath);
@@ -93,97 +107,26 @@
                  }
              }
 
-             @Override
-             public void mousePressed(MouseEvent e) {
-
-             }
-
-             @Override
-             public void mouseReleased(MouseEvent e) {
-
-             }
-
-             @Override
-             public void mouseEntered(MouseEvent e) {
-
-             }
-
-             @Override
-             public void mouseExited(MouseEvent e) {
-
-             }
-         });
-
-         bonificoBTN.addActionListener((ActionEvent e) -> {
-             try {
-                 new BonificoForm();
-                 dispose();
-
-             } catch (TimeoutException ex) {
-                 sessionExpired();
-             } catch (SQLException ex) {
-                 SQLExceptionOccurred(ex);
-             }
-         });
-
-         refreshBTN.addActionListener(e -> setValue());
-
-         removeBTN.addActionListener((ActionEvent e) -> {
-
-             try {
-                 new DeleteAccountForm();
-                 dispose();
-
-             } catch (TimeoutException ex) {
-                 sessionExpired();
-             }
-
 
          });
 
-         depositBTN.addActionListener((ActionEvent e) -> {
-             try {
-                 new DepositoForm();
+         bonificoBTN.addActionListener(this::bonificoForm);
 
+         refreshBTN.addActionListener(e ->
+//                         backgroundTask(setValue)
+                 setValue()
+         );
 
-             } catch (TimeoutException ex) {
-                 sessionExpired();
-             } catch (SQLException ex) {
-                 SQLExceptionOccurred(ex);
-             } finally {
-                 dispose();
-             }
+         removeBTN.addActionListener(this::deleteAccountForm);
 
-         });
+         depositBTN.addActionListener(this::depositoForm);
 
-         prelievoBTN.addActionListener((ActionEvent e) -> {
-             try {
-                 new PrelievoForm();
-             } catch (TimeoutException ex) {
-                 sessionExpired();
-             } catch (SQLException ex) {
-                 SQLExceptionOccurred(ex);
-             } finally {
-                 dispose();
-             }
-
-         });
+         prelievoBTN.addActionListener(this::prelievoForm);
 
          logoutBTN.addActionListener(this::logOutAction);
 
-         changePswBTN.addActionListener((ActionEvent e) -> {
+         changePswBTN.addActionListener(this::changePswForm);
 
-             try {
-                 new ChangePswForm();
-             } catch (TimeoutException ex) {
-                 sessionExpired();
-             } finally {
-                 dispose();
-             }
-
-         });
-
-         setVisible(true);
 
      }
 
@@ -315,7 +258,7 @@
              DBConnect.eraseBalance();
              setValue();
              repaint();
-             JOptionPane.showMessageDialog(getContentPane(),"All transaction was deleted!");
+             JOptionPane.showMessageDialog(getContentPane(), "All transaction was deleted!");
          } catch (SQLException ex) {
              SQLExceptionOccurred(ex);
          }
@@ -331,6 +274,75 @@
              SQLExceptionOccurred(ex);
          } catch (TimeoutException ex) {
              sessionExpired();
+         }
+     }
+
+     private void changePswForm(ActionEvent e) {
+
+         try {
+             location = getLocation();
+             new ChangePswForm();
+         } catch (TimeoutException ex) {
+             sessionExpired();
+         } finally {
+             dispose();
+         }
+
+     }
+
+     private void prelievoForm(ActionEvent e) {
+         try {
+             location = getLocation();
+             new PrelievoForm();
+         } catch (TimeoutException ex) {
+             sessionExpired();
+         } catch (SQLException ex) {
+             SQLExceptionOccurred(ex);
+         } finally {
+             dispose();
+         }
+
+     }
+
+     private void depositoForm(ActionEvent e) {
+         try {
+             location = this.getLocation();
+             new DepositoForm();
+
+         } catch (TimeoutException ex) {
+             sessionExpired();
+         } catch (SQLException ex) {
+             SQLExceptionOccurred(ex);
+         } finally {
+             dispose();
+         }
+
+     }
+
+     private void deleteAccountForm(ActionEvent e) {
+
+         try {
+             location = getLocation();
+             new DeleteAccountForm();
+             dispose();
+
+         } catch (TimeoutException ex) {
+             sessionExpired();
+         }
+
+
+     }
+
+     private void bonificoForm(ActionEvent e) {
+         try {
+             location = getLocation();
+             new BonificoForm();
+             dispose();
+
+         } catch (TimeoutException ex) {
+             sessionExpired();
+         } catch (SQLException ex) {
+             SQLExceptionOccurred(ex);
          }
      }
  }

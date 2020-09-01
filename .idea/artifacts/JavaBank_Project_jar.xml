@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/JavaBank_Project_jar</output-path>
     <root id="archive" name="JavaBank Project.jar">
       <element id="module-output" name="JavaBank Project" />
-      <element id="extracted-dir" path="C:/Program Files (x86)/MySQL/Connector J 8.0/mysql-connector-java-8.0.21.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/src/Connector J 8.0/mysql-connector-java-8.0.21.jar" path-in-jar="/" />
       <element id="directory" name="icons">
         <element id="dir-copy" path="$PROJECT_DIR$/icons" />
       </element>

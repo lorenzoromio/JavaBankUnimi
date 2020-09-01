@@ -2,7 +2,7 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
-import javax.swing.*;
+package JavaBankUnimi.GUI;import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 import java.util.concurrent.TimeoutException;
@@ -26,12 +26,12 @@ public class PrelievoForm extends MainApp {
 
 
     public PrelievoForm() throws TimeoutException, SQLException {
+
         session.updateSessionCreation();
         System.out.println(session);
         setContentPane(prelievoPanel);
-
         pack();
-        setLocationRelativeTo(null);
+        setLocation(location);
         setTitle("Prelievo - JavaBank");
 
         setFrameIcon(moneyIconPath);

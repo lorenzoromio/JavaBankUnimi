@@ -2,6 +2,9 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+package JavaBankUnimi;
+
+import JavaBankUnimi.GUI.MainApp;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;

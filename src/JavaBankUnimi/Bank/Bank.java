@@ -2,6 +2,9 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
+package JavaBankUnimi.Bank;
+import JavaBankUnimi.DBConnect;
+
 import javax.security.auth.login.AccountException;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
