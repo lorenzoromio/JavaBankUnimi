@@ -15,9 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-     - name: TODO to Issue
-  # You may pin to the exact commit or the version.
-  # uses: alstr/todo-to-issue-action@3ab9a520cc39e7b514be18b108e14d0ebcbcb6c7
+  
   uses: alstr/todo-to-issue-action@v2.0
   with:
     # The path to the repository where the action will be used, e.g. 'alstr/my-repo' (automatically set)
