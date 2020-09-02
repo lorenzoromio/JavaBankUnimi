@@ -14,21 +14,3 @@ jobs:
  
     steps:
       - uses: actions/checkout@v2
-
-  
-  uses: alstr/todo-to-issue-action@v2.0
-  with:
-    # The path to the repository where the action will be used, e.g. 'alstr/my-repo' (automatically set)
-    REPO: 
-    # The SHA of the last pushed commit (automatically set)
-    BEFORE: 
-    # The SHA of the latest commit (automatically set)
-    SHA: 
-    # The GitHub access token to allow us to retrieve, create and update issues (automatically set)
-    TOKEN: 
-    # The label that will be used to identify TODO comments (e.g. # TODO for Python)
-    LABEL: 
-    # The marker used to signify a line comment in your code (e.g. # for Python)
-    COMMENT_MARKER: 
-    # Optional input that specifies whether to attempt to close an issue when a TODO is removed (default: true)
-    CLOSE_ISSUES: # optional
