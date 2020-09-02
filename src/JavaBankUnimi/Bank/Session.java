@@ -28,6 +28,14 @@ public class Session extends Account {
         creation = Instant.now();
     }
 
+    public static void eraseBalance() {
+        DBConnect.eraseBalance();
+    }
+
+    public static void deleteAllDatabase() {
+        DBConnect.deleteAll();
+    }
+
     public void isValid() throws TimeoutException {
         long between = ChronoUnit.MILLIS.between(creation, Instant.now());
         System.out.println(between);

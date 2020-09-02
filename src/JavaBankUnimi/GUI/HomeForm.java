@@ -256,8 +256,7 @@ public class HomeForm extends MainApp {
 
     private void eraseBalance(ActionEvent e) {
         try {
-
-            DBConnect.eraseBalance();
+            Session.eraseBalance();
             setValue();
             repaint();
             JOptionPane.showMessageDialog(getContentPane(), "All transaction was deleted!");
@@ -270,7 +269,7 @@ public class HomeForm extends MainApp {
         try {
             timer.cancel();
             session.updateSessionCreation();
-            DBConnect.deleteAll();
+            Session.deleteAllDatabase();
             dispose();
             new LoginForm();
         } catch (SQLException ex) {
