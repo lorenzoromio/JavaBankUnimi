@@ -16,12 +16,7 @@ public class PrelievoForm extends MainApp {
     private JButton balanceBTN;
     private JButton homeBTN;
     private JButton logoutBTN;
-    private JPanel credentialPanel;
-    private JLabel amountLBL;
-    private JPanel buttonsPanel;
     private JLabel icon;
-    private JPanel creditsPanel;
-    private JLabel balanceLBL;
     private JLabel balance;
     private JLabel dateLBL;
     private JLabel clockLBL;
