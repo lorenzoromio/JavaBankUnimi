@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    private final long duration = 10;
+    public static final long duration = 2 * 1000;
     private Instant creation;
     private List<Transaction> transactions;
 
@@ -28,7 +28,9 @@ public class Session extends Account {
     }
 
     public void isValid() throws TimeoutException {
-        if (ChronoUnit.SECONDS.between(creation, Instant.now()) > duration)
+        long between = ChronoUnit.MILLIS.between(creation, Instant.now());
+        System.out.println(between);
+        if (between > duration)
             throw new TimeoutException("Sessione Scaduta");
     }
 
