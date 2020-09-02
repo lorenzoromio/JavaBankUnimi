@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class BonificoForm extends MainApp {
-    private final Contacts contacts = new Contacts();
+    private final Rubrica rubrica = new Rubrica();
     private JPanel bonificoPanel;
     private JTextField ibanFLD;
     private JTextField amountFLD;
@@ -119,16 +119,16 @@ public class BonificoForm extends MainApp {
         });
 
         prevBTN.addActionListener(e -> {
-            contacts.index--;
-            if (contacts.index < 0)
-                contacts.index = contacts.list.size()-1;
+            rubrica.index--;
+            if (rubrica.index < 0)
+                rubrica.index = rubrica.list.size()-1;
             populateRubrica();
         });
 
         nextBTN.addActionListener(e -> {
-            contacts.index++;
-            if (contacts.index > contacts.list.size() - 1)
-                contacts.index=0;
+            rubrica.index++;
+            if (rubrica.index > rubrica.list.size() - 1)
+                rubrica.index=0;
             populateRubrica();
         });
 
@@ -177,17 +177,17 @@ public class BonificoForm extends MainApp {
 
 
     private void populateRubrica() {
-        results.setText(contacts.index + 1 + " of " + contacts.list.size());
-        nomeFLD.setText(contacts.list.get(contacts.index).getNome());
-        cognomeFLD.setText(contacts.list.get(contacts.index).getCognome());
-        ibanContactFLD.setText(contacts.list.get(contacts.index).getIban());
+        results.setText(rubrica.index + 1 + " of " + rubrica.list.size());
+        nomeFLD.setText(rubrica.list.get(rubrica.index).getNome());
+        cognomeFLD.setText(rubrica.list.get(rubrica.index).getCognome());
+        ibanContactFLD.setText(rubrica.list.get(rubrica.index).getIban());
         ibanFLD.setText(ibanContactFLD.getText());
     }
 
     private void printContacts(String search) {
 
         try {
-            contacts.list = session.showContacts(search);
+            rubrica.list = session.showContacts(search);
         } catch (TimeoutException ex) {
             sessionExpired();
 
@@ -195,8 +195,8 @@ public class BonificoForm extends MainApp {
             SQLExceptionOccurred(ex);
         }
 
-        contacts.index = 0;
-        if (contacts.list.isEmpty()) {
+        rubrica.index = 0;
+        if (rubrica.list.isEmpty()) {
             results.setText("No Result");
             nomeFLD.setText("");
             cognomeFLD.setText("");
@@ -245,7 +245,7 @@ public class BonificoForm extends MainApp {
         }
     }
 
-    private static class Contacts {
+    private static class Rubrica {
         public List<Account> list;
         public int index;
 
