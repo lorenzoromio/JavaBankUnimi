@@ -48,7 +48,7 @@ public class MainApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setFrameIcon(bankIconPath);
-        //todo iconpath in jar
+        //TODO iconpath in jar
         //sistemare
         System.out.println("Main location: " + location);
 
