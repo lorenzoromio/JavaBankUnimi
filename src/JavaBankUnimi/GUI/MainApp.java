@@ -4,8 +4,8 @@
 
 package JavaBankUnimi.GUI;
 
-import JavaBankUnimi.DBConnect;
 import JavaBankUnimi.Bank.Session;
+import JavaBankUnimi.DBConnect;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -17,12 +17,16 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
 public class MainApp extends JFrame {
     protected static Session session;
     protected static Point location;
+    protected final Timer timer = new Timer();
     protected final String deleteAccountIconPath = "icons/deleteAccount.png";
     protected final String changePswIconPath = "icons/changePsw.png";
     protected final String moneyIconPath = "icons/money.png";
@@ -38,22 +42,37 @@ public class MainApp extends JFrame {
     protected final String nextIconPath = "icons/next.png";
     protected final String prevIconPath = "icons/prev.png";
     protected final DecimalFormat euro = new DecimalFormat("0.00 €");
-    protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+    protected static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     protected final char echochar = '*';
     protected String user;
     protected String psw;
+    protected static TimerTask sessionTimer;
+
 
     public MainApp() {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setFrameIcon(bankIconPath);
-        //TODO iconpath in jar
-        //sistemare
         System.out.println("Main location: " + location);
 
         Locale.setDefault(Locale.ITALIAN);
-//
+
+        sessionTimer = new TimerTask() {
+            @Override
+            public void run() {
+                System.out.println("session timer running");
+                if (session != null) {
+                    try {
+                        session.isValid();
+                    } catch (TimeoutException e) {
+                        sessionExpired();
+                    }
+                }
+            }
+        };
+
+        timer.schedule(sessionTimer,0,2000);
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -82,6 +101,7 @@ public class MainApp extends JFrame {
             @Override
             public void windowActivated(WindowEvent e) {            //CONTROLLA LA VALIDITA' DELLA SESSIONE QUANDO LA FINESTRA SI RIATTIVA
                 System.out.println("gain focus");
+
                 if (session != null) try {
                     session.updateSessionCreation();
                 } catch (TimeoutException ex) {
@@ -107,6 +127,7 @@ public class MainApp extends JFrame {
 
     //Functions
     protected void sessionExpired() {
+        timer.cancel();
         String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
                 "Verrai reindirizzato alla schermata di Login.";
 
@@ -123,8 +144,22 @@ public class MainApp extends JFrame {
                 ex.getMessage();
 
         JOptionPane.showMessageDialog(getContentPane(), error, "SQL Error", JOptionPane.ERROR_MESSAGE);
-//        dispose();
-//        new LoginForm();
+    }
+
+    protected void displayClock(JLabel clockLBL, JLabel dateLBL) {
+
+        TimerTask displayClock = new TimerTask() {
+            @Override
+            public void run() {
+                SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
+                SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
+                Date now = new Date();
+                clockLBL.setText(time.format(now));
+                dateLBL.setText(date.format(now));
+                System.out.println(sdf.format(now));
+            }
+        };
+        timer.schedule(displayClock, 0, 1000);
     }
 
     protected void setCustomIcon(JButton button, String iconPath) {
@@ -174,6 +209,7 @@ public class MainApp extends JFrame {
 
 
     protected void exitAction(ActionEvent e) {
+        timer.cancel();
         location = getLocation();
         if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to exit?") == 0) {
             session = null;
@@ -182,6 +218,7 @@ public class MainApp extends JFrame {
     }
 
     protected void logOutAction(ActionEvent e) {
+        timer.cancel();
         location = getLocation();
         if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to LogOut?") == 0) {
             dispose();
@@ -192,6 +229,7 @@ public class MainApp extends JFrame {
 
     protected void homeAction(ActionEvent e) {
         try {
+            timer.cancel();
             location = getLocation();
             new HomeForm();
             dispose();
@@ -213,5 +251,7 @@ public class MainApp extends JFrame {
         System.out.println("Count : "+Thread.activeCount());
         System.out.println();
     }
+
+
 
 }

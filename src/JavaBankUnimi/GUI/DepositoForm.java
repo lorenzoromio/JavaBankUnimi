@@ -18,6 +18,8 @@ public class DepositoForm extends MainApp {
     private JButton balanceBTN;
     private JButton homeBTN;
     private JButton logoutBTN;
+    private JLabel dateLBL;
+    private JLabel clockLBL;
 
 
     public DepositoForm() throws TimeoutException, SQLException {
@@ -35,6 +37,7 @@ public class DepositoForm extends MainApp {
         getRootPane().setDefaultButton(depositBTN);
         balance.setText(euro.format(session.getSaldo()));
 
+        displayClock(clockLBL, dateLBL);
         if (balance.isVisible()) {
             setCustomIcon(balanceBTN, showPswIconPath);
         } else {

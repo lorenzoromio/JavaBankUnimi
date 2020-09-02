@@ -33,6 +33,8 @@ public class SignUpForm extends MainApp {
     private JLabel psw1LBL;
     private JLabel psw2LBL;
     private JPanel creditsPanel;
+    private JLabel dateLBL;
+    private JLabel clockLBL;
 
     public SignUpForm() {
 
@@ -42,7 +44,7 @@ public class SignUpForm extends MainApp {
         pack();
         setLocation(location);
         setTitle("SignUP - JavaBank");
-
+        displayClock(clockLBL, dateLBL);
         setFrameIcon(signUpIconPath);
         setCustomIcon(icon, signUpIconPath);
         setResizable(false);

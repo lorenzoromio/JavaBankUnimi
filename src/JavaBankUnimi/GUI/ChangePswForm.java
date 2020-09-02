@@ -26,6 +26,8 @@ public class ChangePswForm extends MainApp {
     private JButton saveBTN;
     private JButton backBTN;
     private JButton logoutBTN;
+    private JLabel dateLBL;
+    private JLabel clockLBL;
 
     public ChangePswForm() throws TimeoutException {
         session.updateSessionCreation();
@@ -38,6 +40,7 @@ public class ChangePswForm extends MainApp {
         setVisible(true);
         getRootPane().setDefaultButton(saveBTN);
 
+        displayClock(clockLBL, dateLBL);
         setCustomIcon(showHideBTN1, hidePswIconPath);
         setCustomIcon(showHideBTN2, hidePswIconPath);
         setCustomIcon(showHideBTN3, hidePswIconPath);

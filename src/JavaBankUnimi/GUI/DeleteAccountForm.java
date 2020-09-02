@@ -22,6 +22,8 @@ public class DeleteAccountForm extends MainApp {
     private JButton deleteBTN;
     private JButton backBTN;
     private JButton logoutBTN;
+    private JLabel dateLBL;
+    private JLabel clockLBL;
 
     public DeleteAccountForm() throws TimeoutException {
         session.updateSessionCreation();
@@ -38,6 +40,8 @@ public class DeleteAccountForm extends MainApp {
         setVisible(true);
 
         getRootPane().setDefaultButton(deleteBTN);
+
+        displayClock(clockLBL, dateLBL);
         setCustomIcon(showHideBTN1, hidePswIconPath);
         setCustomIcon(showHideBTN2, hidePswIconPath);
         pswFLD.setEchoChar(echochar);

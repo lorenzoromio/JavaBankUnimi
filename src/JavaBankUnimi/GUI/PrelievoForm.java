@@ -23,6 +23,8 @@ public class PrelievoForm extends MainApp {
     private JPanel creditsPanel;
     private JLabel balanceLBL;
     private JLabel balance;
+    private JLabel dateLBL;
+    private JLabel clockLBL;
 
 
     public PrelievoForm() throws TimeoutException, SQLException {
@@ -35,6 +37,7 @@ public class PrelievoForm extends MainApp {
         setTitle("Prelievo - JavaBank");
 
         setFrameIcon(moneyIconPath);
+        displayClock(clockLBL, dateLBL);
         setCustomIcon(icon, moneyIconPath);
         setResizable(false);
 
@@ -85,7 +88,7 @@ public class PrelievoForm extends MainApp {
 
     private void prelievo(ActionEvent e) {
         try {
-            session.updateSessionCreation();
+              session.updateSessionCreation();
             if (amountFLD.getText().isEmpty())
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {

@@ -12,13 +12,13 @@ import javax.security.auth.login.CredentialException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.Timer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
 public class LoginForm extends MainApp {
-    private static Timer timer;
-    private static TimerTask task;
+
     private JPanel loginPanel;
     private JPanel credentialPanel;
     private JLabel icon;
@@ -29,15 +29,28 @@ public class LoginForm extends MainApp {
     private JButton signupBTN;
     private JButton exitBTN;
     private JLabel clockLBL;
+    private JLabel dateLBL;
 
 
     public LoginForm() {
+
+        try {
+            DBConnect.close();
+            //CHIUDE LA CONNESSIONE PRIMA DI EFFETTUARE UN NUOVO LOGIN
+        } catch (SQLException ex) {
+            SQLExceptionOccurred(ex);
+        }
+
+
         setContentPane(loginPanel);
         pack();
+
         if (location == null) {
-            setLocationRelativeTo(null);
-        } else
+            setLocationRelativeTo(null);        //imposta location in centro allo schermo
+        } else {
             setLocation(location);
+        }
+
         setVisible(true);
         setTitle("LoginPage - JavaBank");
         setFrameIcon(bankIconPath);
@@ -45,30 +58,8 @@ public class LoginForm extends MainApp {
         getRootPane().setDefaultButton(loginBTN);               //SELEZIONA IL PULSANTE DI LOGIN
         SwingUtilities.invokeLater(userFLD::requestFocus);       //FOCUS SUL CAMPO USERNAME
 
-//        timer = new Timer();
-//        task = new TimerTask() {
-//            @Override
-//            public void run() {
-//                String date = sdf.format(new Date());
-//                clockLBL.setText(date);
-//                System.out.println(date);
-//                try {
-//                    if(session!=null)
-//                    session.isValid();
-//                } catch (TimeoutException e) {
-//                    System.out.println("aaaaaaaaaaaaa");
-//                    sessionExpired();
-//                }
-//            }
-//        };
-//        timer.schedule(task,0,1000);
 
-
-        try {
-            DBConnect.close();              //CHIUDE LA CONNESSIONE PRIMA DI EFFETTUARE UN NUOVO LOGIN
-        } catch (SQLException ex) {
-            SQLExceptionOccurred(ex);
-        }
+        displayClock(clockLBL, dateLBL);
 
         userFLD.setText(this.user);
         pswFLD.setText(this.psw);
@@ -81,16 +72,17 @@ public class LoginForm extends MainApp {
 
     }
 
+
+
     private void login(ActionEvent e) {
         if (session != null) {
             JOptionPane.showMessageDialog(getContentPane(), "User already logged in this machine");
         } else if (userFLD.getText().isEmpty()) {
             JOptionPane.showMessageDialog(getContentPane(), "Username can't be empty");
         } else try {
-
+            timer.cancel();
             session = Bank.login(userFLD.getText(), String.valueOf(pswFLD.getPassword()));
             location = this.getLocation();
-//            timer.cancel();
             new HomeForm();
             dispose();
 

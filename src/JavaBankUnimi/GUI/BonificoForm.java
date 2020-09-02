@@ -43,6 +43,8 @@ public class BonificoForm extends MainApp {
     private JLabel cognomeLBL;
     private JLabel nomeLBL;
     private JLabel results;
+    private JLabel dateLBL;
+    private JLabel clockLBL;
     private JTabbedPane rubricaTab;
     private JPanel buttonsLatoPanel;
     private JPanel balancePanel;
@@ -65,6 +67,7 @@ public class BonificoForm extends MainApp {
 
         SwingUtilities.invokeLater(amountFLD::requestFocus);
 
+        displayClock(clockLBL, dateLBL);
         setCustomIcon(nextBTN, nextIconPath);
         setCustomIcon(prevBTN, prevIconPath);
 
