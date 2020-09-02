@@ -128,6 +128,7 @@ public class MainApp extends JFrame {
     //Functions
     protected void sessionExpired() {
         timer.cancel();
+        location = this.getLocation();
         String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
                 "Verrai reindirizzato alla schermata di Login.";
 
@@ -164,9 +165,9 @@ public class MainApp extends JFrame {
 
     protected void setCustomIcon(JButton button, String iconPath) {
 
-        Image icon;
         int margin = 5;
 
+        Image icon;
         try {
             URL iconUrl = this.getClass().getResource("/"+iconPath);
             icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
