@@ -105,12 +105,13 @@ public class MainApp extends JFrame {
                 System.out.println("gain focus");
 
                 if (session != null)
-//                    try {
-//                    session.isValid();
-                    session.updateSessionCreation();
-//                } catch (TimeoutException ex) {
-//                    sessionExpired();
-//                }
+                    try {
+                        session.isValid();
+                        session.updateSessionCreation();
+                    } catch (TimeoutException timeoutException) {
+                        sessionExpired();
+                    }
+
             }
 
             @Override
