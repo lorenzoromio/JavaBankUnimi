@@ -25,29 +25,26 @@ import java.util.concurrent.TimeoutException;
 
 public class MainApp extends JFrame {
     protected static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
-    protected static Session session;
     protected static Point location;
+    protected static Session session;
     protected static TimerTask sessionTimer;
     protected final Timer timer = new Timer();
-    protected final String deleteAccountIconPath = "icons/deleteAccount.png";
-    protected final String changePswIconPath = "icons/changePsw.png";
+    protected final DecimalFormat euro = new DecimalFormat("0.00 €");
+    protected final String bankIconPath = "icons/bank.png";
+    protected final String nextIconPath = "icons/next.png";
+    protected final String prevIconPath = "icons/prev.png";
     protected final String moneyIconPath = "icons/money.png";
     protected final String signUpIconPath = "icons/signUp.png";
     protected final String showPswIconPath = "icons/showpsw.png";
     protected final String hidePswIconPath = "icons/hidepsw.png";
     protected final String refreshIconPath = "icons/refresh.png";
-    protected final String bankIconPath = "icons/bank.png";
     protected final String depositoIconPath = "icons/deposito2.png";
     protected final String prelievoIconPath = "icons/prelievo2.png";
+    protected final String changePswIconPath = "icons/changePsw.png";
     protected final String bonificoInIconPath = "icons/bonificoIn2.png";
     protected final String bonificoOutIconPath = "icons/bonificoOut2.png";
-    protected final String nextIconPath = "icons/next.png";
-    protected final String prevIconPath = "icons/prev.png";
-    protected final DecimalFormat euro = new DecimalFormat("0.00 €");
+    protected final String deleteAccountIconPath = "icons/deleteAccount.png";
     protected final char echochar = '*';
-    protected String user;
-    protected String psw;
-
 
     public MainApp() {
 
@@ -57,24 +54,7 @@ public class MainApp extends JFrame {
         System.out.println("Main location: " + location);
 
         Locale.setDefault(Locale.ITALIAN);
-
-        sessionTimer = new TimerTask() {
-            @Override
-            public void run() {
-                System.out.println("session timer running");
-                if (session != null) {
-                    try {
-                        if (isFocused()) {
-                            session.isValid();
-                        }
-                    } catch (TimeoutException e) {
-                        sessionExpired();
-                    }
-                }
-            }
-        };
-
-        timer.schedule(sessionTimer, Session.duration, 1000);
+        UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Lucida Console", Font.PLAIN, 16)));
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -86,8 +66,6 @@ public class MainApp extends JFrame {
         } catch (Exception e) {
             System.out.println("Ninbus not avaiable");
         }
-
-        UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Lucida Console", Font.PLAIN, 16)));
 
 
         addWindowListener(new WindowAdapter() {
@@ -124,48 +102,42 @@ public class MainApp extends JFrame {
                 }
             }
         });
+
+        backGroundCheckValidSession();
     }
 
     public static void main(String[] args) {
         new LoginForm();
     }
 
-    //Functions
-    protected void sessionExpired() {
-        timer.cancel();
-        location = this.getLocation();
-        String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
-                "Verrai reindirizzato alla schermata di Login.";
-
-        String title = "Sessione Scaduta";
-        JOptionPane.showMessageDialog(getContentPane(), error_message, title, JOptionPane.ERROR_MESSAGE);
-        dispose();
-        session = null;
-        new LoginForm();
-    }
-
-    public void SQLExceptionOccurred(SQLException ex) {
-        String error = "SQL State : " + ex.getSQLState() + "\n" +
-                "ErrorCode : " + ex.getErrorCode() + "\n" +
-                ex.getMessage();
-
-        JOptionPane.showMessageDialog(getContentPane(), error, "SQL Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    protected void displayClock(JLabel clockLBL, JLabel dateLBL) {
-
-        TimerTask displayClock = new TimerTask() {
+    private void backGroundCheckValidSession() {
+        sessionTimer = new TimerTask() {
             @Override
             public void run() {
-                SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
-                SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
-                Date now = new Date();
-                clockLBL.setText(time.format(now));
-                dateLBL.setText(date.format(now));
-                System.out.println(sdf.format(now));
+                System.out.println("session timer running");
+                if (session != null) {
+                    try {
+                        if (isFocused()) {
+                            session.isValid();
+                        }
+                    } catch (TimeoutException e) {
+                        sessionExpired();
+                    }
+                }
             }
         };
-        timer.schedule(displayClock, 0, 1000);
+        timer.schedule(sessionTimer, Session.duration, 1000);
+    }
+
+    //Functions
+    protected void setFrameIcon(String iconPath) {
+
+        try {
+            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/" + iconPath)));
+        } catch (Exception ex) {
+            ImageIcon imageIcon = new ImageIcon(iconPath);
+            setIconImage(imageIcon.getImage());
+        }
     }
 
     protected void setCustomIcon(JButton button, String iconPath) {
@@ -187,6 +159,27 @@ public class MainApp extends JFrame {
         }
     }
 
+    private void sessionExpired() {
+        timer.cancel();
+        location = this.getLocation();
+        String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
+                "Verrai reindirizzato alla schermata di Login.";
+
+        String title = "Sessione Scaduta";
+        JOptionPane.showMessageDialog(getContentPane(), error_message, title, JOptionPane.ERROR_MESSAGE);
+        dispose();
+        session = null;
+        new LoginForm();
+    }
+
+    public void SQLExceptionOccurred(SQLException ex) {
+        String error = "SQL State : " + ex.getSQLState() + "\n" +
+                "ErrorCode : " + ex.getErrorCode() + "\n" +
+                ex.getMessage();
+
+        JOptionPane.showMessageDialog(getContentPane(), error, "SQL Error", JOptionPane.ERROR_MESSAGE);
+    }
+
     protected void setCustomIcon(JLabel label, String iconPath) {
         Image icon;
 
@@ -202,17 +195,6 @@ public class MainApp extends JFrame {
             ex.printStackTrace();
         }
     }
-
-    protected void setFrameIcon(String iconPath) {
-
-        try {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/" + iconPath)));
-        } catch (Exception ex) {
-            ImageIcon imageIcon = new ImageIcon(iconPath);
-            setIconImage(imageIcon.getImage());
-        }
-    }
-
 
     protected void exitAction(ActionEvent e) {
         timer.cancel();
@@ -254,5 +236,19 @@ public class MainApp extends JFrame {
         System.out.println();
     }
 
+    protected void displayClock(JLabel clockLBL, JLabel dateLBL) {
 
+        TimerTask displayClock = new TimerTask() {
+            @Override
+            public void run() {
+                SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
+                SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
+                Date now = new Date();
+                clockLBL.setText(time.format(now));
+                dateLBL.setText(date.format(now));
+                System.out.println(sdf.format(now));
+            }
+        };
+        timer.schedule(displayClock, 0, 1000);
+    }
 }

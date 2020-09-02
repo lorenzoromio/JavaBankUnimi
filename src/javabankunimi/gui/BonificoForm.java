@@ -18,12 +18,10 @@ public class BonificoForm extends MainApp {
     private JPanel bonificoPanel;
     private JTextField ibanFLD;
     private JTextField amountFLD;
-    private JPanel operationPanel;
     private JButton transferBTN;
     private JButton contactsBTN;
     private JButton balanceBTN;
     private JButton logoutBTN;
-    private JPanel fieldsPanel;
     private JButton homeBTN;
     private JPanel rubricaPanel;
     private JTextField nomeFLD;
@@ -34,22 +32,11 @@ public class BonificoForm extends MainApp {
     private JTextField searchFLD;
     private JButton searchBTN;
     private JButton clearBTN;
-    private JLabel searchLBL;
     private JLabel balance;
     private JLabel balanceLBL;
-    private JLabel amountLBL;
-    private JLabel ibanLBL;
-    private JLabel ibanContactLBL;
-    private JLabel cognomeLBL;
-    private JLabel nomeLBL;
     private JLabel results;
     private JLabel dateLBL;
     private JLabel clockLBL;
-    private JTabbedPane rubricaTab;
-    private JPanel buttonsLatoPanel;
-    private JPanel balancePanel;
-    private JPanel buttonsDownPanel;
-    private JPanel creditsPanel;
 
     public BonificoForm() throws SQLException {
         session.updateSessionCreation();

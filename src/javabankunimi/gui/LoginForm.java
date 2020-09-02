@@ -16,11 +16,9 @@ import java.sql.SQLException;
 public class LoginForm extends MainApp {
 
     private JPanel loginPanel;
-    private JPanel credentialPanel;
     private JLabel icon;
     private JTextField userFLD;
     private JPasswordField pswFLD;
-    private JPanel buttonsPanel;
     private JButton loginBTN;
     private JButton signupBTN;
     private JButton exitBTN;
@@ -36,7 +34,6 @@ public class LoginForm extends MainApp {
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
         }
-
 
         setContentPane(loginPanel);
         pack();
