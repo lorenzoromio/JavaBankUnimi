@@ -28,11 +28,11 @@ public class Session extends Account {
         creation = Instant.now();
     }
 
-    public static void eraseBalance() {
+    public static void eraseBalance() throws SQLException {
         DBConnect.eraseBalance();
     }
 
-    public static void deleteAllDatabase() {
+    public static void deleteAllDatabase() throws SQLException {
         DBConnect.deleteAll();
     }
 

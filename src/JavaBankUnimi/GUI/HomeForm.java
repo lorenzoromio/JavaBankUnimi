@@ -4,6 +4,7 @@
 
 package JavaBankUnimi.GUI;
 
+import JavaBankUnimi.Bank.Session;
 import JavaBankUnimi.Bank.Transaction;
 import JavaBankUnimi.Database.DBConnect;
 
