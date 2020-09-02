@@ -1,21 +1,14 @@
-name: "Todos"
-        on: ["push"]
-        jobs:
-        build:
-        runs-on: "ubuntu-latest"
-        steps:
-        - uses: "actions/checkout@master"
-        - name: "TODO-2-GH-Issue"
-        uses: "jamminroot/todo-2-gh-issue@master"
-        with:
+name: TODO workflow
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Run tdg-github-action
+      uses: ribtoks/tdg-github-action@master
+      with:
         TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TODO_PATTERN: "(?<=\\/\\/ ?TODO[ :]).+"
-        GH_LABEL: "TODO"
-        TRIM: ",: \""
-        TIMEOUT: 1000
-        LINES_BEFORE: 2
-        LINES_AFTER: 5
-        LABELS_PATTERN: "(?<=\\[).+?(?=\\])"
-        LABELS_REPLACE_PATTERN: "\\[(.+?)\\]"
-        IGNORED_LINES_LENGTH: 255
-        id: "todo"
+        REPO: ${{ github.repository }}
+        SHA: ${{ github.sha }}
+        REF: ${{ github.ref }}
