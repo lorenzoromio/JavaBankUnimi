@@ -36,7 +36,6 @@ public class Session extends Account {
     }
 
     public void updateSessionCreation() {
-//        isValid();
         this.creation = Instant.now();
     }
 
