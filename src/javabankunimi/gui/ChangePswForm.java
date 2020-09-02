@@ -4,7 +4,6 @@
 
 package javabankunimi.gui;
 
-import javabankunimi.bank.Account;
 import javabankunimi.bank.RegexChecker;
 
 import javax.security.auth.login.CredentialException;
@@ -54,7 +53,8 @@ public class ChangePswForm extends MainApp {
             @Override
             public void keyReleased(KeyEvent e) {
                 try {
-                    if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(String.valueOf(pswFLD.getPassword())).equals(session.getHashPsw())) {
+                    if (String.valueOf(pswFLD.getPassword()).isEmpty()
+                            || session.hash(String.valueOf(pswFLD.getPassword())).equals(session.getHashPsw())) {
                         pswFLD.setForeground(new JPasswordField().getForeground());
                         pswFLD.setBorder(new JPasswordField().getBorder());
                     } else {
@@ -76,7 +76,7 @@ public class ChangePswForm extends MainApp {
                     newPswFLD.setBorder(new JPasswordField().getBorder());
                 } else {
                     try {
-                        RegexChecker.checkValidPassword( String.valueOf(newPswFLD.getPassword()) );
+                        RegexChecker.checkValidPassword(String.valueOf(newPswFLD.getPassword()));
                         newPswFLD.setForeground(new JPasswordField().getForeground());
                         newPswFLD.setBorder(new JPasswordField().getBorder());
                     } catch (IllegalArgumentException ex) {
@@ -99,7 +99,9 @@ public class ChangePswForm extends MainApp {
 
                 String subPsw1 = String.valueOf(newPswFLD.getPassword()).substring(0, lenghtPsw2);
 
-                if (String.valueOf(confirmNewPswFLD.getPassword()).isEmpty() || (lenghtPsw2 > lenghtPsw1) || subPsw1.equals(String.valueOf(confirmNewPswFLD.getPassword()))) {
+                if (String.valueOf(confirmNewPswFLD.getPassword()).isEmpty()
+                        || (lenghtPsw2 > lenghtPsw1)
+                        || subPsw1.equals(String.valueOf(confirmNewPswFLD.getPassword()))) {
                     confirmNewPswFLD.setForeground(new JPasswordField().getForeground());
                     confirmNewPswFLD.setBorder(new JPasswordField().getBorder());
                 } else {
@@ -165,7 +167,9 @@ public class ChangePswForm extends MainApp {
     private void changePassword(ActionEvent e) {
         System.out.println("Save BTN pressed");
         try {
-            session.changePassword(String.valueOf(pswFLD.getPassword()), String.valueOf(newPswFLD.getPassword()), String.valueOf(confirmNewPswFLD.getPassword()));
+            session.changePassword( String.valueOf(pswFLD.getPassword()),
+                                    String.valueOf(newPswFLD.getPassword()),
+                                    String.valueOf(confirmNewPswFLD.getPassword()));
             JOptionPane.showMessageDialog(getContentPane(), "Modifica effettuata correttamente");
             homeAction(null);
 
