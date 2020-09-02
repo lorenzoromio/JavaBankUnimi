@@ -10,3 +10,6 @@
     <orderEntry type="library" name="mysql-connector-java-8.0.21" level="project" />
   </component>
 </module>
+
+- name: TODO to Issue
+  uses: alstr/todo-to-issue-action@v2.0
