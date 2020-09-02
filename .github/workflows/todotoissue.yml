@@ -5,13 +5,11 @@ jobs:
     runs-on: "ubuntu-latest"
     steps:
       - uses: "actions/checkout@master"
-      - name: "TODO to Issue"
-        uses: "alstr/todo-to-issue-action@v2.0"
-        with:
-          REPO: ${{ github.repository }}
-          BEFORE: ${{ github.event.before }}
-          SHA: ${{ github.sha }}
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LABEL: "# TODO"
-          COMMENT_MARKER: "#"
-        id: "todo"
+     - name: Actions TODO Bot
+  # You may pin to the exact commit or the version.
+  # uses: adriangodong/actions-todo-bot@f332df174d26d8d58a090dcb71a944cb18b12729
+  uses: adriangodong/actions-todo-bot@1.0.2
+  with:
+    # Token for the repo. Can be passed in using {{ secrets.GITHUB_TOKEN }}
+    repo-token: 
+     
