@@ -107,6 +107,7 @@ public class LoginForm extends MainApp {
     }
 
     private void signupForm(ActionEvent e) {
+        timer.cancel();
         location = getLocation();
         new SignUpForm();
         dispose();

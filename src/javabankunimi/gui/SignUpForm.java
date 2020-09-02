@@ -213,7 +213,7 @@ public class SignUpForm extends MainApp {
                         session = Bank.login(account.getUsername(), String.valueOf(psw1FLD.getPassword()));
                         homeAction(null);
                     } else {
-                        //logInAction(null);
+                        logInAction(null);
                         clearNamesFields();
                         clearPasswordFields();
                     }
@@ -260,6 +260,7 @@ public class SignUpForm extends MainApp {
     }
 
     private void logInAction(ActionEvent e) {
+        timer.cancel();
         new LoginForm();
         dispose();
     }
