@@ -1,4 +1,4 @@
-name: "TodostoIssue"
+name: "Todos"
         on: ["push"]
         jobs:
         build:
