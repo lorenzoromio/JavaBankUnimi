@@ -12,9 +12,6 @@ import javax.security.auth.login.CredentialException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
 public class LoginForm extends MainApp {
