@@ -21,7 +21,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      - name: TODO-2-gh-issue
-        uses: Jamminroot/todo-2-gh-issue@1.1.5
+#      - name: TODO-2-gh-issue
+#        uses: Jamminroot/todo-2-gh-issue@1.1.5
+      - name: todo-actions
+  # You may pin to the exact commit or the version.
+  # uses: dtinth/todo-actions@2d54a7a6869a6314b5cb1e2b585b08acd06e6dad
+        uses: dtinth/todo-actions@v0.2.0
 
     
