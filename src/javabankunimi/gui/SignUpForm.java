@@ -6,6 +6,7 @@ package javabankunimi.gui;
 
 import javabankunimi.bank.Account;
 import javabankunimi.bank.Bank;
+import javabankunimi.bank.RegexChecker;
 
 import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountException;
@@ -75,7 +76,7 @@ public class SignUpForm extends MainApp {
                     nomeFLD.setForeground(new JPasswordField().getForeground());
                     nomeFLD.setBorder(new JPasswordField().getBorder());
                 } else try {
-                    Account.checkValidName(nomeFLD.getText());
+                    RegexChecker.checkValidName(nomeFLD.getText());
                     nomeFLD.setForeground(new JPasswordField().getForeground());
                     nomeFLD.setBorder(new JPasswordField().getBorder());
                 } catch (InvalidNameException ex) {
@@ -93,7 +94,7 @@ public class SignUpForm extends MainApp {
                     cognomeFLD.setForeground(new JPasswordField().getForeground());
                     cognomeFLD.setBorder(new JPasswordField().getBorder());
                 } else try {
-                    Account.checkValidName(cognomeFLD.getText());
+                    RegexChecker.checkValidName(cognomeFLD.getText());
                     cognomeFLD.setForeground(new JPasswordField().getForeground());
                     cognomeFLD.setBorder(new JPasswordField().getBorder());
                 } catch (InvalidNameException ex) {
@@ -119,7 +120,7 @@ public class SignUpForm extends MainApp {
                     psw1FLD.setForeground(new JPasswordField().getForeground());
                     psw1FLD.setBorder(new JPasswordField().getBorder());
                 } else try {
-                    Account.checkValidPassword(String.valueOf(psw1FLD.getPassword()));
+                    RegexChecker.checkValidPassword(String.valueOf(psw1FLD.getPassword()));
                     psw1FLD.setForeground(new JPasswordField().getForeground());
                     psw1FLD.setBorder(new JPasswordField().getBorder());
                 } catch (IllegalArgumentException ex) {

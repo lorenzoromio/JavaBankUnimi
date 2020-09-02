@@ -4,6 +4,8 @@
 
 package javabankunimi.gui;
 
+import javabankunimi.bank.RegexChecker;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
@@ -87,9 +89,8 @@ public class DepositoForm extends MainApp {
             if (amountFLD.getText().isEmpty())
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {
-//                    amount = ;
-                session.deposit(session.validateAmount(amountFLD.getText()));
-//                    session.deposit(session.validateAmount(amountFLD.getText()));
+
+                session.deposit(RegexChecker.checkValidAmount(amountFLD.getText()));
                 amountFLD.setText("");
                 balance.setText(euro.format(session.getSaldo()));
                 JOptionPane.showMessageDialog(getContentPane(), "Deposito Effettuato Correttamente");

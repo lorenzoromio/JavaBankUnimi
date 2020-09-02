@@ -123,22 +123,6 @@ public class Session extends Account {
         }
     }
 
-    public Double validateAmount(String amount) throws IllegalArgumentException {
-
-        // RegexChecker to check valid password.
-        IllegalArgumentException validateAmountException = new IllegalArgumentException("Importo non valido");
-
-        String regex = "^\\$?[0-9]+(\\.([0-9]{1,2}))?$";
-        amount = amount.replace(",", ".");
-        try {
-            new RegexChecker(amount, regex);
-        } catch (IllegalArgumentException e) {
-            throw validateAmountException;
-        }
-
-        return Double.parseDouble(amount);
-    }
-
 
     public void deposit(Double amount) throws SQLException, IllegalArgumentException {
 

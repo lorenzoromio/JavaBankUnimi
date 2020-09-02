@@ -5,6 +5,7 @@
 package javabankunimi.gui;
 
 import javabankunimi.bank.Account;
+import javabankunimi.bank.RegexChecker;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.*;
@@ -209,7 +210,8 @@ public class BonificoForm extends MainApp {
                 JOptionPane.showInternalMessageDialog(getContentPane(), "Amount field can't be empty");
 
             else {
-                amount = session.validateAmount(amountFLD.getText());
+
+                amount = RegexChecker.checkValidAmount(amountFLD.getText());
                 if (ibanFLD.getText().isEmpty()) {
                     JOptionPane.showInternalMessageDialog(getContentPane(), "Iban field can't be empty");
                 } else {

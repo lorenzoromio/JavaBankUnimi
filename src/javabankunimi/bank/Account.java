@@ -32,13 +32,13 @@ public class Account implements Comparable<Account> {
     //Create a new Account
     public Account(String nome, String cognome, String psw) throws SQLException, InvalidNameException, IllegalArgumentException {
         try {
-            checkValidName(nome);
+            RegexChecker.checkValidName(nome);
         } catch (InvalidNameException ex) {
             throw new InvalidNameException("Nome non valido");
         }
 
         try {
-            checkValidName(cognome);
+            RegexChecker.checkValidName(cognome);
         } catch (InvalidNameException ex) {
             throw new InvalidNameException("Cognome non valido");
         }
@@ -96,37 +96,6 @@ public class Account implements Comparable<Account> {
         }
     }
 
-    public static void checkValidName(String nome) throws InvalidNameException {
-        //language=RegExp
-        String regex = "^[A-Za-z]+((s)?(('|-|.)?([A-Za-z])+))*$"; //nomi singoli, doppi nomi con spazio, apostrofi
-        try {
-            new RegexChecker(nome, regex);
-        } catch (IllegalArgumentException e) {
-            throw new InvalidNameException();
-        }
-
-    }
-
-    public static void checkValidPassword(String password) throws IllegalArgumentException {
-        // RegexChecker to check valid password.
-
-        IllegalArgumentException invalidPasswordException = new IllegalArgumentException("La password deve contenere un carattere minuscolo, uno maiuscolo, " +
-                "\nun numero, un carattere speciale e deve essere lunga almeno 8 caratteri");
-
-        String regex = "^(?=.*[0-9])"                     //un numero
-                + "(?=.*[a-z])"                      //una lettere minuscola
-                + "(?=.*[A-Z])"                      //una lettere maiuscola
-                + "(?=.*[!£$%&/()=?^*§°çé\"])"       //un caratteri speciale
-                + "(?=\\S+$).{8,20}$";               //lunghezza tra 8 e 20
-
-        try {
-            new RegexChecker(password, regex);
-        } catch (IllegalArgumentException ex) {
-            throw invalidPasswordException;
-        }
-
-    }
-
     protected String randomString(int length) {
         //Use cryptographically secure randomString number generator
         Random random = new SecureRandom();
@@ -158,7 +127,7 @@ public class Account implements Comparable<Account> {
 
     //SETTER
     protected void setPassword(String psw) throws SQLException, IllegalArgumentException {
-        checkValidPassword(psw);
+        RegexChecker.checkValidPassword(psw);
         this.hashPsw = hash(psw);
 
     }

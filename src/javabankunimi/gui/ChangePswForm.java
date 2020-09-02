@@ -5,6 +5,7 @@
 package javabankunimi.gui;
 
 import javabankunimi.bank.Account;
+import javabankunimi.bank.RegexChecker;
 
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
@@ -75,7 +76,7 @@ public class ChangePswForm extends MainApp {
                     newPswFLD.setBorder(new JPasswordField().getBorder());
                 } else {
                     try {
-                        Account.checkValidPassword(String.valueOf(newPswFLD.getPassword()));
+                        RegexChecker.checkValidPassword( String.valueOf(newPswFLD.getPassword()) );
                         newPswFLD.setForeground(new JPasswordField().getForeground());
                         newPswFLD.setBorder(new JPasswordField().getBorder());
                     } catch (IllegalArgumentException ex) {

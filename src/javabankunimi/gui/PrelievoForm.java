@@ -4,6 +4,8 @@
 
 package javabankunimi.gui;
 
+import javabankunimi.bank.RegexChecker;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
@@ -86,7 +88,7 @@ public class PrelievoForm extends MainApp {
             if (amountFLD.getText().isEmpty())
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {
-                session.prelievo(session.validateAmount(amountFLD.getText()));
+                session.prelievo(RegexChecker.checkValidAmount(amountFLD.getText()));
                 amountFLD.setText("");
                 balance.setText(euro.format(session.getSaldo()));
                 JOptionPane.showMessageDialog(getContentPane(), "Prelievo effettuato Correttamente");
