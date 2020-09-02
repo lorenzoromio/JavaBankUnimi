@@ -24,8 +24,10 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
 public class MainApp extends JFrame {
+    protected static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     protected static Session session;
     protected static Point location;
+    protected static TimerTask sessionTimer;
     protected final Timer timer = new Timer();
     protected final String deleteAccountIconPath = "icons/deleteAccount.png";
     protected final String changePswIconPath = "icons/changePsw.png";
@@ -42,11 +44,9 @@ public class MainApp extends JFrame {
     protected final String nextIconPath = "icons/next.png";
     protected final String prevIconPath = "icons/prev.png";
     protected final DecimalFormat euro = new DecimalFormat("0.00 €");
-    protected static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     protected final char echochar = '*';
     protected String user;
     protected String psw;
-    protected static TimerTask sessionTimer;
 
 
     public MainApp() {
@@ -64,7 +64,9 @@ public class MainApp extends JFrame {
                 System.out.println("session timer running");
                 if (session != null) {
                     try {
-                        session.isValid();
+                        if (isFocused()) {
+                            session.isValid();
+                        }
                     } catch (TimeoutException e) {
                         sessionExpired();
                     }
@@ -72,7 +74,7 @@ public class MainApp extends JFrame {
             }
         };
 
-        timer.schedule(sessionTimer,0,2000);
+        timer.schedule(sessionTimer, Session.duration, 1000);
 
         try {
             for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
@@ -169,7 +171,7 @@ public class MainApp extends JFrame {
 
         Image icon;
         try {
-            URL iconUrl = this.getClass().getResource("/"+iconPath);
+            URL iconUrl = this.getClass().getResource("/" + iconPath);
             icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
         } catch (Exception e) {
             icon = new ImageIcon(iconPath).getImage();
@@ -186,7 +188,7 @@ public class MainApp extends JFrame {
         Image icon;
 
         try {
-            URL iconUrl = this.getClass().getResource("/"+iconPath);
+            URL iconUrl = this.getClass().getResource("/" + iconPath);
             icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
         } catch (Exception ex) {
             icon = new ImageIcon(iconPath).getImage();
@@ -201,7 +203,7 @@ public class MainApp extends JFrame {
     protected void setFrameIcon(String iconPath) {
 
         try {
-            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/"+iconPath)));
+            setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/" + iconPath)));
         } catch (Exception ex) {
             ImageIcon imageIcon = new ImageIcon(iconPath);
             setIconImage(imageIcon.getImage());
@@ -248,11 +250,10 @@ public class MainApp extends JFrame {
             System.out.println("interrupt");
             interruptedException.printStackTrace();
         }
-        System.out.println("ID: "+thread.getId());
-        System.out.println("Count : "+Thread.activeCount());
+        System.out.println("ID: " + thread.getId());
+        System.out.println("Count : " + Thread.activeCount());
         System.out.println();
     }
-
 
 
 }
