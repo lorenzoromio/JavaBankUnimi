@@ -221,11 +221,11 @@ public class Account implements Comparable<Account> {
 
     }
 
-    public void setSalt(String salt) throws TimeoutException, SQLException {
+    protected void setSalt(String salt) throws TimeoutException, SQLException {
         this.salt = salt;
     }
 
-    public void setTimestamp(String timestamp) throws TimeoutException, SQLException {
+    protected void setTimestamp(String timestamp) throws TimeoutException, SQLException {
         this.timestamp = timestamp;
     }
 

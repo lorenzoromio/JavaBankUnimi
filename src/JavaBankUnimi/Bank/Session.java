@@ -283,7 +283,7 @@ public class Session extends Account {
     }
 
     @Override
-    public void setSalt(String salt) throws TimeoutException, SQLException {
+    protected void setSalt(String salt) throws TimeoutException, SQLException {
         updateSessionCreation();
         super.setSalt(salt);
         String update = "update accounts set SALT = ? where USERNAME = ?";
@@ -294,7 +294,7 @@ public class Session extends Account {
     }
 
     @Override
-    public void setTimestamp(String timestamp) throws TimeoutException, SQLException {
+    protected void setTimestamp(String timestamp) throws TimeoutException, SQLException {
         updateSessionCreation();
         super.setTimestamp(timestamp);
         String update = "update accounts set TIMESTAMP = ? where USERNAME = ?";
@@ -305,9 +305,9 @@ public class Session extends Account {
 
     }
 
-    public Instant getCreation() {
-        return creation;
-    }
+//    public Instant getCreation() {
+//        return creation;
+//    }
 
     @Override
     public String toString() {
