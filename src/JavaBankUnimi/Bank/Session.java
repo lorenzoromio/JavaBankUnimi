@@ -50,7 +50,7 @@ public class Session extends Account {
         if (!newPsw.equals(checkPsw))
             throw new IllegalArgumentException("Le password non coincidono");
 
-        setTimestamp(String.valueOf(new Date().getTime()));
+//        setTimestamp(String.valueOf(new Date().getTime()));
         setSalt(getTimestamp().concat(randomString(10)));
         setPassword(newPsw);
 
