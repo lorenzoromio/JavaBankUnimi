@@ -11,7 +11,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 public class BonificoForm extends MainApp {
     private final Rubrica rubrica = new Rubrica();
@@ -51,7 +50,7 @@ public class BonificoForm extends MainApp {
     private JPanel buttonsDownPanel;
     private JPanel creditsPanel;
 
-    public BonificoForm() throws TimeoutException, SQLException {
+    public BonificoForm() throws SQLException {
         session.updateSessionCreation();
         System.out.println(session);
         setContentPane(bonificoPanel);
@@ -121,14 +120,14 @@ public class BonificoForm extends MainApp {
         prevBTN.addActionListener(e -> {
             rubrica.index--;
             if (rubrica.index < 0)
-                rubrica.index = rubrica.list.size()-1;
+                rubrica.index = rubrica.list.size() - 1;
             populateRubrica();
         });
 
         nextBTN.addActionListener(e -> {
             rubrica.index++;
             if (rubrica.index > rubrica.list.size() - 1)
-                rubrica.index=0;
+                rubrica.index = 0;
             populateRubrica();
         });
 
@@ -159,8 +158,6 @@ public class BonificoForm extends MainApp {
                     balance.setVisible(true);
                 }
 
-            } catch (TimeoutException ex) {
-                sessionExpired();
             } catch (SQLException ex) {
                 SQLExceptionOccurred(ex);
             }
@@ -188,9 +185,6 @@ public class BonificoForm extends MainApp {
 
         try {
             rubrica.list = session.showContacts(search);
-        } catch (TimeoutException ex) {
-            sessionExpired();
-
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
         }
@@ -238,8 +232,6 @@ public class BonificoForm extends MainApp {
             ibanFLD.setText("");
             JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
 
-        } catch (TimeoutException ex) {
-            sessionExpired();
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
         }

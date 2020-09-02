@@ -104,11 +104,13 @@ public class MainApp extends JFrame {
             public void windowActivated(WindowEvent e) {            //CONTROLLA LA VALIDITA' DELLA SESSIONE QUANDO LA FINESTRA SI RIATTIVA
                 System.out.println("gain focus");
 
-                if (session != null) try {
+                if (session != null)
+//                    try {
+//                    session.isValid();
                     session.updateSessionCreation();
-                } catch (TimeoutException ex) {
+//                } catch (TimeoutException ex) {
 //                    sessionExpired();
-                }
+//                }
             }
 
             @Override
@@ -231,14 +233,10 @@ public class MainApp extends JFrame {
     }
 
     protected void homeAction(ActionEvent e) {
-        try {
-            timer.cancel();
-            location = getLocation();
-            new HomeForm();
-            dispose();
-        } catch (TimeoutException ex) {
-            sessionExpired();
-        }
+        timer.cancel();
+        location = getLocation();
+        new HomeForm();
+        dispose();
     }
 
     protected void backgroundTask(Runnable runnable) {

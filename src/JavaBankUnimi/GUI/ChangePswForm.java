@@ -12,7 +12,6 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
-import java.util.concurrent.TimeoutException;
 
 public class ChangePswForm extends MainApp {
     private JPanel changePswPanel;
@@ -29,7 +28,7 @@ public class ChangePswForm extends MainApp {
     private JLabel dateLBL;
     private JLabel clockLBL;
 
-    public ChangePswForm() throws TimeoutException {
+    public ChangePswForm() {
         session.updateSessionCreation();
         setContentPane(changePswPanel);
         pack();
@@ -179,9 +178,6 @@ public class ChangePswForm extends MainApp {
             newPswFLD.setText("");
             confirmNewPswFLD.setText("");
             JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-
-        } catch (TimeoutException ex) {
-            sessionExpired();
 
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);

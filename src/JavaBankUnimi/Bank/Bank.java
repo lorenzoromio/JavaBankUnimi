@@ -12,7 +12,6 @@ import javax.security.auth.login.CredentialException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.concurrent.TimeoutException;
 
 public class Bank {
     private static final String abi = "02";
@@ -29,7 +28,7 @@ public class Bank {
         }
 
         String newAccount = "insert into accounts(USERNAME, NOME, COGNOME, HASHPSW, SALT, TIMESTAMP, IBAN, NUM_CONTO, SALDO) " +
-                            "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                "values (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         prepStmt = DBConnect.getConnection().prepareStatement(newAccount);
         prepStmt.setString(1, account.getUsername());
         prepStmt.setString(2, account.getNome());
@@ -39,12 +38,7 @@ public class Bank {
         prepStmt.setString(6, account.getTimestamp());
         prepStmt.setString(7, account.getIban());
         prepStmt.setString(8, account.getNum_conto());
-
-        try {
-            prepStmt.setDouble(9, account.getSaldo());
-        } catch (TimeoutException e) {
-            //
-        }
+        prepStmt.setDouble(9, account.getSaldo());
         prepStmt.execute();
     }
 

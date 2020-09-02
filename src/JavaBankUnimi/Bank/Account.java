@@ -16,18 +16,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Random;
-import java.util.concurrent.TimeoutException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Account implements Comparable<Account> {
     private final String nome;
     private final String cognome;
-    private String salt;
-    private String timestamp;
     private final String num_conto;
     private final String iban;
     private final String username;
+    private String salt;
+    private String timestamp;
     private int ID;
     private String hashPsw;
     private Double saldo;
@@ -48,11 +47,7 @@ public class Account implements Comparable<Account> {
 
         this.timestamp = String.valueOf(new Date().getTime());
         this.salt = timestamp.concat(randomString(10));
-        try {
-            setPassword(psw);
-        } catch (TimeoutException e) {
-            //
-        }
+        setPassword(psw);
 
         StringBuilder sb = new StringBuilder();
         String[] nomi = nome.split(" ");
@@ -174,7 +169,7 @@ public class Account implements Comparable<Account> {
     }
 
     //SETTER
-    protected void setPassword(String psw) throws SQLException, IllegalArgumentException, TimeoutException {
+    protected void setPassword(String psw) throws SQLException, IllegalArgumentException {
         checkValidPassword(psw);
         this.hashPsw = hash(psw);
 
@@ -201,8 +196,16 @@ public class Account implements Comparable<Account> {
         return salt;
     }
 
+    protected void setSalt(String salt) throws SQLException {
+        this.salt = salt;
+    }
+
     public String getTimestamp() {
         return timestamp;
+    }
+
+    protected void setTimestamp(String timestamp) throws SQLException {
+        this.timestamp = timestamp;
     }
 
     public String getNum_conto() {
@@ -213,21 +216,13 @@ public class Account implements Comparable<Account> {
         return iban;
     }
 
-    public Double getSaldo() throws SQLException, TimeoutException {
+    public Double getSaldo() throws SQLException {
         return saldo;
     }
 
-    protected void setSaldo(Double saldo) throws SQLException, TimeoutException {
+    protected void setSaldo(Double saldo) throws SQLException {
         this.saldo = saldo;
 
-    }
-
-    protected void setSalt(String salt) throws TimeoutException, SQLException {
-        this.salt = salt;
-    }
-
-    protected void setTimestamp(String timestamp) throws TimeoutException, SQLException {
-        this.timestamp = timestamp;
     }
 
     @Override

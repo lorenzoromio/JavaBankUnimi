@@ -3,13 +3,13 @@
  */
 
 package JavaBankUnimi.GUI;
+
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
-import java.util.concurrent.TimeoutException;
 
 @SuppressWarnings("ConstantConditions")
 public class DeleteAccountForm extends MainApp {
@@ -25,7 +25,7 @@ public class DeleteAccountForm extends MainApp {
     private JLabel dateLBL;
     private JLabel clockLBL;
 
-    public DeleteAccountForm() throws TimeoutException {
+    public DeleteAccountForm() {
         session.updateSessionCreation();
         System.out.println(session);
         setContentPane(removePanel);
@@ -167,9 +167,6 @@ public class DeleteAccountForm extends MainApp {
                 pswFLD.setText("");
                 confirmPswFLD.setText("");
                 JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-
-            } catch (TimeoutException ex) {
-                sessionExpired();
 
             } catch (SQLException ex) {
                 SQLExceptionOccurred(ex);

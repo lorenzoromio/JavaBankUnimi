@@ -2,10 +2,11 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
-package JavaBankUnimi.GUI;import javax.swing.*;
+package JavaBankUnimi.GUI;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.concurrent.TimeoutException;
 
 public class DepositoForm extends MainApp {
 
@@ -22,7 +23,7 @@ public class DepositoForm extends MainApp {
     private JLabel clockLBL;
 
 
-    public DepositoForm() throws TimeoutException, SQLException {
+    public DepositoForm() throws SQLException {
         session.updateSessionCreation();
         System.out.println(session);
         setContentPane(depositoPanel);
@@ -63,8 +64,6 @@ public class DepositoForm extends MainApp {
 
                 }
 
-            } catch (TimeoutException ex) {
-                sessionExpired();
             } catch (SQLException ex) {
                 SQLExceptionOccurred(ex);
             }
@@ -101,8 +100,6 @@ public class DepositoForm extends MainApp {
             amountFLD.setText("");
             JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
 
-        } catch (TimeoutException ex) {
-            sessionExpired();
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
         }

@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 public class HomeForm extends MainApp {
 
@@ -41,7 +40,7 @@ public class HomeForm extends MainApp {
     private JLabel dateLBL;
     private JLabel clockLBL;
 
-    public HomeForm() throws TimeoutException {
+    public HomeForm() {
         session.updateSessionCreation();
         System.out.println(session);
         setContentPane(homePanel);
@@ -249,8 +248,6 @@ public class HomeForm extends MainApp {
 
         } catch (SQLException e) {
             SQLExceptionOccurred(e);
-        } catch (TimeoutException e) {
-            sessionExpired();
         }
 
 
@@ -278,22 +275,17 @@ public class HomeForm extends MainApp {
             new LoginForm();
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
-        } catch (TimeoutException ex) {
-            sessionExpired();
         }
     }
 
     private void changePswForm(ActionEvent e) {
 
-        try {
-            timer.cancel();
-            location = getLocation();
-            new ChangePswForm();
-        } catch (TimeoutException ex) {
-            sessionExpired();
-        } finally {
-            dispose();
-        }
+
+        timer.cancel();
+        location = getLocation();
+        new ChangePswForm();
+
+        dispose();
 
     }
 
@@ -302,8 +294,6 @@ public class HomeForm extends MainApp {
             timer.cancel();
             location = getLocation();
             new PrelievoForm();
-        } catch (TimeoutException ex) {
-            sessionExpired();
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
         } finally {
@@ -318,8 +308,6 @@ public class HomeForm extends MainApp {
             location = this.getLocation();
             new DepositoForm();
 
-        } catch (TimeoutException ex) {
-            sessionExpired();
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
         } finally {
@@ -330,15 +318,10 @@ public class HomeForm extends MainApp {
 
     private void deleteAccountForm(ActionEvent e) {
 
-        try {
-            timer.cancel();
-            location = getLocation();
-            new DeleteAccountForm();
-            dispose();
-
-        } catch (TimeoutException ex) {
-            sessionExpired();
-        }
+        timer.cancel();
+        location = getLocation();
+        new DeleteAccountForm();
+        dispose();
 
 
     }
@@ -350,8 +333,6 @@ public class HomeForm extends MainApp {
             new BonificoForm();
             dispose();
 
-        } catch (TimeoutException ex) {
-            sessionExpired();
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
         }

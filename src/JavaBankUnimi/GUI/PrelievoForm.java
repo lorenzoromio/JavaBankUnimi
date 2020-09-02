@@ -2,10 +2,11 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
-package JavaBankUnimi.GUI;import javax.swing.*;
+package JavaBankUnimi.GUI;
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.concurrent.TimeoutException;
 
 public class PrelievoForm extends MainApp {
 
@@ -22,7 +23,7 @@ public class PrelievoForm extends MainApp {
     private JLabel clockLBL;
 
 
-    public PrelievoForm() throws TimeoutException, SQLException {
+    public PrelievoForm() throws SQLException {
 
         session.updateSessionCreation();
         System.out.println(session);
@@ -40,9 +41,9 @@ public class PrelievoForm extends MainApp {
         balance.setText(euro.format(session.getSaldo()));
 
         if (balance.isVisible()) {
-            setCustomIcon(balanceBTN,showPswIconPath);
+            setCustomIcon(balanceBTN, showPswIconPath);
         } else {
-            setCustomIcon(balanceBTN,hidePswIconPath);
+            setCustomIcon(balanceBTN, hidePswIconPath);
         }
 
         SwingUtilities.invokeLater(amountFLD::requestFocus);
@@ -54,17 +55,15 @@ public class PrelievoForm extends MainApp {
                 balance.setText(euro.format(session.getSaldo()));
 
                 if (balance.isVisible()) {
-                    setCustomIcon(balanceBTN,hidePswIconPath);
+                    setCustomIcon(balanceBTN, hidePswIconPath);
                     balance.setVisible(false);
 
                 } else {
-                    setCustomIcon(balanceBTN,showPswIconPath);
+                    setCustomIcon(balanceBTN, showPswIconPath);
                     balance.setVisible(true);
 
                 }
 
-            } catch (TimeoutException ex) {
-                sessionExpired();
             } catch (SQLException ex) {
                 SQLExceptionOccurred(ex);
             }
@@ -83,7 +82,7 @@ public class PrelievoForm extends MainApp {
 
     private void prelievo(ActionEvent e) {
         try {
-              session.updateSessionCreation();
+            session.updateSessionCreation();
             if (amountFLD.getText().isEmpty())
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {
@@ -98,8 +97,6 @@ public class PrelievoForm extends MainApp {
             amountFLD.setText("");
             JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
 
-        } catch (TimeoutException ex) {
-            sessionExpired();
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
         }

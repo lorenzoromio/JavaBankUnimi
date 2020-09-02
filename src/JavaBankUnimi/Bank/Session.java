@@ -3,6 +3,7 @@
  */
 
 package JavaBankUnimi.Bank;
+
 import JavaBankUnimi.Database.DBConnect;
 
 import javax.security.auth.login.AccountNotFoundException;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    public static final long duration = 5 * 1000;
+    public static final long duration = 15 * 1000;
     private Instant creation;
     private List<Transaction> transactions;
 
@@ -34,12 +35,12 @@ public class Session extends Account {
             throw new TimeoutException("Sessione Scaduta");
     }
 
-    public void updateSessionCreation() throws TimeoutException {
-        isValid();
+    public void updateSessionCreation() {
+//        isValid();
         this.creation = Instant.now();
     }
 
-    public void changePassword(String oldPsw, String newPsw, String checkPsw) throws TimeoutException, IllegalArgumentException, SQLException, CredentialException {
+    public void changePassword(String oldPsw, String newPsw, String checkPsw) throws IllegalArgumentException, SQLException, CredentialException {
 
         updateSessionCreation();
 
@@ -58,7 +59,7 @@ public class Session extends Account {
 
     }
 
-    public void deleteAccount(String psw, String confirmPsw) throws TimeoutException, IllegalArgumentException, CredentialException, SQLException {
+    public void deleteAccount(String psw, String confirmPsw) throws IllegalArgumentException, CredentialException, SQLException {
 
         updateSessionCreation();
 
@@ -77,7 +78,7 @@ public class Session extends Account {
 
     }
 
-    public void transfer(String iban, double amount) throws AccountNotFoundException, IllegalArgumentException, TimeoutException, SQLException {
+    public void transfer(String iban, double amount) throws AccountNotFoundException, IllegalArgumentException, SQLException {
 
         updateSessionCreation();
 
@@ -132,7 +133,7 @@ public class Session extends Account {
     }
 
 
-    public void deposit(Double amount) throws TimeoutException, SQLException, IllegalArgumentException {
+    public void deposit(Double amount) throws SQLException, IllegalArgumentException {
 
         updateSessionCreation();
 
@@ -143,7 +144,7 @@ public class Session extends Account {
         new Transaction(getIban(), amount, "deposito", new Date()).push();
     }
 
-    public void prelievo(Double amount) throws IllegalArgumentException, TimeoutException, SQLException {
+    public void prelievo(Double amount) throws IllegalArgumentException, SQLException {
         updateSessionCreation();
 
         if (getSaldo() < amount)
@@ -153,7 +154,7 @@ public class Session extends Account {
         new Transaction(getIban(), amount, "prelievo", new Date()).push();
     }
 
-    public List<Account> showContacts(String search) throws TimeoutException, SQLException {
+    public List<Account> showContacts(String search) throws SQLException {
         updateSessionCreation();
         List<Account> accountsList = new ArrayList<>();
         String showContacts = "select USERNAME from accounts where USERNAME <> ? order by COGNOME";
@@ -186,7 +187,7 @@ public class Session extends Account {
         return accountsList;
     }
 
-    public List<Transaction> showTransactions() throws TimeoutException, SQLException {
+    public List<Transaction> showTransactions() throws SQLException {
 
         updateSessionCreation();
         List<Transaction> transactionsList = new ArrayList<>();
@@ -236,7 +237,7 @@ public class Session extends Account {
     }
 
     @Override
-    public Double getSaldo() throws SQLException, TimeoutException {
+    public Double getSaldo() throws SQLException {
         updateSessionCreation();
         String update = "select * from accounts where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
@@ -252,7 +253,7 @@ public class Session extends Account {
     }
 
     @Override
-    protected void setSaldo(Double saldo) throws SQLException, TimeoutException {
+    protected void setSaldo(Double saldo) throws SQLException {
         updateSessionCreation();
         super.setSaldo(saldo);
         String update = "update accounts set SALDO = ? where USERNAME = ?";
@@ -264,7 +265,7 @@ public class Session extends Account {
     }
 
     @Override
-    protected void setPassword(String psw) throws SQLException, TimeoutException {
+    protected void setPassword(String psw) throws SQLException {
         updateSessionCreation();
         super.setPassword(psw);
         String update = "update accounts set HASHPSW = ? where USERNAME = ?";
@@ -286,7 +287,7 @@ public class Session extends Account {
     }
 
     @Override
-    protected void setSalt(String salt) throws TimeoutException, SQLException {
+    protected void setSalt(String salt) throws SQLException {
         updateSessionCreation();
         super.setSalt(salt);
         String update = "update accounts set SALT = ? where USERNAME = ?";
@@ -297,7 +298,7 @@ public class Session extends Account {
     }
 
     @Override
-    protected void setTimestamp(String timestamp) throws TimeoutException, SQLException {
+    protected void setTimestamp(String timestamp) throws SQLException {
         updateSessionCreation();
         super.setTimestamp(timestamp);
         String update = "update accounts set TIMESTAMP = ? where USERNAME = ?";

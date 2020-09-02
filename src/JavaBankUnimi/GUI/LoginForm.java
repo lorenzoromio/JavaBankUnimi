@@ -12,7 +12,6 @@ import javax.security.auth.login.CredentialException;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
-import java.util.concurrent.TimeoutException;
 
 public class LoginForm extends MainApp {
 
@@ -70,7 +69,6 @@ public class LoginForm extends MainApp {
     }
 
 
-
     private void login(ActionEvent e) {
         if (session != null) {
             JOptionPane.showMessageDialog(getContentPane(), "User already logged in this machine");
@@ -105,8 +103,6 @@ public class LoginForm extends MainApp {
                     SQLExceptionOccurred(ex);
                     break;
             }
-        } catch (TimeoutException timeoutException) {
-            sessionExpired();
         }
     }
 

@@ -31,7 +31,7 @@ public class Transaction {
         this.date = date;
     }
 
-    public Transaction(String ibanFrom, Double amount, String type, Date date) throws SQLException{
+    public Transaction(String ibanFrom, Double amount, String type, Date date) throws SQLException {
         this.type = type; //prelievo o versamento
         this.ibanFrom = ibanFrom;
         this.amount = amount;
@@ -56,7 +56,7 @@ public class Transaction {
     public void push() throws SQLException {
 
         String query = "INSERT INTO transaction (TYPE, DATE, IBAN_FROM, USERNAME_FROM, IBAN_DEST, USERNAME_DEST, AMOUNT)\n" +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
         prepStmt.setString(1, this.type);
