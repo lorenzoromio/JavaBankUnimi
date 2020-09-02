@@ -16,8 +16,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Account implements Comparable<Account> {
     private final String nome;
@@ -98,21 +96,11 @@ public class Account implements Comparable<Account> {
         }
     }
 
-    public static void checkRegex(String string, String regex) throws IllegalArgumentException {
-
-        if (string == null) throw new IllegalArgumentException();
-
-        Pattern p = Pattern.compile(regex);
-        Matcher m = p.matcher(string);
-
-        if (!m.matches()) throw new IllegalArgumentException();
-    }
-
     public static void checkValidName(String nome) throws InvalidNameException {
         //language=RegExp
         String regex = "^[A-Za-z]+((s)?(('|-|.)?([A-Za-z])+))*$"; //nomi singoli, doppi nomi con spazio, apostrofi
         try {
-            checkRegex(nome, regex);
+            new RegexChecker(nome, regex);
         } catch (IllegalArgumentException e) {
             throw new InvalidNameException();
         }
@@ -120,7 +108,7 @@ public class Account implements Comparable<Account> {
     }
 
     public static void checkValidPassword(String password) throws IllegalArgumentException {
-        // Regex to check valid password.
+        // RegexChecker to check valid password.
 
         IllegalArgumentException invalidPasswordException = new IllegalArgumentException("La password deve contenere un carattere minuscolo, uno maiuscolo, " +
                 "\nun numero, un carattere speciale e deve essere lunga almeno 8 caratteri");
@@ -132,7 +120,7 @@ public class Account implements Comparable<Account> {
                 + "(?=\\S+$).{8,20}$";               //lunghezza tra 8 e 20
 
         try {
-            checkRegex(password, regex);
+            new RegexChecker(password, regex);
         } catch (IllegalArgumentException ex) {
             throw invalidPasswordException;
         }
@@ -236,4 +224,6 @@ public class Account implements Comparable<Account> {
     public int compareTo(Account o) {
         return this.getCognome().compareTo(o.getCognome());
     }
+
+
 }

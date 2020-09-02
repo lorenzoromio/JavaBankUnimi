@@ -92,7 +92,8 @@ public class HomeForm extends MainApp {
                     balanceFLD.setEchoChar(echochar); //* Echo Char
                     outcomeFLD.setEchoChar(echochar); //* Echo Char
                     incomeFLD.setEchoChar(echochar); //* Echo Char
-                    scrollPane.setVisible(false);
+//                    scrollPane.setVisible(false);
+                    transictionArea.setVisible(false);
 
                     setCustomIcon(showHideBTN, hidePswIconPath);
 
@@ -100,9 +101,9 @@ public class HomeForm extends MainApp {
                     balanceFLD.setEchoChar(visibleChar);  //Password Visibile
                     incomeFLD.setEchoChar(visibleChar);  //Password Visibile
                     outcomeFLD.setEchoChar(visibleChar);  //Password Visibile
-                    scrollPane.setVisible(true);
-//                     backgroundTask(setValue);
-                    setValue();
+                    transictionArea.setVisible(true);
+                    backgroundTask(setValue);
+//                    setValue();
 
                     setCustomIcon(showHideBTN, showPswIconPath);
 
@@ -116,8 +117,8 @@ public class HomeForm extends MainApp {
         bonificoBTN.addActionListener(this::bonificoForm);
 
         refreshBTN.addActionListener(e ->
-//                         backgroundTask(setValue)
-                        setValue()
+                         backgroundTask(setValue)
+//                        setValue()
         );
 
         removeBTN.addActionListener(this::deleteAccountForm);
