@@ -11,5 +11,4 @@
   </component>
 </module>
 
-- name: TODO to Issue
-  uses: alstr/todo-to-issue-action@v2.0
+
