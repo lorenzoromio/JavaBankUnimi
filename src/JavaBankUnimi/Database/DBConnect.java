@@ -34,7 +34,6 @@ public class DBConnect {
     public static void close() throws SQLException {
         if (connection != null && !connection.isClosed()) {
             connection.close();
-            //todo check connection close
             connection = null;
         }
     }
