@@ -5,7 +5,7 @@
 package JavaBankUnimi.GUI;
 
 import JavaBankUnimi.Bank.Bank;
-import JavaBankUnimi.DBConnect;
+import JavaBankUnimi.Database.DBConnect;
 
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;

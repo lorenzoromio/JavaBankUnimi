@@ -2,7 +2,7 @@
  * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
-package JavaBankUnimi;
+package JavaBankUnimi.Database;
 
 import JavaBankUnimi.GUI.MainApp;
 import java.sql.Connection;

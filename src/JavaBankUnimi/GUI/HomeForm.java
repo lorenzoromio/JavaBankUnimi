@@ -5,7 +5,7 @@
 package JavaBankUnimi.GUI;
 
 import JavaBankUnimi.Bank.Transaction;
-import JavaBankUnimi.DBConnect;
+import JavaBankUnimi.Database.DBConnect;
 
 import javax.swing.*;
 import java.awt.*;

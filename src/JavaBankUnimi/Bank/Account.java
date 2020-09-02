@@ -3,7 +3,8 @@
  */
 
 package JavaBankUnimi.Bank;
-import JavaBankUnimi.DBConnect;
+
+import JavaBankUnimi.Database.DBConnect;
 
 import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountNotFoundException;

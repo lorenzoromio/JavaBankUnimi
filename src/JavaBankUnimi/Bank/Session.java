@@ -3,7 +3,8 @@
  */
 
 package JavaBankUnimi.Bank;
-import JavaBankUnimi.DBConnect;
+import JavaBankUnimi.Database.DBConnect;
+
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
 import java.sql.PreparedStatement;

@@ -5,7 +5,7 @@
 package JavaBankUnimi.GUI;
 
 import JavaBankUnimi.Bank.Session;
-import JavaBankUnimi.DBConnect;
+import JavaBankUnimi.Database.DBConnect;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
