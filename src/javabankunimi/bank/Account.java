@@ -15,6 +15,7 @@ import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 
@@ -31,7 +32,7 @@ public class Account implements Comparable<Account> {
     private Double saldo;
 
     //Create a new Account
-    public Account(String nome, String cognome, String psw) throws SQLException, InvalidNameException, IllegalArgumentException {
+    public Account(String nome, String cognome, char[] psw) throws SQLException, InvalidNameException, IllegalArgumentException {
         try {
             RegexChecker.checkValidName(nome);
         } catch (InvalidNameException ex) {
@@ -104,17 +105,17 @@ public class Account implements Comparable<Account> {
         return String.valueOf(result);
     }
 
-    public String hash(String psw) {
+    public String hash(char[] psw) {
 
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-512");
-            md.update((psw + this.salt).getBytes());
+            md.update((String.valueOf(psw) + this.salt).getBytes());
             byte[] bytes = md.digest();
             StringBuilder sb = new StringBuilder();
             for (byte aByte : bytes) {
                 sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
             }
-
+            Arrays.fill(psw, '0');
             return sb.toString();
 
         } catch (NoSuchAlgorithmException e) {
@@ -123,9 +124,10 @@ public class Account implements Comparable<Account> {
     }
 
     //SETTER
-    protected void setPassword(String psw) throws SQLException, IllegalArgumentException {
+    protected void setPassword(char[] psw) throws SQLException, IllegalArgumentException {
         RegexChecker.checkValidPassword(psw);
         this.hashPsw = hash(psw);
+        Arrays.fill(psw, '0');
 
     }
 

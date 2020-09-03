@@ -53,7 +53,7 @@ public class DeleteAccountForm extends MainApp {
             @Override
             public void keyReleased(KeyEvent e) {
                 try {
-                    if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(String.valueOf(pswFLD.getPassword())).equals(session.getHashPsw())) {
+                    if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(pswFLD.getPassword()).equals(session.getHashPsw())) {
                         setFieldOnCorrect(pswFLD);
                     } else {
                         setFieldOnError(pswFLD);
@@ -124,7 +124,7 @@ public class DeleteAccountForm extends MainApp {
             @Override
             public void keyReleased(KeyEvent e) {
 
-                System.out.println("Psw1: " + session.hash(String.valueOf(pswFLD.getPassword())));
+                System.out.println("Psw1: " + session.hash(pswFLD.getPassword()));
                 try {
                     System.out.println("Psw2: " + session.getHashPsw());
                     System.out.println();
@@ -134,7 +134,7 @@ public class DeleteAccountForm extends MainApp {
 
                 try {
 
-                    if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(String.valueOf(pswFLD.getPassword())).equals(session.getHashPsw())) {
+                    if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(pswFLD.getPassword()).equals(session.getHashPsw())) {
                         setFieldOnCorrect(pswFLD);
                     } else {
                         setFieldOnError(pswFLD);
@@ -155,7 +155,7 @@ public class DeleteAccountForm extends MainApp {
         if (choice == 0) {
 
             try {
-                session.deleteAccount(String.valueOf(pswFLD.getPassword()), String.valueOf(confirmPswFLD.getPassword()));
+                session.deleteAccount(pswFLD.getPassword(), confirmPswFLD.getPassword());
                 JOptionPane.showMessageDialog(getContentPane(), "Account Eliminato");
                 new LoginForm();
                 dispose();

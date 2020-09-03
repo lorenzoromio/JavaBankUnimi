@@ -5,6 +5,7 @@
 package javabankunimi.regex;
 
 import javax.naming.InvalidNameException;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +45,7 @@ public class RegexChecker {
         }
     }
 
-    public static void checkValidPassword(String password) throws IllegalArgumentException {
+    public static void checkValidPassword(char[] password) throws IllegalArgumentException {
         //language=RegExp
         String pswRegex = "^(?=.*[0-9])"                //un numero
                 + "(?=.*[a-z])"                 //una lettere minuscola
@@ -53,7 +54,8 @@ public class RegexChecker {
                 + "(?=\\S+$).{8,20}$";          //lunghezza tra 8 e 20
 
         try {
-            new RegexChecker(password, pswRegex);
+            new RegexChecker(String.valueOf(password), pswRegex);
+            Arrays.fill(password, '0');
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException("La password deve contenere un carattere minuscolo, uno maiuscolo, " +
                     "\nun numero, un carattere speciale e deve essere lunga almeno 8 caratteri");

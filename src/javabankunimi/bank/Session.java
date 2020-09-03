@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
@@ -61,7 +62,7 @@ public class Session extends Account {
         this.creation = Instant.now();
     }
 
-    public void changePassword(String oldPsw, String newPsw, String checkPsw) throws IllegalArgumentException, SQLException, CredentialException {
+    public void changePassword(char[] oldPsw, char[] newPsw, char[] checkPsw) throws IllegalArgumentException, SQLException, CredentialException {
 
         updateSessionCreation();
 
@@ -77,10 +78,13 @@ public class Session extends Account {
 //        setTimestamp(String.valueOf(new Date().getTime()));
         setSalt(getTimestamp().concat(randomString(10)));
         setPassword(newPsw);
+        Arrays.fill(oldPsw, '0');
+        Arrays.fill(newPsw, '0');
+        Arrays.fill(checkPsw, '0');
 
     }
 
-    public void deleteAccount(String psw, String confirmPsw) throws IllegalArgumentException, CredentialException, SQLException {
+    public void deleteAccount(char[] psw, char[] confirmPsw) throws IllegalArgumentException, CredentialException, SQLException {
 
         updateSessionCreation();
 
@@ -95,6 +99,8 @@ public class Session extends Account {
         prepStmt.setString(1, getUsername());
         prepStmt.setString(2, hash(psw));
         prepStmt.execute();
+        Arrays.fill(psw, '0');
+        Arrays.fill(confirmPsw, '0');
 
 
     }
@@ -165,7 +171,6 @@ public class Session extends Account {
         String showContacts = "select USERNAME from accounts where USERNAME <> ? order by COGNOME";
 
         try {
-            Instant check = Instant.now();
 
             PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(showContacts);
             prepStmt.setString(1, getUsername());
@@ -185,7 +190,6 @@ public class Session extends Account {
                     accountsList.add(new Account(username));
                 }
             }
-            System.out.println("ShowContacts :" + ChronoUnit.MILLIS.between(check, Instant.now()) + "ms for");
 
         } catch (AccountNotFoundException e) { /*IGNORE*/ }
 //        Collections.sort(accountsList);
@@ -270,9 +274,10 @@ public class Session extends Account {
     }
 
     @Override
-    protected void setPassword(String psw) throws SQLException {
+    protected void setPassword(char[] psw) throws SQLException {
         updateSessionCreation();
         super.setPassword(psw);
+        Arrays.fill(psw, '0');
         String update = "update accounts set HASHPSW = ? where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
         prepStmt.setString(1, super.getHashPsw());

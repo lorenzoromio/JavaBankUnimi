@@ -12,6 +12,7 @@ import javax.security.auth.login.CredentialException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class Bank {
     private static final String abi = "02";
@@ -42,12 +43,13 @@ public class Bank {
         prepStmt.execute();
     }
 
-    public static Session login(String username, String login_psw) throws CredentialException, AccountNotFoundException, SQLException {
+    public static Session login(String username, char[] login_psw) throws CredentialException, AccountNotFoundException, SQLException {
         Session logging = new Session(username);
         if (!logging.hash(login_psw).equals(logging.getHashPsw())) {
             logging = null;
             throw new CredentialException("Invalid Password");
         }
+        Arrays.fill(login_psw, '0');
         return logging;
     }
 

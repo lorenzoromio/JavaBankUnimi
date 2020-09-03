@@ -98,7 +98,7 @@ public class SignUpForm extends MainApp {
                 if (String.valueOf(psw1FLD.getPassword()).isEmpty()) {
                     setFieldOnCorrect(psw1FLD);
                 } else try {
-                    RegexChecker.checkValidPassword(String.valueOf(psw1FLD.getPassword()));
+                    RegexChecker.checkValidPassword(psw1FLD.getPassword());
                     setFieldOnCorrect(psw1FLD);
                 } catch (IllegalArgumentException ex) {
                     pswInvalid.setMessage(ex.getMessage());
@@ -176,10 +176,10 @@ public class SignUpForm extends MainApp {
             if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Sign Up?") == 0) {
 
                 try {
-                    Account account = new Account(nomeFLD.getText(), cognomeFLD.getText(), String.valueOf(psw1FLD.getPassword()));
+                    Account account = new Account(nomeFLD.getText(), cognomeFLD.getText(), psw1FLD.getPassword());
                     Bank.addAccount(account);
                     if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Login as " + account.getNome() + " " + account.getCognome() + "?") == 0) {
-                        session = Bank.login(account.getUsername(), String.valueOf(psw1FLD.getPassword()));
+                        session = Bank.login(account.getUsername(), psw1FLD.getPassword());
                         displayHomeForm();
                     } else {
                         displayLoginForm();

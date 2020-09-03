@@ -70,7 +70,7 @@ public class LoginForm extends MainApp {
             JOptionPane.showMessageDialog(getContentPane(), "Username can't be empty");
         } else try {
             timer.cancel();
-            session = Bank.login(userFLD.getText(), String.valueOf(pswFLD.getPassword()));
+            session = Bank.login(userFLD.getText(), pswFLD.getPassword());
             location = this.getLocation();
             new HomeForm();
             dispose();

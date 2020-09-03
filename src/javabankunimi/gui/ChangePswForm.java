@@ -56,7 +56,7 @@ public class ChangePswForm extends MainApp {
             public void keyReleased(KeyEvent e) {
                 try {
                     if (String.valueOf(pswFLD.getPassword()).isEmpty()
-                            || session.hash(String.valueOf(pswFLD.getPassword())).equals(session.getHashPsw())) {
+                            || session.hash(pswFLD.getPassword()).equals(session.getHashPsw())) {
                         setFieldOnCorrect(pswFLD);
                     } else {
                         setFieldOnError(pswFLD);
@@ -75,7 +75,7 @@ public class ChangePswForm extends MainApp {
                     setFieldOnCorrect(newPswFLD);
                 } else {
                     try {
-                        RegexChecker.checkValidPassword(String.valueOf(newPswFLD.getPassword()));
+                        RegexChecker.checkValidPassword(newPswFLD.getPassword());
                         setFieldOnCorrect(newPswFLD);
                     } catch (IllegalArgumentException ex) {
                         setFieldOnError(newPswFLD);
@@ -164,9 +164,9 @@ public class ChangePswForm extends MainApp {
     protected void defaultAction() {
         System.out.println("Save BTN pressed");
         try {
-            session.changePassword(String.valueOf(pswFLD.getPassword()),
-                    String.valueOf(newPswFLD.getPassword()),
-                    String.valueOf(confirmNewPswFLD.getPassword()));
+            session.changePassword(pswFLD.getPassword(),
+                    newPswFLD.getPassword(),
+                    confirmNewPswFLD.getPassword());
             JOptionPane.showMessageDialog(getContentPane(), "Modifica effettuata correttamente");
             displayHomeForm();
 
