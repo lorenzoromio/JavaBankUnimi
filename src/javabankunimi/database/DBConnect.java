@@ -4,9 +4,6 @@
 
 package javabankunimi.database;
 
-import javabankunimi.gui.LoginForm;
-import javabankunimi.gui.MainApp;
-
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;

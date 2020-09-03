@@ -300,10 +300,6 @@ public class Session extends Account {
 
     }
 
-//    public Instant getCreation() {
-//        return creation;
-//    }
-
     @Override
     public String toString() {
         return "Logged as " + getUsername();
