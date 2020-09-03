@@ -114,7 +114,7 @@ public abstract class MainApp extends JFrame {
                 Date now = new Date();
                 clockLBL.setText(time.format(now));
                 dateLBL.setText(date.format(now));
-                System.out.println(sdf.format(now));
+//                System.out.println(sdf.format(now));
             }
         };
         timer.schedule(displayClock, 0, 1000);
