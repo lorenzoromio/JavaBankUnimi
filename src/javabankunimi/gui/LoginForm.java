@@ -54,9 +54,6 @@ public class LoginForm extends MainApp {
 
         displayClock(clockLBL, dateLBL);
 
-        userFLD.setText(this.user);
-        pswFLD.setText(this.psw);
-
         loginBTN.addActionListener(this::login);
 
         signupBTN.addActionListener(this::signupForm);
