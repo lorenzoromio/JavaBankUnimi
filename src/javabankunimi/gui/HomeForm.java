@@ -13,6 +13,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 public class HomeForm extends MainApp {
@@ -39,6 +40,7 @@ public class HomeForm extends MainApp {
     private JTextArea transictionArea;
     private JLabel dateLBL;
     private JLabel clockLBL;
+    private JTextField timestampFLD;
 
     public HomeForm() {
         session.updateSessionCreation();
@@ -245,6 +247,7 @@ public class HomeForm extends MainApp {
             balanceFLD.setText(euro.format(session.getSaldo()));
             incomeFLD.setText(euro.format(session.getIncomes()));
             outcomeFLD.setText(euro.format(session.getOutcomes()));
+            timestampFLD.setText(sdf.format(new Date(Long.parseLong(session.getTimestamp()))));
             repaint();
 
         } catch (SQLException e) {
