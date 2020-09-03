@@ -86,12 +86,8 @@ public class Account implements Comparable<Account> {
             this.username = rs.getString("USERNAME");
             this.nome = rs.getString("NOME");
             this.cognome = rs.getString("COGNOME");
-            this.hashPsw = rs.getString("HASHPSW");
-            this.salt = rs.getString("SALT");
-            this.timestamp = rs.getString("TIMESTAMP");
             this.iban = rs.getString("IBAN");
             this.num_conto = rs.getString("NUM_CONTO");
-            this.saldo = rs.getDouble("SALDO");
         } else {
             throw new AccountNotFoundException("Account not in database");
         }
@@ -158,6 +154,10 @@ public class Account implements Comparable<Account> {
         this.salt = salt;
     }
 
+    protected void setHashPsw(String hashPsw) {
+        this.hashPsw = hashPsw;
+    }
+
     public String getTimestamp() {
         return timestamp;
     }
@@ -183,11 +183,21 @@ public class Account implements Comparable<Account> {
 
     }
 
+
     @Override
     public String toString() {
-        return "Account{" +
-                "username='" + username + '\'' +
-                '}';
+        return "Account {\n" +
+                "\tnome= " + nome + '\n' +
+                "\tcognome= " + cognome + '\n' +
+                "\tnum_conto= " + num_conto + '\n' +
+                "\tiban= " + iban + '\n' +
+                "\tusername= " + username + '\n' +
+                "\tsalt= " + salt + '\n' +
+                "\ttimestamp= " + timestamp + '\n' +
+                "\tID= " + ID + "\n" +
+                "\thashPsw= " + hashPsw + "\n" +
+                "\tsaldo= " + saldo + "\n" +
+                "}\n";
     }
 
     @Override

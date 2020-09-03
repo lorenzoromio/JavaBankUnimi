@@ -26,6 +26,20 @@ public class Session extends Account {
     public Session(String username) throws AccountNotFoundException, SQLException {
         super(username);
         creation = Instant.now();
+        String query = "select * from accounts where username = ?";
+        PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
+        prepStmt.setString(1, username);
+        ResultSet rs = prepStmt.executeQuery();
+
+        if (rs.next()) {
+            setHashPsw(rs.getString("HASHPSW"));
+            setSalt(rs.getString("SALT"));
+            setTimestamp(rs.getString("TIMESTAMP"));
+            setSaldo(rs.getDouble("SALDO"));
+        } else {
+            throw new AccountNotFoundException("Account not in database");
+        }
+
     }
 
     public static void eraseBalance() throws SQLException {

@@ -45,7 +45,7 @@ public class Bank {
     public static Session login(String username, String login_psw) throws CredentialException, AccountNotFoundException, SQLException {
         Session logging = new Session(username);
         if (!logging.hash(login_psw).equals(logging.getHashPsw())) {
-//            logging = null;
+            logging = null;
             throw new CredentialException("Invalid Password");
         }
         return logging;
@@ -58,6 +58,4 @@ public class Bank {
     public static String getCab() {
         return cab;
     }
-
-
 }
