@@ -4,12 +4,9 @@
 
 package javabankunimi.gui;
 
-import javabankunimi.bank.RegexChecker;
+import javabankunimi.regex.RegexChecker;
 
-import javax.naming.InvalidNameException;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -84,7 +81,7 @@ public class DepositoForm extends MainApp {
 
         logoutBTN.addActionListener(this::logOutAction);
 
-        depositBTN.addActionListener(this::deposito);
+        depositBTN.addActionListener(this::defaultAction);
 
         amountFLD.addKeyListener(new KeyAdapter() {
 
@@ -104,7 +101,8 @@ public class DepositoForm extends MainApp {
         setVisible(true);
     }
 
-    private void deposito(ActionEvent e) {
+    @Override
+    protected void defaultAction(ActionEvent e) {
         try {
 //                Double amount = 0.0;
             session.updateSessionCreation();

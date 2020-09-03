@@ -4,19 +4,15 @@
 
 package javabankunimi.gui;
 
-import javabankunimi.bank.RegexChecker;
+import javabankunimi.regex.RegexChecker;
 
-import javax.naming.InvalidNameException;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 
 public class PrelievoForm extends MainApp {
-
 
     private JPanel prelievoPanel;
     private JTextField amountFLD;
@@ -28,7 +24,6 @@ public class PrelievoForm extends MainApp {
     private JLabel balance;
     private JLabel dateLBL;
     private JLabel clockLBL;
-
 
     public PrelievoForm() throws SQLException {
 
@@ -44,7 +39,7 @@ public class PrelievoForm extends MainApp {
         setCustomIcon(icon, moneyIconPath);
         setResizable(false);
 
-        setHandCursor(balanceBTN,homeBTN,logoutBTN,prelievoBTN);
+        setHandCursor(balanceBTN, homeBTN, logoutBTN, prelievoBTN);
 
         getRootPane().setDefaultButton(prelievoBTN);
         balance.setText(euro.format(session.getSaldo()));
@@ -99,12 +94,13 @@ public class PrelievoForm extends MainApp {
 
         logoutBTN.addActionListener(this::logOutAction);
 
-        prelievoBTN.addActionListener(this::prelievo);
+        prelievoBTN.addActionListener(this::defaultAction);
 
         setVisible(true);
     }
 
-    private void prelievo(ActionEvent e) {
+    @Override
+    protected void defaultAction(ActionEvent e) {
         try {
             session.updateSessionCreation();
             if (amountFLD.getText().isEmpty())

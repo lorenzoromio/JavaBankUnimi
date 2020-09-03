@@ -1,4 +1,8 @@
-package javabankunimi.bank;
+/*
+ * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
+ */
+
+package javabankunimi.regex;
 
 import javax.naming.InvalidNameException;
 import java.util.regex.Matcher;

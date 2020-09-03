@@ -5,6 +5,7 @@
 package javabankunimi.bank;
 
 import javabankunimi.database.DBConnect;
+import javabankunimi.regex.RegexChecker;
 
 import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountNotFoundException;

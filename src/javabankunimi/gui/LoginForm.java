@@ -54,7 +54,7 @@ public class LoginForm extends MainApp {
 
         displayClock(clockLBL, dateLBL);
 
-        loginBTN.addActionListener(this::login);
+        loginBTN.addActionListener(this::defaultAction);
 
         signupBTN.addActionListener(this::signupForm);
 
@@ -62,8 +62,9 @@ public class LoginForm extends MainApp {
 
     }
 
+    @Override
+    protected void defaultAction(ActionEvent e) {
 
-    private void login(ActionEvent e) {
         if (session != null) {
             JOptionPane.showMessageDialog(getContentPane(), "User already logged in this machine");
         } else if (userFLD.getText().isEmpty()) {
@@ -106,4 +107,6 @@ public class LoginForm extends MainApp {
         new SignUpForm();
         dispose();
     }
+
+
 }

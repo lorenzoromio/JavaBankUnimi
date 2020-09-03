@@ -6,8 +6,6 @@ package javabankunimi.gui;
 
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 
@@ -115,7 +113,7 @@ public class DeleteAccountForm extends MainApp {
         });
 
 
-        deleteBTN.addActionListener(this::deleteAccount);
+        deleteBTN.addActionListener(this::defaultAction);
         logoutBTN.addActionListener(this::logOutAction);
         backBTN.addActionListener(this::homeAction);
 
@@ -147,7 +145,8 @@ public class DeleteAccountForm extends MainApp {
         });
     }
 
-    private void deleteAccount(ActionEvent e) {
+    @Override
+    protected void defaultAction(ActionEvent e) {
         System.out.println("Save BTN pressed");
         int choice = JOptionPane.showConfirmDialog(getContentPane(), "Sei sicuro di voler eliminare il tuo account?");
         if (choice == 0) {

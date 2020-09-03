@@ -1,17 +1,15 @@
 /*
- * Copyright (c) 2020 Lorenzo Romio. All Right Reserved. test
+ * Copyright (c) 2020 Lorenzo Romio. All Right Reserved.
  */
 
 package javabankunimi.gui;
 
 import javabankunimi.bank.Account;
-import javabankunimi.bank.RegexChecker;
+import javabankunimi.regex.RegexChecker;
 
 import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.List;
@@ -181,7 +179,7 @@ public class BonificoForm extends MainApp {
             }
         });
 
-        transferBTN.addActionListener(this::bonifico);
+        transferBTN.addActionListener(this::defaultAction);
 
         homeBTN.addActionListener(this::homeAction);
 
@@ -218,7 +216,8 @@ public class BonificoForm extends MainApp {
         }
     }
 
-    private void bonifico(ActionEvent e) {
+    @Override
+    protected void defaultAction(ActionEvent e) {
         try {
             Double amount;
             session.updateSessionCreation();

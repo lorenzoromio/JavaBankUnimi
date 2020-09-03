@@ -4,12 +4,10 @@
 
 package javabankunimi.gui;
 
-import javabankunimi.bank.RegexChecker;
+import javabankunimi.regex.RegexChecker;
 
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 
@@ -150,7 +148,7 @@ public class ChangePswForm extends MainApp {
             }
         });
 
-        saveBTN.addActionListener(this::changePassword);
+        saveBTN.addActionListener(this::defaultAction);
 
         backBTN.addActionListener(this::homeAction);
 
@@ -159,14 +157,13 @@ public class ChangePswForm extends MainApp {
     }
 
 
-
-
-    private void changePassword(ActionEvent e) {
+    @Override
+    protected void defaultAction(ActionEvent e) {
         System.out.println("Save BTN pressed");
         try {
-            session.changePassword( String.valueOf(pswFLD.getPassword()),
-                                    String.valueOf(newPswFLD.getPassword()),
-                                    String.valueOf(confirmNewPswFLD.getPassword()));
+            session.changePassword(String.valueOf(pswFLD.getPassword()),
+                    String.valueOf(newPswFLD.getPassword()),
+                    String.valueOf(confirmNewPswFLD.getPassword()));
             JOptionPane.showMessageDialog(getContentPane(), "Modifica effettuata correttamente");
             homeAction(null);
 

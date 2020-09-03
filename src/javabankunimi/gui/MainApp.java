@@ -3,8 +3,10 @@
  */
 
 package javabankunimi.gui;
+
 import javabankunimi.bank.Session;
 import javabankunimi.database.DBConnect;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.plaf.FontUIResource;
@@ -22,7 +24,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
-public class MainApp extends JFrame {
+public abstract class MainApp extends JFrame {
     protected static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     protected static Point location;
     protected static Session session;
@@ -274,4 +276,6 @@ public class MainApp extends JFrame {
         System.out.println("Count : " + Thread.activeCount());
         System.out.println();
     }
+
+    protected abstract void defaultAction(ActionEvent e);
 }

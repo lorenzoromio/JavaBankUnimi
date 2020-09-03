@@ -114,7 +114,7 @@ public class HomeForm extends MainApp {
 
         });
 
-        bonificoBTN.addActionListener(this::bonificoForm);
+        bonificoBTN.addActionListener(this::defaultAction);
 
         refreshBTN.addActionListener(e ->
                          backgroundTask(setValue)
@@ -325,7 +325,8 @@ public class HomeForm extends MainApp {
 
     }
 
-    private void bonificoForm(ActionEvent e) {
+    @Override
+    protected void defaultAction(ActionEvent e) {
         try {
             timer.cancel();
             location = getLocation();

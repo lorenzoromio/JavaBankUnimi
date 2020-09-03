@@ -6,7 +6,7 @@ package javabankunimi.gui;
 
 import javabankunimi.bank.Account;
 import javabankunimi.bank.Bank;
-import javabankunimi.bank.RegexChecker;
+import javabankunimi.regex.RegexChecker;
 
 import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountException;
@@ -156,7 +156,7 @@ public class SignUpForm extends MainApp {
 
         });
 
-        signupBTN.addActionListener(this::signUpAction);
+        signupBTN.addActionListener(this::defaultAction);
 
         backBTN.addActionListener(this::logInAction);
 
@@ -165,7 +165,8 @@ public class SignUpForm extends MainApp {
     }
 
 
-    private void signUpAction(ActionEvent e) {
+    @Override
+    protected void defaultAction(ActionEvent e) {
         if (nomeFLD.getText().isEmpty() || cognomeFLD.getText().isEmpty() || String.valueOf(psw1FLD.getPassword()).isEmpty() || String.valueOf(psw2FLD.getPassword()).isEmpty()) {
             JOptionPane.showMessageDialog(getContentPane(), "Tutti i campi devono essere compilati");
         } else if (String.valueOf(psw1FLD.getPassword()).equals(String.valueOf(psw2FLD.getPassword()))) {
