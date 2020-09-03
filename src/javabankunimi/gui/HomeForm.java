@@ -114,7 +114,7 @@ public class HomeForm extends MainApp {
 
         });
 
-        bonificoBTN.addActionListener(this::defaultAction);
+        bonificoBTN.addActionListener(e -> defaultAction());
 
         refreshBTN.addActionListener(e ->
                          backgroundTask(setValue)
@@ -127,7 +127,7 @@ public class HomeForm extends MainApp {
 
         prelievoBTN.addActionListener(this::prelievoForm);
 
-        logoutBTN.addActionListener(this::logOutAction);
+        logoutBTN.addActionListener(e -> logOutAction());
 
         changePswBTN.addActionListener(this::changePswForm);
 
@@ -326,7 +326,7 @@ public class HomeForm extends MainApp {
     }
 
     @Override
-    protected void defaultAction(ActionEvent e) {
+    protected void defaultAction() {
         try {
             timer.cancel();
             location = getLocation();

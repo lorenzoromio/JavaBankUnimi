@@ -12,7 +12,10 @@ import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountException;
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class SignUpForm extends MainApp {
@@ -156,17 +159,17 @@ public class SignUpForm extends MainApp {
 
         });
 
-        signupBTN.addActionListener(this::defaultAction);
+        signupBTN.addActionListener(e -> defaultAction());
 
-        backBTN.addActionListener(this::logInAction);
+        backBTN.addActionListener(e -> displayLoginForm());
 
-        exitBTN.addActionListener(this::exitAction);
+        exitBTN.addActionListener(e -> exitAction());
 
     }
 
 
     @Override
-    protected void defaultAction(ActionEvent e) {
+    protected void defaultAction() {
         if (nomeFLD.getText().isEmpty() || cognomeFLD.getText().isEmpty() || String.valueOf(psw1FLD.getPassword()).isEmpty() || String.valueOf(psw2FLD.getPassword()).isEmpty()) {
             JOptionPane.showMessageDialog(getContentPane(), "Tutti i campi devono essere compilati");
         } else if (String.valueOf(psw1FLD.getPassword()).equals(String.valueOf(psw2FLD.getPassword()))) {
@@ -177,9 +180,9 @@ public class SignUpForm extends MainApp {
                     Bank.addAccount(account);
                     if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Login as " + account.getNome() + " " + account.getCognome() + "?") == 0) {
                         session = Bank.login(account.getUsername(), String.valueOf(psw1FLD.getPassword()));
-                        homeAction(null);
+                        displayHomeForm();
                     } else {
-                        logInAction(null);
+                        displayLoginForm();
                         clearFields(nomeFLD, cognomeFLD, psw1FLD, psw2FLD);
 
                     }
@@ -212,21 +215,7 @@ public class SignUpForm extends MainApp {
         }
     }
 
-    private void clearNamesFields() {
-        nomeFLD.setText("");
-        cognomeFLD.setText("");
-        nomeFLD.setForeground(new JLabel().getForeground());
-        cognomeFLD.setForeground(new JLabel().getForeground());
-    }
-
-    private void clearPasswordFields() {
-        psw1FLD.setText("");
-        psw2FLD.setText("");
-        psw1FLD.setForeground(new JPasswordField().getForeground());
-        psw2FLD.setForeground(new JPasswordField().getForeground());
-    }
-
-    private void logInAction(ActionEvent e) {
+    private void displayLoginForm() {
         timer.cancel();
         new LoginForm();
         dispose();

@@ -10,7 +10,6 @@ import javabankunimi.database.DBConnect;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.sql.SQLException;
 
 public class LoginForm extends MainApp {
@@ -54,16 +53,16 @@ public class LoginForm extends MainApp {
 
         displayClock(clockLBL, dateLBL);
 
-        loginBTN.addActionListener(this::defaultAction);
+        loginBTN.addActionListener(e -> defaultAction());
 
-        signupBTN.addActionListener(this::signupForm);
+        signupBTN.addActionListener(e -> signupForm());
 
-        exitBTN.addActionListener(this::exitAction);
+        exitBTN.addActionListener(e -> exitAction());
 
     }
 
     @Override
-    protected void defaultAction(ActionEvent e) {
+    protected void defaultAction() {
 
         if (session != null) {
             JOptionPane.showMessageDialog(getContentPane(), "User already logged in this machine");
@@ -101,7 +100,7 @@ public class LoginForm extends MainApp {
         }
     }
 
-    private void signupForm(ActionEvent e) {
+    private void signupForm() {
         timer.cancel();
         location = getLocation();
         new SignUpForm();

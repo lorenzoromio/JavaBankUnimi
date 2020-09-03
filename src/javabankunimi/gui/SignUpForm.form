@@ -39,7 +39,7 @@
                 </constraints>
                 <properties>
                   <font size="14"/>
-                  <labelFor value="b62ae"/>
+                  <labelFor value="5dcfc"/>
                   <text value="Nome"/>
                 </properties>
               </component>
@@ -49,7 +49,7 @@
                 </constraints>
                 <properties>
                   <font size="14"/>
-                  <labelFor value="d27b2"/>
+                  <labelFor value="16699"/>
                   <text value="Cognome"/>
                 </properties>
               </component>

@@ -77,11 +77,11 @@ public class DepositoForm extends MainApp {
 
         });
 
-        homeBTN.addActionListener(this::homeAction);
+        homeBTN.addActionListener(e1 -> displayHomeForm());
 
-        logoutBTN.addActionListener(this::logOutAction);
+        logoutBTN.addActionListener(e -> logOutAction());
 
-        depositBTN.addActionListener(this::defaultAction);
+        depositBTN.addActionListener(e -> defaultAction());
 
         amountFLD.addKeyListener(new KeyAdapter() {
 
@@ -102,7 +102,7 @@ public class DepositoForm extends MainApp {
     }
 
     @Override
-    protected void defaultAction(ActionEvent e) {
+    protected void defaultAction() {
         try {
 //                Double amount = 0.0;
             session.updateSessionCreation();

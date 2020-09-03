@@ -8,7 +8,10 @@ import javabankunimi.regex.RegexChecker;
 
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 public class ChangePswForm extends MainApp {
@@ -148,24 +151,24 @@ public class ChangePswForm extends MainApp {
             }
         });
 
-        saveBTN.addActionListener(this::defaultAction);
+        saveBTN.addActionListener(e -> defaultAction());
 
-        backBTN.addActionListener(this::homeAction);
+        backBTN.addActionListener(e -> displayHomeForm());
 
-        logoutBTN.addActionListener(this::logOutAction);
+        logoutBTN.addActionListener(e -> logOutAction());
 
     }
 
 
     @Override
-    protected void defaultAction(ActionEvent e) {
+    protected void defaultAction() {
         System.out.println("Save BTN pressed");
         try {
             session.changePassword(String.valueOf(pswFLD.getPassword()),
                     String.valueOf(newPswFLD.getPassword()),
                     String.valueOf(confirmNewPswFLD.getPassword()));
             JOptionPane.showMessageDialog(getContentPane(), "Modifica effettuata correttamente");
-            homeAction(null);
+            displayHomeForm();
 
         } catch (IllegalArgumentException ex) {
             newPswFLD.setText("");

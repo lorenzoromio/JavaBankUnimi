@@ -37,7 +37,7 @@
                 </constraints>
                 <properties>
                   <font size="20"/>
-                  <labelFor value="3f4c7"/>
+                  <labelFor value="fecbc"/>
                   <text value="Importo"/>
                 </properties>
               </component>

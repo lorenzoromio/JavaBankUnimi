@@ -6,7 +6,10 @@ package javabankunimi.gui;
 
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 @SuppressWarnings("ConstantConditions")
@@ -113,9 +116,9 @@ public class DeleteAccountForm extends MainApp {
         });
 
 
-        deleteBTN.addActionListener(this::defaultAction);
-        logoutBTN.addActionListener(this::logOutAction);
-        backBTN.addActionListener(this::homeAction);
+        deleteBTN.addActionListener(e -> defaultAction());
+        logoutBTN.addActionListener(e -> logOutAction());
+        backBTN.addActionListener(e -> displayHomeForm());
 
         pswFLD.addKeyListener(new KeyAdapter() {
             @Override
@@ -146,7 +149,7 @@ public class DeleteAccountForm extends MainApp {
     }
 
     @Override
-    protected void defaultAction(ActionEvent e) {
+    protected void defaultAction() {
         System.out.println("Save BTN pressed");
         int choice = JOptionPane.showConfirmDialog(getContentPane(), "Sei sicuro di voler eliminare il tuo account?");
         if (choice == 0) {

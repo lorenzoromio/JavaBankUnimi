@@ -90,17 +90,17 @@ public class PrelievoForm extends MainApp {
             }
         });
 
-        homeBTN.addActionListener(this::homeAction);
+        homeBTN.addActionListener(e1 -> displayHomeForm());
 
-        logoutBTN.addActionListener(this::logOutAction);
+        logoutBTN.addActionListener(e -> logOutAction());
 
-        prelievoBTN.addActionListener(this::defaultAction);
+        prelievoBTN.addActionListener(e -> defaultAction());
 
         setVisible(true);
     }
 
     @Override
-    protected void defaultAction(ActionEvent e) {
+    protected void defaultAction() {
         try {
             session.updateSessionCreation();
             if (amountFLD.getText().isEmpty())

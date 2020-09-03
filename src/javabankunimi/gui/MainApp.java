@@ -11,7 +11,6 @@ import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
@@ -25,11 +24,10 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeoutException;
 
 public abstract class MainApp extends JFrame {
-    protected static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     protected static Point location;
     protected static Session session;
-    protected static TimerTask sessionTimer;
     protected final Timer timer = new Timer();
+    protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     protected final DecimalFormat euro = new DecimalFormat("0.00 €");
     protected final String bankIconPath = "icons/bank.png";
     protected final String nextIconPath = "icons/next.png";
@@ -71,7 +69,7 @@ public abstract class MainApp extends JFrame {
 
         addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosing(WindowEvent e) {              // CHIUDE LA CONNESSIONE PRIMA DI CHIUDERE LA FINESTRA
+            public void windowClosing(WindowEvent e) {              // CLOSE CONNECTION BEFORE CLOSING WINDOW
                 try {
                     DBConnect.close();
                 } catch (SQLException ex) {
@@ -80,7 +78,7 @@ public abstract class MainApp extends JFrame {
             }
 
             @Override
-            public void windowActivated(WindowEvent e) {            //CONTROLLA LA VALIDITA' DELLA SESSIONE QUANDO LA FINESTRA SI RIATTIVA
+            public void windowActivated(WindowEvent e) {            //UPDATE SESSION CREATION WHEN USER FOCUS WINDOW
                 System.out.println("gain focus");
 
                 if (session != null) {
@@ -89,7 +87,7 @@ public abstract class MainApp extends JFrame {
             }
 
             @Override
-            public void windowDeactivated(WindowEvent e) {          //CHIUDE LA CONNESSIONE QUANDO LA FINESTRA SI DISATTIVA
+            public void windowDeactivated(WindowEvent e) {          //CLOSE CONNECTION WHEN WINDOW DEACTIVATE
                 try {
                     System.out.println("lost focus");
                     DBConnect.close();
@@ -99,7 +97,7 @@ public abstract class MainApp extends JFrame {
             }
         });
 
-        backGroundCheckValidSession();
+        backgroundCheckValidSession();
     }
 
     public static void main(String[] args) {
@@ -143,8 +141,6 @@ public abstract class MainApp extends JFrame {
         }
     }
 
-    //Functions
-
     protected void setFrameIcon(String iconPath) {
 
         try {
@@ -174,14 +170,30 @@ public abstract class MainApp extends JFrame {
         }
     }
 
+    protected void setCustomIcon(JLabel label, String iconPath) {
+        Image icon;
+
+        try {
+            URL iconUrl = this.getClass().getResource("/" + iconPath);
+            icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
+        } catch (Exception ex) {
+            icon = new ImageIcon(iconPath).getImage();
+        }
+        try {
+            label.setIcon(new ImageIcon(icon.getScaledInstance(label.getWidth() - 5, label.getHeight() - 5, Image.SCALE_SMOOTH)));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     protected void setHandCursor(JButton... buttons) {
         for (JButton button : buttons) {
             button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
     }
 
-    private void backGroundCheckValidSession() {
-        sessionTimer = new TimerTask() {
+    private void backgroundCheckValidSession() {
+        timer.schedule(new TimerTask() {
             @Override
             public synchronized void run() {
                 System.out.println("session timer running");
@@ -193,14 +205,28 @@ public abstract class MainApp extends JFrame {
                     }
                 }
             }
-        };
-        timer.schedule(sessionTimer, Session.duration, 1000);
+        }, Session.duration, 1000);
+    }
+
+    protected void backgroundTask(Runnable runnable) {
+        Thread thread = new Thread(runnable);
+        thread.start();
+        try {
+            thread.join(150);
+        } catch (InterruptedException interruptedException) {
+            System.out.println("interrupt");
+            interruptedException.printStackTrace();
+        }
+        System.out.println("ID: " + thread.getId());
+        System.out.println("Count : " + Thread.activeCount());
+        System.out.println();
     }
 
     private void sessionExpired() {
         session = null;
         location = this.getLocation();
         while (!isFocused()) {
+            //wait for user focus
         }
         String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
                 "Verrai reindirizzato alla schermata di Login.";
@@ -221,23 +247,7 @@ public abstract class MainApp extends JFrame {
         JOptionPane.showMessageDialog(getContentPane(), error, "SQL Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    protected void setCustomIcon(JLabel label, String iconPath) {
-        Image icon;
-
-        try {
-            URL iconUrl = this.getClass().getResource("/" + iconPath);
-            icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-        } catch (Exception ex) {
-            icon = new ImageIcon(iconPath).getImage();
-        }
-        try {
-            label.setIcon(new ImageIcon(icon.getScaledInstance(label.getWidth() - 5, label.getHeight() - 5, Image.SCALE_SMOOTH)));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    protected void exitAction(ActionEvent e) {
+    protected void exitAction() {
         timer.cancel();
         location = getLocation();
         if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to exit?") == 0) {
@@ -246,7 +256,7 @@ public abstract class MainApp extends JFrame {
         }
     }
 
-    protected void logOutAction(ActionEvent e) {
+    protected void logOutAction() {
         timer.cancel();
         location = getLocation();
         if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to LogOut?") == 0) {
@@ -256,26 +266,13 @@ public abstract class MainApp extends JFrame {
         }
     }
 
-    protected void homeAction(ActionEvent e) {
+    protected void displayHomeForm() {
         timer.cancel();
         location = getLocation();
         new HomeForm();
         dispose();
     }
 
-    protected void backgroundTask(Runnable runnable) {
-        Thread thread = new Thread(runnable);
-        thread.start();
-        try {
-            thread.join(150);
-        } catch (InterruptedException interruptedException) {
-            System.out.println("interrupt");
-            interruptedException.printStackTrace();
-        }
-        System.out.println("ID: " + thread.getId());
-        System.out.println("Count : " + Thread.activeCount());
-        System.out.println();
-    }
-
-    protected abstract void defaultAction(ActionEvent e);
+    protected abstract void defaultAction();  //subclass will implement defaultAction
+//    protected abstract void backAction();
 }

@@ -10,7 +10,10 @@ import javabankunimi.regex.RegexChecker;
 import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.*;
-import java.awt.event.*;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -179,11 +182,11 @@ public class BonificoForm extends MainApp {
             }
         });
 
-        transferBTN.addActionListener(this::defaultAction);
+        transferBTN.addActionListener(e -> defaultAction());
 
-        homeBTN.addActionListener(this::homeAction);
+        homeBTN.addActionListener(e1 -> displayHomeForm());
 
-        logoutBTN.addActionListener(this::logOutAction);
+        logoutBTN.addActionListener(e -> logOutAction());
 
     }
 
@@ -217,9 +220,9 @@ public class BonificoForm extends MainApp {
     }
 
     @Override
-    protected void defaultAction(ActionEvent e) {
+    protected void defaultAction() {
         try {
-            Double amount;
+            double amount;
             session.updateSessionCreation();
             if (amountFLD.getText().isEmpty())
                 JOptionPane.showInternalMessageDialog(getContentPane(), "Amount field can't be empty");
