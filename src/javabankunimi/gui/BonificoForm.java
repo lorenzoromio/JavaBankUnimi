@@ -7,8 +7,11 @@ package javabankunimi.gui;
 import javabankunimi.bank.Account;
 import javabankunimi.bank.RegexChecker;
 
+import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.List;
@@ -101,7 +104,14 @@ public class BonificoForm extends MainApp {
             @Override
             public void keyReleased(KeyEvent e) {
                 backgroundTask(search);
-
+                if (searchFLD.getText().isEmpty()) {
+                    setFieldOnCorrect(searchFLD);
+                } else try {
+                    RegexChecker.checkValidName(searchFLD.getText());
+                    setFieldOnCorrect(searchFLD);
+                } catch (InvalidNameException ex) {
+                    setFieldOnError(searchFLD);
+                }
             }
         });
 
@@ -119,7 +129,11 @@ public class BonificoForm extends MainApp {
             populateRubrica();
         });
 
-        searchBTN.addActionListener(e -> printContacts(searchFLD.getText()));
+        searchBTN.addActionListener(e -> {
+//                    printContacts(searchFLD.getText())
+                    backgroundTask(search);
+                }
+        );
 
         clearBTN.addActionListener(e -> {
             searchFLD.setText("");
@@ -150,6 +164,21 @@ public class BonificoForm extends MainApp {
                 SQLExceptionOccurred(ex);
             }
 
+        });
+
+        amountFLD.addKeyListener(new KeyAdapter() {
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (amountFLD.getText().isEmpty()) {
+                    setFieldOnCorrect(amountFLD);
+                } else try {
+                    RegexChecker.checkValidAmount(amountFLD.getText());
+                    setFieldOnCorrect(amountFLD);
+                } catch (IllegalArgumentException ex) {
+                    setFieldOnError(amountFLD);
+                }
+            }
         });
 
         transferBTN.addActionListener(this::bonifico);

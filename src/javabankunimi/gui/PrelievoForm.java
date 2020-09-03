@@ -6,8 +6,13 @@ package javabankunimi.gui;
 
 import javabankunimi.bank.RegexChecker;
 
+import javax.naming.InvalidNameException;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 
 public class PrelievoForm extends MainApp {
@@ -71,6 +76,21 @@ public class PrelievoForm extends MainApp {
             }
 
 
+        });
+
+        amountFLD.addKeyListener(new KeyAdapter() {
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (amountFLD.getText().isEmpty()) {
+                    setFieldOnCorrect(amountFLD);
+                } else try {
+                    RegexChecker.checkValidAmount(amountFLD.getText());
+                    setFieldOnCorrect(amountFLD);
+                } catch (IllegalArgumentException ex) {
+                    setFieldOnError(amountFLD);
+                }
+            }
         });
 
         homeBTN.addActionListener(this::homeAction);
