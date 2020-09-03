@@ -3,11 +3,10 @@
  */
 
 package javabankunimi.gui;
-
 import javabankunimi.bank.Session;
 import javabankunimi.database.DBConnect;
-
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -82,14 +81,9 @@ public class MainApp extends JFrame {
             public void windowActivated(WindowEvent e) {            //CONTROLLA LA VALIDITA' DELLA SESSIONE QUANDO LA FINESTRA SI RIATTIVA
                 System.out.println("gain focus");
 
-                if (session != null)
-                    try {
-                        session.isValid();
-                        session.updateSessionCreation();
-                    } catch (TimeoutException timeoutException) {
-                        sessionExpired();
-                    }
-
+                if (session != null) {
+                    session.updateSessionCreation();
+                }
             }
 
             @Override
@@ -110,26 +104,45 @@ public class MainApp extends JFrame {
         new LoginForm();
     }
 
-    private void backGroundCheckValidSession() {
-        sessionTimer = new TimerTask() {
+    protected void displayClock(JLabel clockLBL, JLabel dateLBL) {
+
+        TimerTask displayClock = new TimerTask() {
             @Override
             public void run() {
-                System.out.println("session timer running");
-                if (session != null) {
-                    try {
-                        if (isFocused()) {
-                            session.isValid();
-                        }
-                    } catch (TimeoutException e) {
-                        sessionExpired();
-                    }
-                }
+                SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
+                SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
+                Date now = new Date();
+                clockLBL.setText(time.format(now));
+                dateLBL.setText(date.format(now));
+                System.out.println(sdf.format(now));
             }
         };
-        timer.schedule(sessionTimer, Session.duration, 1000);
+        timer.schedule(displayClock, 0, 1000);
+    }
+
+    protected void setFieldOnError(JTextField... fields) {
+        for (JTextField field : fields) {
+            field.setForeground(Color.red);
+            field.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+        }
+    }
+
+    protected void setFieldOnCorrect(JTextField... fields) {
+        for (JTextField field : fields) {
+            field.setForeground(new JPasswordField().getForeground());
+            field.setBorder(new JPasswordField().getBorder());
+        }
+    }
+
+    protected void clearFields(JTextField... fields) {
+        for (JTextField field : fields) {
+            field.setText("");
+            field.setForeground(new JLabel().getForeground());
+        }
     }
 
     //Functions
+
     protected void setFrameIcon(String iconPath) {
 
         try {
@@ -141,7 +154,7 @@ public class MainApp extends JFrame {
     }
 
     protected void setCustomIcon(JButton button, String iconPath) {
-
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         int margin = 5;
 
         Image icon;
@@ -159,16 +172,42 @@ public class MainApp extends JFrame {
         }
     }
 
+    protected void setHandCursor(JButton... buttons) {
+        for (JButton button : buttons) {
+            button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+    }
+
+    private void backGroundCheckValidSession() {
+        sessionTimer = new TimerTask() {
+            @Override
+            public synchronized void run() {
+                System.out.println("session timer running");
+                if (session != null) {
+                    try {
+                        session.isValid();
+                    } catch (TimeoutException e) {
+                        sessionExpired();
+                    }
+                }
+            }
+        };
+        timer.schedule(sessionTimer, Session.duration, 1000);
+    }
+
     private void sessionExpired() {
-        timer.cancel();
+        session = null;
         location = this.getLocation();
+        while (!isFocused()) {
+        }
         String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
                 "Verrai reindirizzato alla schermata di Login.";
 
         String title = "Sessione Scaduta";
         JOptionPane.showMessageDialog(getContentPane(), error_message, title, JOptionPane.ERROR_MESSAGE);
         dispose();
-        session = null;
+        timer.cancel();
+        System.out.println("open new login");
         new LoginForm();
     }
 
@@ -234,21 +273,5 @@ public class MainApp extends JFrame {
         System.out.println("ID: " + thread.getId());
         System.out.println("Count : " + Thread.activeCount());
         System.out.println();
-    }
-
-    protected void displayClock(JLabel clockLBL, JLabel dateLBL) {
-
-        TimerTask displayClock = new TimerTask() {
-            @Override
-            public void run() {
-                SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
-                SimpleDateFormat date = new SimpleDateFormat("dd/MM/yyyy");
-                Date now = new Date();
-                clockLBL.setText(time.format(now));
-                dateLBL.setText(date.format(now));
-                System.out.println(sdf.format(now));
-            }
-        };
-        timer.schedule(displayClock, 0, 1000);
     }
 }

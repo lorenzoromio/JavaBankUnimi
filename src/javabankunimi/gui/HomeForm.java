@@ -77,6 +77,7 @@ public class HomeForm extends MainApp {
 
         setCustomIcon(showHideBTN, showPswIconPath);
         setCustomIcon(refreshBTN, refreshIconPath);
+        setHandCursor(bonificoBTN,changePswBTN,deleteAllBTN,depositBTN,eraseBTN,logoutBTN,prelievoBTN,refreshBTN,removeBTN,showHideBTN);
 
 //        backgroundTask(setValue);
         setValue();
@@ -92,7 +93,6 @@ public class HomeForm extends MainApp {
                     balanceFLD.setEchoChar(echochar); //* Echo Char
                     outcomeFLD.setEchoChar(echochar); //* Echo Char
                     incomeFLD.setEchoChar(echochar); //* Echo Char
-//                    scrollPane.setVisible(false);
                     transictionArea.setVisible(false);
 
                     setCustomIcon(showHideBTN, hidePswIconPath);
@@ -279,8 +279,6 @@ public class HomeForm extends MainApp {
     }
 
     private void changePswForm(ActionEvent e) {
-
-
         timer.cancel();
         location = getLocation();
         new ChangePswForm();
@@ -304,6 +302,7 @@ public class HomeForm extends MainApp {
 
     private void depositoForm(ActionEvent e) {
         try {
+
             timer.cancel();
             location = this.getLocation();
             new DepositoForm();

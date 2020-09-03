@@ -44,6 +44,7 @@ public class DeleteAccountForm extends MainApp {
         displayClock(clockLBL, dateLBL);
         setCustomIcon(showHideBTN1, hidePswIconPath);
         setCustomIcon(showHideBTN2, hidePswIconPath);
+        setHandCursor(backBTN,deleteBTN,logoutBTN,showHideBTN1,showHideBTN2);
         pswFLD.setEchoChar(echochar);
         confirmPswFLD.setEchoChar(echochar);
 
@@ -52,11 +53,9 @@ public class DeleteAccountForm extends MainApp {
             public void keyReleased(KeyEvent e) {
                 try {
                     if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(String.valueOf(pswFLD.getPassword())).equals(session.getHashPsw())) {
-                        pswFLD.setForeground(new JPasswordField().getForeground());
-                        pswFLD.setBorder(new JPasswordField().getBorder());
+                        setFieldOnCorrect(pswFLD);
                     } else {
-                        pswFLD.setForeground(Color.red);
-                        pswFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                        setFieldOnError(pswFLD);
                     }
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
@@ -77,11 +76,9 @@ public class DeleteAccountForm extends MainApp {
                 String subPsw1 = String.valueOf(pswFLD.getPassword()).substring(0, lenghtPsw2);
 
                 if (String.valueOf(confirmPswFLD.getPassword()).isEmpty() || (lenghtPsw2 > lenghtPsw1) || subPsw1.equals(String.valueOf(confirmPswFLD.getPassword()))) {
-                    confirmPswFLD.setForeground(new JPasswordField().getForeground());
-                    confirmPswFLD.setBorder(new JPasswordField().getBorder());
+                    setFieldOnCorrect(confirmPswFLD);
                 } else {
-                    confirmPswFLD.setForeground(Color.red);
-                    confirmPswFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                    setFieldOnError(confirmPswFLD);
                 }
             }
         });
@@ -137,11 +134,9 @@ public class DeleteAccountForm extends MainApp {
                 try {
 
                     if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(String.valueOf(pswFLD.getPassword())).equals(session.getHashPsw())) {
-                        pswFLD.setForeground(new JPasswordField().getForeground());
-                        pswFLD.setBorder(new JPasswordField().getBorder());
+                        setFieldOnCorrect(pswFLD);
                     } else {
-                        pswFLD.setForeground(Color.red);
-                        pswFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                        setFieldOnError(pswFLD);
                     }
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
@@ -172,12 +167,7 @@ public class DeleteAccountForm extends MainApp {
                 SQLExceptionOccurred(ex);
 
             } finally {
-
-                pswFLD.setForeground(new JPasswordField().getForeground());
-                pswFLD.setBorder(new JPasswordField().getBorder());
-                confirmPswFLD.setForeground(new JPasswordField().getForeground());
-                confirmPswFLD.setBorder(new JPasswordField().getBorder());
-
+                setFieldOnCorrect(pswFLD,confirmPswFLD);
             }
         }
     }

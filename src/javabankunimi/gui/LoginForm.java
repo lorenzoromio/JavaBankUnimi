@@ -50,7 +50,7 @@ public class LoginForm extends MainApp {
         setCustomIcon(icon, bankIconPath);
         getRootPane().setDefaultButton(loginBTN);               //SELEZIONA IL PULSANTE DI LOGIN
         SwingUtilities.invokeLater(userFLD::requestFocus);       //FOCUS SUL CAMPO USERNAME
-
+        setHandCursor(exitBTN,loginBTN,signupBTN);
 
         displayClock(clockLBL, dateLBL);
 

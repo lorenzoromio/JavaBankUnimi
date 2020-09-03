@@ -43,6 +43,7 @@ public class ChangePswForm extends MainApp {
         setCustomIcon(showHideBTN1, hidePswIconPath);
         setCustomIcon(showHideBTN2, hidePswIconPath);
         setCustomIcon(showHideBTN3, hidePswIconPath);
+        setHandCursor(backBTN,logoutBTN,saveBTN,showHideBTN1,showHideBTN2,showHideBTN3);
 
         pswFLD.setEchoChar(echochar);
         newPswFLD.setEchoChar(echochar);
@@ -55,11 +56,9 @@ public class ChangePswForm extends MainApp {
                 try {
                     if (String.valueOf(pswFLD.getPassword()).isEmpty()
                             || session.hash(String.valueOf(pswFLD.getPassword())).equals(session.getHashPsw())) {
-                        pswFLD.setForeground(new JPasswordField().getForeground());
-                        pswFLD.setBorder(new JPasswordField().getBorder());
+                        setFieldOnCorrect(pswFLD);
                     } else {
-                        pswFLD.setForeground(Color.red);
-                        pswFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                        setFieldOnError(pswFLD);
                     }
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
@@ -72,16 +71,13 @@ public class ChangePswForm extends MainApp {
             @Override
             public void keyReleased(KeyEvent e) {
                 if (String.valueOf(newPswFLD.getPassword()).isEmpty()) {
-                    newPswFLD.setForeground(new JPasswordField().getForeground());
-                    newPswFLD.setBorder(new JPasswordField().getBorder());
+                    setFieldOnCorrect(newPswFLD);
                 } else {
                     try {
                         RegexChecker.checkValidPassword(String.valueOf(newPswFLD.getPassword()));
-                        newPswFLD.setForeground(new JPasswordField().getForeground());
-                        newPswFLD.setBorder(new JPasswordField().getBorder());
+                        setFieldOnCorrect(newPswFLD);
                     } catch (IllegalArgumentException ex) {
-                        newPswFLD.setForeground(Color.red);
-                        newPswFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                        setFieldOnError(newPswFLD);
                     }
                 }
             }
@@ -102,11 +98,9 @@ public class ChangePswForm extends MainApp {
                 if (String.valueOf(confirmNewPswFLD.getPassword()).isEmpty()
                         || (lenghtPsw2 > lenghtPsw1)
                         || subPsw1.equals(String.valueOf(confirmNewPswFLD.getPassword()))) {
-                    confirmNewPswFLD.setForeground(new JPasswordField().getForeground());
-                    confirmNewPswFLD.setBorder(new JPasswordField().getBorder());
+                    setFieldOnCorrect(confirmNewPswFLD);
                 } else {
-                    confirmNewPswFLD.setForeground(Color.red);
-                    confirmNewPswFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                    setFieldOnError(confirmNewPswFLD);
                 }
             }
         });
@@ -164,6 +158,9 @@ public class ChangePswForm extends MainApp {
 
     }
 
+
+
+
     private void changePassword(ActionEvent e) {
         System.out.println("Save BTN pressed");
         try {
@@ -188,12 +185,9 @@ public class ChangePswForm extends MainApp {
             SQLExceptionOccurred(ex);
 
         } finally {
-            pswFLD.setForeground(new JPasswordField().getForeground());
-            pswFLD.setBorder(new JPasswordField().getBorder());
-            newPswFLD.setForeground(new JPasswordField().getForeground());
-            newPswFLD.setBorder(new JPasswordField().getBorder());
-            confirmNewPswFLD.setForeground(new JPasswordField().getForeground());
-            confirmNewPswFLD.setBorder(new JPasswordField().getBorder());
+            setFieldOnCorrect(pswFLD);
+            setFieldOnCorrect(newPswFLD);
+            setFieldOnCorrect(confirmNewPswFLD);
         }
     }
 }

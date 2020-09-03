@@ -12,16 +12,12 @@ import javax.naming.InvalidNameException;
 import javax.security.auth.login.AccountException;
 import javax.security.auth.login.CredentialException;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
 
 public class SignUpForm extends MainApp {
     private JPanel signupPanel;
-    private JPanel credentialPanel;
     private JTextField nomeFLD;
-    private JPanel buttonsPanel;
     private JButton signupBTN;
     private JButton backBTN;
     private JButton exitBTN;
@@ -31,9 +27,6 @@ public class SignUpForm extends MainApp {
     private JPasswordField psw2FLD;
     private JButton showHideBTN1;
     private JButton showHideBTN2;
-    private JLabel psw1LBL;
-    private JLabel psw2LBL;
-    private JPanel creditsPanel;
     private JLabel dateLBL;
     private JLabel clockLBL;
 
@@ -52,11 +45,7 @@ public class SignUpForm extends MainApp {
         setVisible(true);
         getRootPane().setDefaultButton(signupBTN);
 
-        showHideBTN1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        showHideBTN2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        signupBTN.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        exitBTN.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        backBTN.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        setHandCursor(signupBTN, exitBTN, backBTN);
 
         psw1FLD.setEchoChar(echochar);
         psw2FLD.setEchoChar(echochar);
@@ -65,6 +54,7 @@ public class SignUpForm extends MainApp {
 
         setCustomIcon(showHideBTN1, hidePswIconPath);
         setCustomIcon(showHideBTN2, hidePswIconPath);
+        setHandCursor(backBTN, exitBTN, showHideBTN1, showHideBTN2, signupBTN);
 
         JOptionPane pswInvalid = new JOptionPane();
 
@@ -73,15 +63,12 @@ public class SignUpForm extends MainApp {
             @Override
             public void keyReleased(KeyEvent e) {
                 if (nomeFLD.getText().isEmpty()) {
-                    nomeFLD.setForeground(new JPasswordField().getForeground());
-                    nomeFLD.setBorder(new JPasswordField().getBorder());
+                    setFieldOnCorrect(nomeFLD);
                 } else try {
                     RegexChecker.checkValidName(nomeFLD.getText());
-                    nomeFLD.setForeground(new JPasswordField().getForeground());
-                    nomeFLD.setBorder(new JPasswordField().getBorder());
+                    setFieldOnCorrect(nomeFLD);
                 } catch (InvalidNameException ex) {
-                    nomeFLD.setForeground(Color.red);
-                    nomeFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                    setFieldOnError(nomeFLD);
                 }
             }
         });
@@ -91,54 +78,33 @@ public class SignUpForm extends MainApp {
             @Override
             public void keyReleased(KeyEvent e) {
                 if (cognomeFLD.getText().isEmpty()) {
-                    cognomeFLD.setForeground(new JPasswordField().getForeground());
-                    cognomeFLD.setBorder(new JPasswordField().getBorder());
+                    setFieldOnCorrect(cognomeFLD);
                 } else try {
                     RegexChecker.checkValidName(cognomeFLD.getText());
-                    cognomeFLD.setForeground(new JPasswordField().getForeground());
-                    cognomeFLD.setBorder(new JPasswordField().getBorder());
+                    setFieldOnCorrect(cognomeFLD);
                 } catch (InvalidNameException ex) {
-                    cognomeFLD.setForeground(Color.red);
-                    cognomeFLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                    setFieldOnError(cognomeFLD);
                 }
             }
         });
 
-        psw1FLD.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-
-            }
+        psw1FLD.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyReleased(KeyEvent e) {
                 if (String.valueOf(psw1FLD.getPassword()).isEmpty()) {
-                    psw1FLD.setForeground(new JPasswordField().getForeground());
-                    psw1FLD.setBorder(new JPasswordField().getBorder());
+                    setFieldOnCorrect(psw1FLD);
                 } else try {
                     RegexChecker.checkValidPassword(String.valueOf(psw1FLD.getPassword()));
-                    psw1FLD.setForeground(new JPasswordField().getForeground());
-                    psw1FLD.setBorder(new JPasswordField().getBorder());
+                    setFieldOnCorrect(psw1FLD);
                 } catch (IllegalArgumentException ex) {
                     pswInvalid.setMessage(ex.getMessage());
-                    psw1FLD.setForeground(Color.red);
-                    psw1FLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                    setFieldOnError(psw1FLD);
                 }
             }
         });
 
-        psw2FLD.addKeyListener(new KeyListener() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
-
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
+        psw2FLD.addKeyListener(new KeyAdapter() {
 
             @Override
             public void keyReleased(KeyEvent e) {
@@ -150,11 +116,9 @@ public class SignUpForm extends MainApp {
                 String subPsw1 = String.valueOf(psw1FLD.getPassword()).substring(0, lenghtPsw2);
 
                 if (subPsw1.equals(String.valueOf(psw2FLD.getPassword())) || lenghtPsw2 > lenghtPsw1) {
-                    psw2FLD.setForeground(psw1FLD.getForeground());
-                    psw2FLD.setBorder(psw1FLD.getBorder());
+                    setFieldOnCorrect(psw2FLD);
                 } else {
-                    psw2FLD.setForeground(Color.red);
-                    psw2FLD.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+                    setFieldOnError(psw2FLD);
                 }
             }
         });
@@ -200,6 +164,7 @@ public class SignUpForm extends MainApp {
 
     }
 
+
     private void signUpAction(ActionEvent e) {
         if (nomeFLD.getText().isEmpty() || cognomeFLD.getText().isEmpty() || String.valueOf(psw1FLD.getPassword()).isEmpty() || String.valueOf(psw2FLD.getPassword()).isEmpty()) {
             JOptionPane.showMessageDialog(getContentPane(), "Tutti i campi devono essere compilati");
@@ -214,22 +179,22 @@ public class SignUpForm extends MainApp {
                         homeAction(null);
                     } else {
                         logInAction(null);
-                        clearNamesFields();
-                        clearPasswordFields();
+                        clearFields(nomeFLD, cognomeFLD, psw1FLD, psw2FLD);
+
                     }
 
                 } catch (IllegalArgumentException ex) {
                     JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-                    clearPasswordFields();
+                    clearFields(psw1FLD, psw2FLD);
 
                 } catch (InvalidNameException ex) {
                     JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-                    clearNamesFields();
+                    clearFields(nomeFLD, cognomeFLD);
 
                 } catch (AccountException ex) {
                     JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
-                    clearNamesFields();
-                    clearPasswordFields();
+                    clearFields(nomeFLD, cognomeFLD, psw1FLD, psw2FLD);
+
 
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
@@ -240,7 +205,8 @@ public class SignUpForm extends MainApp {
             }
 
         } else {
-            clearPasswordFields();
+            clearFields(psw1FLD, psw2FLD);
+
             JOptionPane.showMessageDialog(getContentPane(), "Password non corrette");
         }
     }

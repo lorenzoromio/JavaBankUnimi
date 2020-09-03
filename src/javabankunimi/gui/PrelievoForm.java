@@ -44,6 +44,8 @@ public class PrelievoForm extends MainApp {
         setCustomIcon(icon, moneyIconPath);
         setResizable(false);
 
+        setHandCursor(balanceBTN,homeBTN,logoutBTN,prelievoBTN);
+
         getRootPane().setDefaultButton(prelievoBTN);
         balance.setText(euro.format(session.getSaldo()));
 
