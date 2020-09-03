@@ -9,23 +9,22 @@ public class RegexChecker {
 
 
     public RegexChecker(String stringToCheck, String regex) throws IllegalArgumentException {
-        if (stringToCheck == null) throw new IllegalArgumentException();
+        if (stringToCheck == null) throw new IllegalArgumentException("String is null, does not match regex");
 
         Pattern p = Pattern.compile(regex);
         Matcher m = p.matcher(stringToCheck);
 
-        if (!m.matches()) throw new IllegalArgumentException();
+        if (!m.matches()) throw new IllegalArgumentException("String does not match regex");
     }
 
     public static Double checkValidAmount(String amount) throws IllegalArgumentException {
         // RegexChecker to check valid password.
-        IllegalArgumentException validateAmountException = new IllegalArgumentException("Importo non valido");
 
         String amountRegex = "^\\$?[0-9]+(\\.([0-9]{1,2}))?$";
         try {
             new RegexChecker(amount.replace(",", "."), amountRegex);
         } catch (IllegalArgumentException e) {
-            throw validateAmountException;
+            throw new IllegalArgumentException("Importo non valido");
         }
 
         return Double.parseDouble(amount);
@@ -43,8 +42,6 @@ public class RegexChecker {
 
     public static void checkValidPassword(String password) throws IllegalArgumentException {
         // RegexChecker to check valid password.
-        IllegalArgumentException invalidPasswordException = new IllegalArgumentException("La password deve contenere un carattere minuscolo, uno maiuscolo, " +
-                "\nun numero, un carattere speciale e deve essere lunga almeno 8 caratteri");
 
         String pswRegex = "^(?=.*[0-9])"                     //un numero
                 + "(?=.*[a-z])"                      //una lettere minuscola
@@ -55,7 +52,8 @@ public class RegexChecker {
         try {
             new RegexChecker(password, pswRegex);
         } catch (IllegalArgumentException ex) {
-            throw invalidPasswordException;
+            throw new IllegalArgumentException("La password deve contenere un carattere minuscolo, uno maiuscolo, " +
+                    "\nun numero, un carattere speciale e deve essere lunga almeno 8 caratteri");
         }
     }
 
