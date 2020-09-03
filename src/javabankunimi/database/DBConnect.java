@@ -4,8 +4,10 @@
 
 package javabankunimi.database;
 
+import javabankunimi.gui.LoginForm;
 import javabankunimi.gui.MainApp;
 
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -24,7 +26,7 @@ public class DBConnect {
             connection = DriverManager.getConnection(DBUrl, user, psw);
 
         } catch (ClassNotFoundException ex) {
-            new MainApp().SQLExceptionOccurred(new SQLException("Invalid Driver"));
+            JOptionPane.showMessageDialog(null,driver+"\nis not a valid Driver","SQL Error",JOptionPane.ERROR_MESSAGE);
             System.out.println("Error on create Load JDBC Driver: ");
             System.exit(-1);
         }
