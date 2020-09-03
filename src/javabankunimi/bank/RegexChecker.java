@@ -18,7 +18,6 @@ public class RegexChecker {
     }
 
     public static Double checkValidAmount(String amount) throws IllegalArgumentException {
-        // RegexChecker to check valid password.
 
         String amountRegex = "^\\$?[0-9]+(\\.([0-9]{1,2}))?$";
         try {
