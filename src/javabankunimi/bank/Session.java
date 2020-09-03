@@ -19,14 +19,14 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    public static final long duration = 15 * 1000;
+    public static final long duration = 2 * 60 * 1000;
     private Instant creation;
     private List<Transaction> transactions;
 
     public Session(String username) throws AccountNotFoundException, SQLException {
         super(username);
         creation = Instant.now();
-        String query = "select * from accounts where username = ?";
+        String query = "select HASHPSW,SALT,TIMESTAMP,SALDO from accounts where username = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
         prepStmt.setString(1, username);
         ResultSet rs = prepStmt.executeQuery();

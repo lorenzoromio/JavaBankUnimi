@@ -76,7 +76,7 @@ public class Account implements Comparable<Account> {
     //Create ad Account Obj from Database only by Username
     public Account(String username) throws AccountNotFoundException, SQLException {
 
-        String query = "select * from accounts where username = ?";
+        String query = "select ID,USERNAME,NOME,COGNOME,IBAN,NUM_CONTO from accounts where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(query);
         prepStmt.setString(1, username);
         ResultSet rs = prepStmt.executeQuery();
