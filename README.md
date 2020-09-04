@@ -8,3 +8,11 @@ Users are stored in a mysql online database. Passwords are encrypted using a has
 
 
 [Download Jar](https://github.com/lorenzoromio/JavaBankUnimi/raw/master/out/artifacts/JavaBank_Project_jar/JavaBank%20Project.jar)
+
+![LoginForm](/screenshot/LoginForm.png)
+![SignUpForm](/screenshot/SignupForm.png)
+![HomeForm](/screenshot/HomeForm.png)
+![BonificoForm](/screenshot/BonificoForm.png)
+![ChangePswForm](/screenshot/ChangePswForm.png)
+![DeleteAccountForm](/screenshot/DeleteAccountForm.png)
+
