@@ -50,7 +50,7 @@ public abstract class MainApp extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         setFrameIcon(bankIconPath);
-        System.out.println("Main location: " + location);
+        System.out.println("Main locMain ation: " + location);
 
         Locale.setDefault(Locale.ITALIAN);
         UIManager.put("OptionPane.messageFont", new FontUIResource(new Font("Lucida Console", Font.PLAIN, 16)));
