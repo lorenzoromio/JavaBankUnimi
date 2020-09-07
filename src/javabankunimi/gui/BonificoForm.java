@@ -235,6 +235,7 @@ public class BonificoForm extends MainApp {
                     JOptionPane.showInternalMessageDialog(getContentPane(), "Iban field can't be empty");
                 } else {
                     session.transfer(ibanFLD.getText().toUpperCase(), amount);
+                    playSound(cashSound);
                     amountFLD.setText("");
                     balance.setText(euro.format(session.getSaldo()));
                     JOptionPane.showInternalMessageDialog(getContentPane(), "Bonifico Effettuato Correttamente");

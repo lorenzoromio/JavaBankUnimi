@@ -109,6 +109,7 @@ public class PrelievoForm extends MainApp {
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {
                 session.prelievo(RegexChecker.checkValidAmount(amountFLD.getText()));
+                playSound(cashSound);
                 amountFLD.setText("");
                 balance.setText(euro.format(session.getSaldo()));
                 JOptionPane.showMessageDialog(getContentPane(), "Prelievo effettuato Correttamente");

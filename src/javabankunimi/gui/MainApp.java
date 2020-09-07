@@ -7,12 +7,16 @@ package javabankunimi.gui;
 import javabankunimi.bank.Session;
 import javabankunimi.database.DBConnect;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.plaf.FontUIResource;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
@@ -44,6 +48,8 @@ public abstract class MainApp extends JFrame {
     protected final String bonificoInIconPath = "icons/bonificoIn2.png";
     protected final String bonificoOutIconPath = "icons/bonificoOut2.png";
     protected final String deleteAccountIconPath = "icons/deleteAccount.png";
+    protected final String cashSound = "sounds/cash.wav";
+    protected final String prelievoSound = "sounds/prelievo.wav";
     protected final char echochar = '*';
 
     public MainApp() {
@@ -128,9 +134,16 @@ public abstract class MainApp extends JFrame {
                 Date now = new Date();
                 long millis = session.getExpiredTime().toEpochMilli() - Instant.now().toEpochMilli();
                 timerLBL.setText("Tempo rimasto: " + time.format(millis > 0 ? millis : 0));
-                if (millis < 10000) timerLBL.setForeground(Color.red);
-                if (millis < 5000) timerLBL.setFont(timerLBL.getFont().deriveFont(20f - millis / 1000));
 
+                if (millis < 10000) {
+                    timerLBL.setForeground(Color.red);
+                    if (millis < 5000) {
+                        timerLBL.setFont(timerLBL.getFont().deriveFont(20f - millis / 1000));
+                    }
+                } else {
+                    timerLBL.setForeground(new JLabel().getForeground());
+                    timerLBL.setFont(timerLBL.getFont().deriveFont(14f));
+                }
             }
         }, 0, 30);
     }
@@ -272,6 +285,18 @@ public abstract class MainApp extends JFrame {
         location = getLocation();
         new HomeForm();
         dispose();
+    }
+
+    protected void playSound(String soundName) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
+        }
     }
 
     protected abstract void defaultAction();  //subclass will implement defaultAction
