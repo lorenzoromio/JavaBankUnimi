@@ -25,6 +25,7 @@ public class DepositoForm extends MainApp {
     private JButton logoutBTN;
     private JLabel dateLBL;
     private JLabel clockLBL;
+    private JLabel timerLBL;
 
 
     public DepositoForm() throws SQLException {
@@ -43,6 +44,7 @@ public class DepositoForm extends MainApp {
         balance.setText(euro.format(session.getSaldo()));
 
         displayClock(clockLBL, dateLBL);
+        setTimer(timerLBL);
         if (balance.isVisible()) {
             setCustomIcon(balanceBTN, showPswIconPath);
         } else {

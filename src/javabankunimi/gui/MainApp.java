@@ -17,6 +17,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Timer;
@@ -66,6 +67,8 @@ public abstract class MainApp extends JFrame {
             System.out.println("Ninbus not avaiable");
         }
 
+        System.out.println("Session timer running");
+        timer.schedule(new CheckSessionTask(), Session.getDuration(), 250);
 
         addWindowListener(new WindowAdapter() {
             @Override
@@ -82,7 +85,7 @@ public abstract class MainApp extends JFrame {
                 System.out.println("gain focus");
 
                 if (session != null) {
-                    session.updateSessionCreation();
+//                    session.updateSessionCreation();
                 }
             }
 
@@ -97,7 +100,6 @@ public abstract class MainApp extends JFrame {
             }
         });
 
-        backgroundCheckValidSession();
     }
 
     public static void main(String[] args) {
@@ -106,7 +108,7 @@ public abstract class MainApp extends JFrame {
 
     protected void displayClock(JLabel clockLBL, JLabel dateLBL) {
 
-        TimerTask displayClock = new TimerTask() {
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss");
@@ -114,10 +116,23 @@ public abstract class MainApp extends JFrame {
                 Date now = new Date();
                 clockLBL.setText(time.format(now));
                 dateLBL.setText(date.format(now));
-//                System.out.println(sdf.format(now));
             }
-        };
-        timer.schedule(displayClock, 0, 1000);
+        }, 0, 1000);
+    }
+
+    protected void setTimer(JLabel timerLBL) {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                SimpleDateFormat time = new SimpleDateFormat("mm:ss:SSS");
+                Date now = new Date();
+                long millis = session.getExpiredTime().toEpochMilli() - Instant.now().toEpochMilli();
+                timerLBL.setText("Tempo rimasto: " + time.format(millis > 0 ? millis : 0));
+                if (millis < 10000) timerLBL.setForeground(Color.red);
+                if (millis < 5000) timerLBL.setFont(timerLBL.getFont().deriveFont(20f - millis / 1000));
+
+            }
+        }, 0, 30);
     }
 
     protected void setFieldOnError(JTextField... fields) {
@@ -192,22 +207,6 @@ public abstract class MainApp extends JFrame {
         }
     }
 
-    private void backgroundCheckValidSession() {
-        System.out.println("session timer running");
-        timer.schedule(new TimerTask() {
-            @Override
-            public synchronized void run() {
-                if (session != null) {
-                    try {
-                        session.isValid();
-                    } catch (TimeoutException e) {
-                        sessionExpired();
-                    }
-                }
-            }
-        }, Session.duration, 1000);
-    }
-
     protected void backgroundTask(Runnable runnable) {
         Thread thread = new Thread(runnable);
         thread.start();
@@ -229,6 +228,7 @@ public abstract class MainApp extends JFrame {
         while (!isFocused()) {
             //wait for user focus
         }
+        java.awt.Toolkit.getDefaultToolkit().beep();
         String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
                 "Verrai reindirizzato alla schermata di Login.";
 
@@ -275,5 +275,17 @@ public abstract class MainApp extends JFrame {
     }
 
     protected abstract void defaultAction();  //subclass will implement defaultAction
-//    protected abstract void backAction();
+
+    private class CheckSessionTask extends TimerTask {
+        @Override
+        public synchronized void run() {
+            if (session != null) {
+                try {
+                    session.isValid();
+                } catch (TimeoutException e) {
+                    sessionExpired();
+                }
+            }
+        }
+    }
 }

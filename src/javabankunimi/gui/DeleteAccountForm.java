@@ -25,6 +25,7 @@ public class DeleteAccountForm extends MainApp {
     private JButton logoutBTN;
     private JLabel dateLBL;
     private JLabel clockLBL;
+    private JLabel timerLBL;
 
     public DeleteAccountForm() {
         session.updateSessionCreation();
@@ -43,6 +44,7 @@ public class DeleteAccountForm extends MainApp {
         getRootPane().setDefaultButton(deleteBTN);
 
         displayClock(clockLBL, dateLBL);
+        setTimer(timerLBL);
         setCustomIcon(showHideBTN1, hidePswIconPath);
         setCustomIcon(showHideBTN2, hidePswIconPath);
         setHandCursor(backBTN,deleteBTN,logoutBTN,showHideBTN1,showHideBTN2);

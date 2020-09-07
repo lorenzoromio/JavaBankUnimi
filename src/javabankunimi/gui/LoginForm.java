@@ -53,6 +53,7 @@ public class LoginForm extends MainApp {
 
         displayClock(clockLBL, dateLBL);
 
+
         loginBTN.addActionListener(e -> defaultAction());
 
         signupBTN.addActionListener(e -> signupForm());
@@ -60,6 +61,7 @@ public class LoginForm extends MainApp {
         exitBTN.addActionListener(e -> exitAction());
 
     }
+
 
     @Override
     protected void defaultAction() {

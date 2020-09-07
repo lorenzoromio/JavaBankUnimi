@@ -20,8 +20,9 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    public static final long duration = 2 * 60 * 1000;
+    private static final long duration = 60 * 1000;
     private Instant creation;
+    private Instant expiredTime;
     private List<Transaction> transactions;
 
     public Session(String username) throws AccountNotFoundException, SQLException {
@@ -51,15 +52,28 @@ public class Session extends Account {
         DBConnect.deleteAll();
     }
 
+    public static long getDuration() {
+        return duration;
+    }
+
+    public Instant getCreation() {
+        return creation;
+    }
+
+    public Instant getExpiredTime() {
+        return expiredTime;
+    }
+
+    public void updateSessionCreation() {
+        this.creation = Instant.now();
+        this.expiredTime = Instant.ofEpochMilli((creation.toEpochMilli() + duration));
+    }
+
     public void isValid() throws TimeoutException {
         long between = ChronoUnit.MILLIS.between(creation, Instant.now());
         System.out.println(between);
         if (between > duration)
             throw new TimeoutException("Sessione Scaduta");
-    }
-
-    public void updateSessionCreation() {
-        this.creation = Instant.now();
     }
 
     public void changePassword(char[] oldPsw, char[] newPsw, char[] checkPsw) throws IllegalArgumentException, SQLException, CredentialException {

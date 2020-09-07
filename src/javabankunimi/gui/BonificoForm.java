@@ -41,6 +41,7 @@ public class BonificoForm extends MainApp {
     private JLabel results;
     private JLabel dateLBL;
     private JLabel clockLBL;
+    private JLabel timerLBL;
 
     public BonificoForm() throws SQLException {
         session.updateSessionCreation();
@@ -59,6 +60,7 @@ public class BonificoForm extends MainApp {
         SwingUtilities.invokeLater(amountFLD::requestFocus);
 
         displayClock(clockLBL, dateLBL);
+        setTimer(timerLBL);
         setCustomIcon(nextBTN, nextIconPath);
         setCustomIcon(prevBTN, prevIconPath);
 
@@ -84,7 +86,6 @@ public class BonificoForm extends MainApp {
             } else {
                 backgroundTask(search);
                 rubricaPanel.setVisible(true);
-//                ibanFLD.setText(ibanContactFLD.getText());
             }
         });
 

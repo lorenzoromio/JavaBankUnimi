@@ -41,6 +41,7 @@ public class HomeForm extends MainApp {
     private JLabel dateLBL;
     private JLabel clockLBL;
     private JTextField timestampFLD;
+    private JLabel timerLBL;
 
     public HomeForm() {
         session.updateSessionCreation();
@@ -58,6 +59,8 @@ public class HomeForm extends MainApp {
         balanceFLD.setEchoChar(visibleChar);
         incomeFLD.setEchoChar(visibleChar);
         outcomeFLD.setEchoChar(visibleChar);
+
+        setTimer(timerLBL);
 
         Runnable setValue = new Runnable() {
             @Override

@@ -24,6 +24,7 @@ public class PrelievoForm extends MainApp {
     private JLabel balance;
     private JLabel dateLBL;
     private JLabel clockLBL;
+    private JLabel timerLBL;
 
     public PrelievoForm() throws SQLException {
 
@@ -36,6 +37,7 @@ public class PrelievoForm extends MainApp {
 
         setFrameIcon(moneyIconPath);
         displayClock(clockLBL, dateLBL);
+        setTimer(timerLBL);
         setCustomIcon(icon, moneyIconPath);
         setResizable(false);
 
