@@ -35,8 +35,8 @@ public class DeleteAccountForm extends MainApp {
         pack();
         setLocation(location);
         setTitle("Delete Account - JavaBank");
-        setFrameIcon(deleteAccountIconPath);
-        setCustomIcon(icon, deleteAccountIconPath);
+        setFrameIcon(Icons.DELETE_ACCOUNT);
+        setCustomIcon(icon, Icons.DELETE_ACCOUNT);
 
         setResizable(false);
         setVisible(true);
@@ -45,9 +45,9 @@ public class DeleteAccountForm extends MainApp {
 
         displayClock(clockLBL, dateLBL);
         setTimer(timerLBL);
-        setCustomIcon(showHideBTN1, hidePswIconPath);
-        setCustomIcon(showHideBTN2, hidePswIconPath);
-        setHandCursor(backBTN,deleteBTN,logoutBTN,showHideBTN1,showHideBTN2);
+        setCustomIcon(showHideBTN1, Icons.HIDEPSW);
+        setCustomIcon(showHideBTN2, Icons.HIDEPSW);
+        setHandCursor(backBTN, deleteBTN, logoutBTN, showHideBTN1, showHideBTN2);
         pswFLD.setEchoChar(echochar);
         confirmPswFLD.setEchoChar(echochar);
 
@@ -92,13 +92,13 @@ public class DeleteAccountForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 pswFLD.setEchoChar('\u0000');  //Password Visibile
-                setCustomIcon(showHideBTN1, showPswIconPath);
+                setCustomIcon(showHideBTN1, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 pswFLD.setEchoChar(echochar);
-                setCustomIcon(showHideBTN1, hidePswIconPath);
+                setCustomIcon(showHideBTN1, Icons.HIDEPSW);
             }
         });
 
@@ -107,13 +107,13 @@ public class DeleteAccountForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 confirmPswFLD.setEchoChar('\u0000');  //Password Visibile
-                setCustomIcon(showHideBTN2, showPswIconPath);
+                setCustomIcon(showHideBTN2, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 confirmPswFLD.setEchoChar(echochar);
-                setCustomIcon(showHideBTN2, hidePswIconPath);
+                setCustomIcon(showHideBTN2, Icons.HIDEPSW);
             }
         });
 

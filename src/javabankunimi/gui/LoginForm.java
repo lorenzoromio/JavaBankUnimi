@@ -45,11 +45,11 @@ public class LoginForm extends MainApp {
 
         setVisible(true);
         setTitle("LoginPage - JavaBank");
-        setFrameIcon(bankIconPath);
-        setCustomIcon(icon, bankIconPath);
+        setFrameIcon(Icons.BANK);
+        setCustomIcon(icon, Icons.BANK);
         getRootPane().setDefaultButton(loginBTN);               //SELEZIONA IL PULSANTE DI LOGIN
         SwingUtilities.invokeLater(userFLD::requestFocus);       //FOCUS SUL CAMPO USERNAME
-        setHandCursor(exitBTN,loginBTN,signupBTN);
+        setHandCursor(exitBTN, loginBTN, signupBTN);
 
         displayClock(clockLBL, dateLBL);
 
@@ -67,23 +67,29 @@ public class LoginForm extends MainApp {
     protected void defaultAction() {
 
         if (session != null) {
+            playSound(Sounds.ACCESS_GRANTED);
             JOptionPane.showMessageDialog(getContentPane(), "User already logged in this machine");
         } else if (userFLD.getText().isEmpty()) {
+            playSound(Sounds.ERROR);
             JOptionPane.showMessageDialog(getContentPane(), "Username can't be empty");
         } else try {
             timer.cancel();
             session = Bank.login(userFLD.getText(), pswFLD.getPassword());
             location = this.getLocation();
+
             new HomeForm();
+            playSound(Sounds.ACCESS_GRANTED);
             dispose();
 
         } catch (AccountNotFoundException ex) {
             userFLD.setText("");
             pswFLD.setText("");
+            playSound(Sounds.ERROR);
             JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
 
         } catch (CredentialException ex) {
             pswFLD.setText("");
+            playSound(Sounds.ERROR);
             JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
 
         } catch (SQLException ex) {

@@ -42,8 +42,8 @@ public class SignUpForm extends MainApp {
         setLocation(location);
         setTitle("SignUP - JavaBank");
         displayClock(clockLBL, dateLBL);
-        setFrameIcon(signUpIconPath);
-        setCustomIcon(icon, signUpIconPath);
+        setFrameIcon(Icons.SIGNUP);
+        setCustomIcon(icon, Icons.SIGNUP);
         setResizable(false);
         setVisible(true);
         getRootPane().setDefaultButton(signupBTN);
@@ -55,8 +55,8 @@ public class SignUpForm extends MainApp {
 
         SwingUtilities.invokeLater(nomeFLD::requestFocus);
 
-        setCustomIcon(showHideBTN1, hidePswIconPath);
-        setCustomIcon(showHideBTN2, hidePswIconPath);
+        setCustomIcon(showHideBTN1, Icons.HIDEPSW);
+        setCustomIcon(showHideBTN2, Icons.HIDEPSW);
         setHandCursor(backBTN, exitBTN, showHideBTN1, showHideBTN2, signupBTN);
 
         JOptionPane pswInvalid = new JOptionPane();
@@ -132,13 +132,13 @@ public class SignUpForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 psw1FLD.setEchoChar('\u0000');  //Password Visibile
-                setCustomIcon(showHideBTN1, showPswIconPath);
+                setCustomIcon(showHideBTN1, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 psw1FLD.setEchoChar(echochar);
-                setCustomIcon(showHideBTN1, hidePswIconPath);
+                setCustomIcon(showHideBTN1, Icons.HIDEPSW);
             }
 
         });
@@ -148,13 +148,13 @@ public class SignUpForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 psw2FLD.setEchoChar('\u0000');  //Password Visibile
-                setCustomIcon(showHideBTN2, showPswIconPath);
+                setCustomIcon(showHideBTN2, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 psw2FLD.setEchoChar(echochar);
-                setCustomIcon(showHideBTN2, hidePswIconPath);
+                setCustomIcon(showHideBTN2, Icons.HIDEPSW);
             }
 
         });

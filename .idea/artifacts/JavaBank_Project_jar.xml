@@ -7,6 +7,9 @@
       <element id="directory" name="icons">
         <element id="dir-copy" path="$PROJECT_DIR$/icons" />
       </element>
+      <element id="directory" name="sounds">
+        <element id="dir-copy" path="$PROJECT_DIR$/sounds" />
+      </element>
     </root>
   </artifact>
 </component>

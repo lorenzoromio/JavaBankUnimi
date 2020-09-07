@@ -34,29 +34,13 @@ public abstract class MainApp extends JFrame {
     protected final Timer timer = new Timer();
     protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     protected final DecimalFormat euro = new DecimalFormat("0.00 €");
-    protected final String bankIconPath = "icons/bank.png";
-    protected final String nextIconPath = "icons/next.png";
-    protected final String prevIconPath = "icons/prev.png";
-    protected final String moneyIconPath = "icons/money.png";
-    protected final String signUpIconPath = "icons/signUp.png";
-    protected final String showPswIconPath = "icons/showpsw.png";
-    protected final String hidePswIconPath = "icons/hidepsw.png";
-    protected final String refreshIconPath = "icons/refresh.png";
-    protected final String depositoIconPath = "icons/deposito2.png";
-    protected final String prelievoIconPath = "icons/prelievo2.png";
-    protected final String changePswIconPath = "icons/changePsw.png";
-    protected final String bonificoInIconPath = "icons/bonificoIn2.png";
-    protected final String bonificoOutIconPath = "icons/bonificoOut2.png";
-    protected final String deleteAccountIconPath = "icons/deleteAccount.png";
-    protected final String cashSound = "sounds/cash.wav";
-    protected final String prelievoSound = "sounds/prelievo.wav";
     protected final char echochar = '*';
 
     public MainApp() {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
-        setFrameIcon(bankIconPath);
+        setFrameIcon(Icons.BANK);
         System.out.println("Location: " + location);
 
         Locale.setDefault(Locale.ITALIAN);
@@ -108,6 +92,46 @@ public abstract class MainApp extends JFrame {
 
     }
 
+    protected void setTimer(JLabel timerLBL) {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                SimpleDateFormat time = new SimpleDateFormat("mm:ss:SSS");
+                Date now = new Date();
+                long millis = session.getExpiredTime().toEpochMilli() - Instant.now().toEpochMilli();
+                timerLBL.setText("Tempo rimasto: " + time.format(millis > 0 ? millis : 0));
+
+//                playSound(Sounds.ACCESS_DENIED);
+                if (millis < 10000) {
+                    timerLBL.setForeground(Color.red);
+                    if (millis < 5000) {
+                        timerLBL.setFont(timerLBL.getFont().deriveFont(20f - millis / 1000));
+                    }
+                } else {
+                    timerLBL.setForeground(new JLabel().getForeground());
+                    timerLBL.setFont(timerLBL.getFont().deriveFont(14f));
+                }
+            }
+        }, 0, 30);
+    }
+
+    protected void setCustomIcon(JLabel label, String iconPath) {
+        Image icon;
+
+        try {
+            URL iconUrl = this.getClass().getResource("/" + iconPath);
+            icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
+
+        } catch (Exception ex) {
+            icon = new ImageIcon(iconPath).getImage();
+        }
+        try {
+            label.setIcon(new ImageIcon(icon.getScaledInstance(label.getWidth() - 5, label.getHeight() - 5, Image.SCALE_SMOOTH)));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
         new LoginForm();
     }
@@ -126,26 +150,24 @@ public abstract class MainApp extends JFrame {
         }, 0, 1000);
     }
 
-    protected void setTimer(JLabel timerLBL) {
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                SimpleDateFormat time = new SimpleDateFormat("mm:ss:SSS");
-                Date now = new Date();
-                long millis = session.getExpiredTime().toEpochMilli() - Instant.now().toEpochMilli();
-                timerLBL.setText("Tempo rimasto: " + time.format(millis > 0 ? millis : 0));
+    protected void playSound(String soundName) {
 
-                if (millis < 10000) {
-                    timerLBL.setForeground(Color.red);
-                    if (millis < 5000) {
-                        timerLBL.setFont(timerLBL.getFont().deriveFont(20f - millis / 1000));
-                    }
-                } else {
-                    timerLBL.setForeground(new JLabel().getForeground());
-                    timerLBL.setFont(timerLBL.getFont().deriveFont(14f));
-                }
+        try {
+            URL soundURL = this.getClass().getResource("/" + soundName);
+            AudioInputStream audioInputStream = null;
+            try {
+                audioInputStream = AudioSystem.getAudioInputStream(soundURL);
+            } catch (Exception e) {
+                audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
             }
-        }, 0, 30);
+
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
+        }
     }
 
     protected void setFieldOnError(JTextField... fields) {
@@ -198,20 +220,41 @@ public abstract class MainApp extends JFrame {
         }
     }
 
-    protected void setCustomIcon(JLabel label, String iconPath) {
-        Image icon;
+    private void sessionExpired() {
+        session = null;
+        location = this.getLocation();
+        System.out.println("Sessione Expired: waiting for user focus");
+        playSound(Sounds.ERROR);
+        while (!isFocused()) {
+            //wait for user focus
+        }
 
-        try {
-            URL iconUrl = this.getClass().getResource("/" + iconPath);
-            icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-        } catch (Exception ex) {
-            icon = new ImageIcon(iconPath).getImage();
-        }
-        try {
-            label.setIcon(new ImageIcon(icon.getScaledInstance(label.getWidth() - 5, label.getHeight() - 5, Image.SCALE_SMOOTH)));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
+                "Verrai reindirizzato alla schermata di Login.";
+
+        String title = "Sessione Scaduta";
+        JOptionPane.showMessageDialog(getContentPane(), error_message, title, JOptionPane.ERROR_MESSAGE);
+        dispose();
+        timer.cancel();
+        System.out.println("open new login");
+        new LoginForm();
+    }
+
+    protected static class Icons {
+        protected static final String BANK = "icons/bank.png";
+        protected static final String NEXT = "icons/next.png";
+        protected static final String PREV = "icons/prev.png";
+        protected static final String MONEY = "icons/money.png";
+        protected static final String SIGNUP = "icons/signUp.png";
+        protected static final String SHOWPSW = "icons/showpsw.png";
+        protected static final String HIDEPSW = "icons/hidepsw.png";
+        protected static final String REFRESH = "icons/refresh.png";
+        protected static final String DEPOSITO = "icons/deposito2.png";
+        protected static final String PRELIEVO = "icons/prelievo2.png";
+        protected static final String CHANGEPSW = "icons/changePsw.png";
+        protected static final String BONIFICO_IN = "icons/bonificoIn2.png";
+        protected static final String BONIFICO_OUT = "icons/bonificoOut2.png";
+        protected static final String DELETE_ACCOUNT = "icons/deleteAccount.png";
     }
 
     protected void setHandCursor(JButton... buttons) {
@@ -234,23 +277,11 @@ public abstract class MainApp extends JFrame {
         System.out.println();
     }
 
-    private void sessionExpired() {
-        session = null;
-        location = this.getLocation();
-        System.out.println("Sessione Expired: waiting for user focus");
-        while (!isFocused()) {
-            //wait for user focus
-        }
-        java.awt.Toolkit.getDefaultToolkit().beep();
-        String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
-                "Verrai reindirizzato alla schermata di Login.";
-
-        String title = "Sessione Scaduta";
-        JOptionPane.showMessageDialog(getContentPane(), error_message, title, JOptionPane.ERROR_MESSAGE);
-        dispose();
-        timer.cancel();
-        System.out.println("open new login");
-        new LoginForm();
+    protected static class Sounds {
+        protected static final String CASH = "sounds/cash.wav";
+        protected static final String PRELIEVO = "sounds/prelievo.wav";
+        protected static final String ERROR = "sounds/accessDenied.wav";
+        protected static final String ACCESS_GRANTED = "sounds/accessGranted.wav";
     }
 
     public void SQLExceptionOccurred(SQLException ex) {
@@ -285,18 +316,6 @@ public abstract class MainApp extends JFrame {
         location = getLocation();
         new HomeForm();
         dispose();
-    }
-
-    protected void playSound(String soundName) {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (Exception ex) {
-            System.out.println("Error with playing sound.");
-            ex.printStackTrace();
-        }
     }
 
     protected abstract void defaultAction();  //subclass will implement defaultAction

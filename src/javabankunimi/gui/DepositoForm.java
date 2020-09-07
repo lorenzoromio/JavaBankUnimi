@@ -36,8 +36,8 @@ public class DepositoForm extends MainApp {
         pack();
         setLocation(location);
         setTitle("Deposito - JavaBank");
-        setFrameIcon(moneyIconPath);
-        setCustomIcon(icon, moneyIconPath);
+        setFrameIcon(Icons.MONEY);
+        setCustomIcon(icon, Icons.MONEY);
         setResizable(false);
 
         getRootPane().setDefaultButton(depositBTN);
@@ -46,9 +46,9 @@ public class DepositoForm extends MainApp {
         displayClock(clockLBL, dateLBL);
         setTimer(timerLBL);
         if (balance.isVisible()) {
-            setCustomIcon(balanceBTN, showPswIconPath);
+            setCustomIcon(balanceBTN, Icons.SHOWPSW);
         } else {
-            setCustomIcon(balanceBTN, hidePswIconPath);
+            setCustomIcon(balanceBTN, Icons.HIDEPSW);
         }
 
         setHandCursor(balanceBTN,depositBTN,homeBTN,logoutBTN);
@@ -63,11 +63,11 @@ public class DepositoForm extends MainApp {
                 balance.setText(euro.format(session.getSaldo()));
 
                 if (balance.isVisible()) {
-                    setCustomIcon(balanceBTN, hidePswIconPath);
+                    setCustomIcon(balanceBTN, Icons.HIDEPSW);
                     balance.setVisible(false);
 
                 } else {
-                    setCustomIcon(balanceBTN, showPswIconPath);
+                    setCustomIcon(balanceBTN, Icons.SHOWPSW);
                     balance.setVisible(true);
 
                 }
@@ -113,6 +113,7 @@ public class DepositoForm extends MainApp {
             else {
 
                 session.deposit(RegexChecker.checkValidAmount(amountFLD.getText()));
+                playSound(Sounds.CASH);
                 amountFLD.setText("");
                 balance.setText(euro.format(session.getSaldo()));
                 JOptionPane.showMessageDialog(getContentPane(), "Deposito Effettuato Correttamente");

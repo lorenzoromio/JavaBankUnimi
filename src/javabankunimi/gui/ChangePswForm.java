@@ -36,17 +36,17 @@ public class ChangePswForm extends MainApp {
         pack();
         setLocation(location);
         setTitle("Change Password - JavaBank");
-        setFrameIcon(changePswIconPath);
-        setCustomIcon(icon, changePswIconPath);
+        setFrameIcon(Icons.CHANGEPSW);
+        setCustomIcon(icon, Icons.CHANGEPSW);
         setVisible(true);
         getRootPane().setDefaultButton(saveBTN);
 
         displayClock(clockLBL, dateLBL);
         setTimer(timerLBL);
-        setCustomIcon(showHideBTN1, hidePswIconPath);
-        setCustomIcon(showHideBTN2, hidePswIconPath);
-        setCustomIcon(showHideBTN3, hidePswIconPath);
-        setHandCursor(backBTN,logoutBTN,saveBTN,showHideBTN1,showHideBTN2,showHideBTN3);
+        setCustomIcon(showHideBTN1, Icons.HIDEPSW);
+        setCustomIcon(showHideBTN2, Icons.HIDEPSW);
+        setCustomIcon(showHideBTN3, Icons.HIDEPSW);
+        setHandCursor(backBTN, logoutBTN, saveBTN, showHideBTN1, showHideBTN2, showHideBTN3);
 
         pswFLD.setEchoChar(echochar);
         newPswFLD.setEchoChar(echochar);
@@ -113,13 +113,13 @@ public class ChangePswForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 pswFLD.setEchoChar('\u0000');  //Password Visibile
-                setCustomIcon(showHideBTN1, showPswIconPath);
+                setCustomIcon(showHideBTN1, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 pswFLD.setEchoChar(echochar);
-                setCustomIcon(showHideBTN1, hidePswIconPath);
+                setCustomIcon(showHideBTN1, Icons.HIDEPSW);
             }
         });
 
@@ -128,13 +128,13 @@ public class ChangePswForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 newPswFLD.setEchoChar('\u0000');  //Password Visibile
-                setCustomIcon(showHideBTN2, showPswIconPath);
+                setCustomIcon(showHideBTN2, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 newPswFLD.setEchoChar(echochar);
-                setCustomIcon(showHideBTN2, hidePswIconPath);
+                setCustomIcon(showHideBTN2, Icons.HIDEPSW);
             }
         });
 
@@ -143,13 +143,13 @@ public class ChangePswForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 confirmNewPswFLD.setEchoChar('\u0000');  //Password Visibile
-                setCustomIcon(showHideBTN3, showPswIconPath);
+                setCustomIcon(showHideBTN3, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 confirmNewPswFLD.setEchoChar(echochar);
-                setCustomIcon(showHideBTN1, hidePswIconPath);
+                setCustomIcon(showHideBTN1, Icons.HIDEPSW);
             }
         });
 

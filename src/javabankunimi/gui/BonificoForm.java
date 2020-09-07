@@ -52,7 +52,7 @@ public class BonificoForm extends MainApp {
         setLocation(location);
         setTitle("Bonifico - JavaBank");
 
-        setFrameIcon(moneyIconPath);
+        setFrameIcon(Icons.MONEY);
         setResizable(false);
 
         getRootPane().setDefaultButton(transferBTN);
@@ -61,8 +61,8 @@ public class BonificoForm extends MainApp {
 
         displayClock(clockLBL, dateLBL);
         setTimer(timerLBL);
-        setCustomIcon(nextBTN, nextIconPath);
-        setCustomIcon(prevBTN, prevIconPath);
+        setCustomIcon(nextBTN, Icons.NEXT);
+        setCustomIcon(prevBTN, Icons.PREV);
 
         setVisible(true);
 
@@ -235,7 +235,7 @@ public class BonificoForm extends MainApp {
                     JOptionPane.showInternalMessageDialog(getContentPane(), "Iban field can't be empty");
                 } else {
                     session.transfer(ibanFLD.getText().toUpperCase(), amount);
-                    playSound(cashSound);
+                    playSound(Sounds.CASH);
                     amountFLD.setText("");
                     balance.setText(euro.format(session.getSaldo()));
                     JOptionPane.showInternalMessageDialog(getContentPane(), "Bonifico Effettuato Correttamente");

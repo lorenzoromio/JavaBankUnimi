@@ -35,10 +35,10 @@ public class PrelievoForm extends MainApp {
         setLocation(location);
         setTitle("Prelievo - JavaBank");
 
-        setFrameIcon(moneyIconPath);
+        setFrameIcon(Icons.MONEY);
         displayClock(clockLBL, dateLBL);
         setTimer(timerLBL);
-        setCustomIcon(icon, moneyIconPath);
+        setCustomIcon(icon, Icons.MONEY);
         setResizable(false);
 
         setHandCursor(balanceBTN, homeBTN, logoutBTN, prelievoBTN);
@@ -47,9 +47,9 @@ public class PrelievoForm extends MainApp {
         balance.setText(euro.format(session.getSaldo()));
 
         if (balance.isVisible()) {
-            setCustomIcon(balanceBTN, showPswIconPath);
+            setCustomIcon(balanceBTN, Icons.SHOWPSW);
         } else {
-            setCustomIcon(balanceBTN, hidePswIconPath);
+            setCustomIcon(balanceBTN, Icons.HIDEPSW);
         }
 
         SwingUtilities.invokeLater(amountFLD::requestFocus);
@@ -61,11 +61,11 @@ public class PrelievoForm extends MainApp {
                 balance.setText(euro.format(session.getSaldo()));
 
                 if (balance.isVisible()) {
-                    setCustomIcon(balanceBTN, hidePswIconPath);
+                    setCustomIcon(balanceBTN, Icons.HIDEPSW);
                     balance.setVisible(false);
 
                 } else {
-                    setCustomIcon(balanceBTN, showPswIconPath);
+                    setCustomIcon(balanceBTN, Icons.SHOWPSW);
                     balance.setVisible(true);
 
                 }
@@ -109,7 +109,7 @@ public class PrelievoForm extends MainApp {
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {
                 session.prelievo(RegexChecker.checkValidAmount(amountFLD.getText()));
-                playSound(cashSound);
+                playSound(Sounds.CASH);
                 amountFLD.setText("");
                 balance.setText(euro.format(session.getSaldo()));
                 JOptionPane.showMessageDialog(getContentPane(), "Prelievo effettuato Correttamente");

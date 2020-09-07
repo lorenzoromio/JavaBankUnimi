@@ -52,7 +52,7 @@ public class HomeForm extends MainApp {
         System.out.println(location);
         setLocation(location);
         setTitle("Home - JavaBank");
-        setFrameIcon(bankIconPath);
+        setFrameIcon(Icons.BANK);
         displayClock(clockLBL, dateLBL);
 
         final char visibleChar = '\u0000';
@@ -80,9 +80,9 @@ public class HomeForm extends MainApp {
             deleteAllBTN.addActionListener(this::deleteAllDatabase);
         }
 
-        setCustomIcon(showHideBTN, showPswIconPath);
-        setCustomIcon(refreshBTN, refreshIconPath);
-        setHandCursor(bonificoBTN,changePswBTN,deleteAllBTN,depositBTN,eraseBTN,logoutBTN,prelievoBTN,refreshBTN,removeBTN,showHideBTN);
+        setCustomIcon(showHideBTN, Icons.SHOWPSW);
+        setCustomIcon(refreshBTN, Icons.REFRESH);
+        setHandCursor(bonificoBTN, changePswBTN, deleteAllBTN, depositBTN, eraseBTN, logoutBTN, prelievoBTN, refreshBTN, removeBTN, showHideBTN);
 
 //        backgroundTask(setValue);
         setValue();
@@ -100,7 +100,7 @@ public class HomeForm extends MainApp {
                     incomeFLD.setEchoChar(echochar); //* Echo Char
                     transictionArea.setVisible(false);
 
-                    setCustomIcon(showHideBTN, hidePswIconPath);
+                    setCustomIcon(showHideBTN, Icons.HIDEPSW);
 
                 } else {
                     balanceFLD.setEchoChar(visibleChar);  //Password Visibile
@@ -110,7 +110,7 @@ public class HomeForm extends MainApp {
                     backgroundTask(setValue);
 //                    setValue();
 
-                    setCustomIcon(showHideBTN, showPswIconPath);
+                    setCustomIcon(showHideBTN, Icons.SHOWPSW);
 
 
                 }
@@ -177,7 +177,7 @@ public class HomeForm extends MainApp {
                 if (x.getType().equals("bonifico")) {                  //controllo se il bonifico è in uscita o in entrata
 
                     if (x.getIbanFrom().equals(session.getIban())) {
-                        iconpath = bonificoOutIconPath;
+                        iconpath = Icons.BONIFICO_OUT;
                         sgn = "- ";
                         amount.setForeground(Color.red);
                         ibanDest.setText("IBAN " + x.getIbanDest());
@@ -185,7 +185,7 @@ public class HomeForm extends MainApp {
                         transictionArea.add(ibanDest);
                         transictionArea.add(userDest);
                     } else {
-                        iconpath = bonificoInIconPath;
+                        iconpath = Icons.BONIFICO_IN;
                         sgn = "+ ";
                         amount.setForeground(Color.green.darker());
                         ibanFrom.setText("IBAN " + x.getIbanFrom());
@@ -198,12 +198,12 @@ public class HomeForm extends MainApp {
                     transictionArea.add(type);
                     switch (x.getType()) {
                         case "deposito":
-                            iconpath = depositoIconPath;
+                            iconpath = Icons.DEPOSITO;
                             sgn = "+ ";
                             amount.setForeground(Color.green.darker());
                             break;
                         case "prelievo":
-                            iconpath = prelievoIconPath;
+                            iconpath = Icons.PRELIEVO;
                             sgn = "- ";
                             amount.setForeground(Color.red);
                             break;
