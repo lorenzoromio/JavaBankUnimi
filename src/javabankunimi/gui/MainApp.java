@@ -193,10 +193,10 @@ public abstract class MainApp extends JFrame {
     }
 
     private void backgroundCheckValidSession() {
+        System.out.println("session timer running");
         timer.schedule(new TimerTask() {
             @Override
             public synchronized void run() {
-                System.out.println("session timer running");
                 if (session != null) {
                     try {
                         session.isValid();
@@ -225,6 +225,7 @@ public abstract class MainApp extends JFrame {
     private void sessionExpired() {
         session = null;
         location = this.getLocation();
+        System.out.println("Sessione Expired: waiting for user focus");
         while (!isFocused()) {
             //wait for user focus
         }
