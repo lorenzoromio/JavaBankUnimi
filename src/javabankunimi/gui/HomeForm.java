@@ -109,7 +109,6 @@ public class HomeForm extends MainApp {
                     transictionArea.setVisible(true);
                     backgroundTask(setValue);
 //                    setValue();
-
                     setCustomIcon(showHideBTN, Icons.SHOWPSW);
 
 
