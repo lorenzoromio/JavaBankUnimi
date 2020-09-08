@@ -44,7 +44,7 @@ public class DepositoForm extends MainApp {
         balance.setText(euro.format(session.getSaldo()));
 
         displayClock(clockLBL, dateLBL);
-        setTimer(timerLBL);
+        setSessionTimer(timerLBL);
         if (balance.isVisible()) {
             setCustomIcon(balanceBTN, Icons.SHOWPSW);
         } else {

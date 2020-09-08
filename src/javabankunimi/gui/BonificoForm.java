@@ -60,7 +60,7 @@ public class BonificoForm extends MainApp {
         SwingUtilities.invokeLater(amountFLD::requestFocus);
 
         displayClock(clockLBL, dateLBL);
-        setTimer(timerLBL);
+        setSessionTimer(timerLBL);
         setCustomIcon(nextBTN, Icons.NEXT);
         setCustomIcon(prevBTN, Icons.PREV);
 

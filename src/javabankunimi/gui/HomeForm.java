@@ -60,7 +60,7 @@ public class HomeForm extends MainApp {
         incomeFLD.setEchoChar(visibleChar);
         outcomeFLD.setEchoChar(visibleChar);
 
-        setTimer(timerLBL);
+        setSessionTimer(timerLBL);
 
         Runnable setValue = new Runnable() {
             @Override

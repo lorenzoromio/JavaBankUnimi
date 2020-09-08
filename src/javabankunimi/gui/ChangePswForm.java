@@ -42,7 +42,7 @@ public class ChangePswForm extends MainApp {
         getRootPane().setDefaultButton(saveBTN);
 
         displayClock(clockLBL, dateLBL);
-        setTimer(timerLBL);
+        setSessionTimer(timerLBL);
         setCustomIcon(showHideBTN1, Icons.HIDEPSW);
         setCustomIcon(showHideBTN2, Icons.HIDEPSW);
         setCustomIcon(showHideBTN3, Icons.HIDEPSW);

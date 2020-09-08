@@ -36,6 +36,48 @@ public abstract class MainApp extends JFrame {
     protected final DecimalFormat euro = new DecimalFormat("0.00 €");
     protected final char echochar = '*';
 
+    protected void setSessionTimer(JLabel timerLBL) {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                SimpleDateFormat time = new SimpleDateFormat("mm:ss:SSS");
+                Date now = new Date();
+                long millis = session.getExpiredTime().toEpochMilli() - Instant.now().toEpochMilli();
+                timerLBL.setText("Tempo rimasto: " + time.format(millis > 0 ? millis : 0));
+
+                if (millis < 10000) {
+//                    if( millis - millis/1000*1000 < 40) playSound(Sounds.ERROR);
+                    timerLBL.setForeground(Color.red);
+                    if (millis < 5000) {
+                        timerLBL.setFont(timerLBL.getFont().deriveFont(20f - millis / 1000));
+                    }
+                } else {
+                    timerLBL.setForeground(new JLabel().getForeground());
+                    timerLBL.setFont(timerLBL.getFont().deriveFont(14f));
+                }
+            }
+        }, 0, 30);
+    }
+
+    protected static class Icons {
+
+        protected static final String BANK = "icons/bank.png";
+        protected static final String NEXT = "icons/next.png";
+        protected static final String PREV = "icons/prev.png";
+        protected static final String MONEY = "icons/money.png";
+        protected static final String SIGNUP = "icons/signUp.png";
+        protected static final String SHOWPSW = "icons/showpsw.png";
+        protected static final String HIDEPSW = "icons/hidepsw.png";
+        protected static final String REFRESH = "icons/refresh.png";
+        protected static final String DEPOSITO = "icons/deposito2.png";
+        protected static final String PRELIEVO = "icons/prelievo2.png";
+        protected static final String CHANGEPSW = "icons/changePsw.png";
+        protected static final String BONIFICO_IN = "icons/bonificoIn2.png";
+        protected static final String BONIFICO_OUT = "icons/bonificoOut2.png";
+        protected static final String DELETE_ACCOUNT = "icons/deleteAccount.png";
+
+    }
+
     public MainApp() {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -92,27 +134,12 @@ public abstract class MainApp extends JFrame {
 
     }
 
-    protected void setTimer(JLabel timerLBL) {
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                SimpleDateFormat time = new SimpleDateFormat("mm:ss:SSS");
-                Date now = new Date();
-                long millis = session.getExpiredTime().toEpochMilli() - Instant.now().toEpochMilli();
-                timerLBL.setText("Tempo rimasto: " + time.format(millis > 0 ? millis : 0));
+    protected static class Sounds {
 
-//                playSound(Sounds.ACCESS_DENIED);
-                if (millis < 10000) {
-                    timerLBL.setForeground(Color.red);
-                    if (millis < 5000) {
-                        timerLBL.setFont(timerLBL.getFont().deriveFont(20f - millis / 1000));
-                    }
-                } else {
-                    timerLBL.setForeground(new JLabel().getForeground());
-                    timerLBL.setFont(timerLBL.getFont().deriveFont(14f));
-                }
-            }
-        }, 0, 30);
+        protected static final String CASH = "sounds/cash.wav";
+        protected static final String PRELIEVO = "sounds/prelievo.wav";
+        protected static final String ERROR = "sounds/error.wav";
+        protected static final String ACCESS_GRANTED = "sounds/accessGranted.wav";
     }
 
     protected void setCustomIcon(JLabel label, String iconPath) {
@@ -240,23 +267,6 @@ public abstract class MainApp extends JFrame {
         new LoginForm();
     }
 
-    protected static class Icons {
-        protected static final String BANK = "icons/bank.png";
-        protected static final String NEXT = "icons/next.png";
-        protected static final String PREV = "icons/prev.png";
-        protected static final String MONEY = "icons/money.png";
-        protected static final String SIGNUP = "icons/signUp.png";
-        protected static final String SHOWPSW = "icons/showpsw.png";
-        protected static final String HIDEPSW = "icons/hidepsw.png";
-        protected static final String REFRESH = "icons/refresh.png";
-        protected static final String DEPOSITO = "icons/deposito2.png";
-        protected static final String PRELIEVO = "icons/prelievo2.png";
-        protected static final String CHANGEPSW = "icons/changePsw.png";
-        protected static final String BONIFICO_IN = "icons/bonificoIn2.png";
-        protected static final String BONIFICO_OUT = "icons/bonificoOut2.png";
-        protected static final String DELETE_ACCOUNT = "icons/deleteAccount.png";
-    }
-
     protected void setHandCursor(JButton... buttons) {
         for (JButton button : buttons) {
             button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -275,13 +285,6 @@ public abstract class MainApp extends JFrame {
         System.out.println("ID: " + thread.getId());
         System.out.println("Count : " + Thread.activeCount());
         System.out.println();
-    }
-
-    protected static class Sounds {
-        protected static final String CASH = "sounds/cash.wav";
-        protected static final String PRELIEVO = "sounds/prelievo.wav";
-        protected static final String ERROR = "sounds/accessDenied.wav";
-        protected static final String ACCESS_GRANTED = "sounds/accessGranted.wav";
     }
 
     public void SQLExceptionOccurred(SQLException ex) {

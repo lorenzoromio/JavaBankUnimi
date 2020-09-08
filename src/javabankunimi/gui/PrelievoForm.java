@@ -37,7 +37,7 @@ public class PrelievoForm extends MainApp {
 
         setFrameIcon(Icons.MONEY);
         displayClock(clockLBL, dateLBL);
-        setTimer(timerLBL);
+        setSessionTimer(timerLBL);
         setCustomIcon(icon, Icons.MONEY);
         setResizable(false);
 

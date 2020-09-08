@@ -44,7 +44,7 @@ public class DeleteAccountForm extends MainApp {
         getRootPane().setDefaultButton(deleteBTN);
 
         displayClock(clockLBL, dateLBL);
-        setTimer(timerLBL);
+        setSessionTimer(timerLBL);
         setCustomIcon(showHideBTN1, Icons.HIDEPSW);
         setCustomIcon(showHideBTN2, Icons.HIDEPSW);
         setHandCursor(backBTN, deleteBTN, logoutBTN, showHideBTN1, showHideBTN2);
