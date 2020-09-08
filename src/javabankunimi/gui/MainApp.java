@@ -36,48 +36,6 @@ public abstract class MainApp extends JFrame {
     protected final DecimalFormat euro = new DecimalFormat("0.00 €");
     protected final char echochar = '*';
 
-    protected void setSessionTimer(JLabel timerLBL) {
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                SimpleDateFormat time = new SimpleDateFormat("mm:ss:SSS");
-                Date now = new Date();
-                long millis = session.getExpiredTime().toEpochMilli() - Instant.now().toEpochMilli();
-                timerLBL.setText("Tempo rimasto: " + time.format(millis > 0 ? millis : 0));
-
-                if (millis < 10000) {
-//                    if( millis - millis/1000*1000 < 40) playSound(Sounds.ERROR);
-                    timerLBL.setForeground(Color.red);
-                    if (millis < 5000) {
-                        timerLBL.setFont(timerLBL.getFont().deriveFont(20f - millis / 1000));
-                    }
-                } else {
-                    timerLBL.setForeground(new JLabel().getForeground());
-                    timerLBL.setFont(timerLBL.getFont().deriveFont(14f));
-                }
-            }
-        }, 0, 30);
-    }
-
-    protected static class Icons {
-
-        protected static final String BANK = "icons/bank.png";
-        protected static final String NEXT = "icons/next.png";
-        protected static final String PREV = "icons/prev.png";
-        protected static final String MONEY = "icons/money.png";
-        protected static final String SIGNUP = "icons/signUp.png";
-        protected static final String SHOWPSW = "icons/showpsw.png";
-        protected static final String HIDEPSW = "icons/hidepsw.png";
-        protected static final String REFRESH = "icons/refresh.png";
-        protected static final String DEPOSITO = "icons/deposito2.png";
-        protected static final String PRELIEVO = "icons/prelievo2.png";
-        protected static final String CHANGEPSW = "icons/changePsw.png";
-        protected static final String BONIFICO_IN = "icons/bonificoIn2.png";
-        protected static final String BONIFICO_OUT = "icons/bonificoOut2.png";
-        protected static final String DELETE_ACCOUNT = "icons/deleteAccount.png";
-
-    }
-
     public MainApp() {
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -117,7 +75,7 @@ public abstract class MainApp extends JFrame {
                 System.out.println("gain focus");
 
                 if (session != null) {
-//                    session.updateSessionCreation();
+//                    session.updateCreation();
                 }
             }
 
@@ -134,12 +92,66 @@ public abstract class MainApp extends JFrame {
 
     }
 
-    protected static class Sounds {
+    protected static class Icons {
 
-        protected static final String CASH = "sounds/cash.wav";
-        protected static final String PRELIEVO = "sounds/prelievo.wav";
-        protected static final String ERROR = "sounds/error.wav";
-        protected static final String ACCESS_GRANTED = "sounds/accessGranted.wav";
+        protected static final String BANK = "icons/bank.png";
+        protected static final String NEXT = "icons/next.png";
+        protected static final String PREV = "icons/prev.png";
+        protected static final String MONEY = "icons/money.png";
+        protected static final String SIGNUP = "icons/signUp.png";
+        protected static final String SHOWPSW = "icons/showpsw.png";
+        protected static final String HIDEPSW = "icons/hidepsw.png";
+        protected static final String REFRESH = "icons/refresh.png";
+        protected static final String DEPOSITO = "icons/deposito2.png";
+        protected static final String PRELIEVO = "icons/prelievo2.png";
+        protected static final String CHANGEPSW = "icons/changePsw.png";
+        protected static final String BONIFICO_IN = "icons/bonificoIn2.png";
+        protected static final String BONIFICO_OUT = "icons/bonificoOut2.png";
+        protected static final String DELETE_ACCOUNT = "icons/deleteAccount.png";
+
+    }
+
+    protected void setSessionTimer(JLabel timerLBL) {
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                SimpleDateFormat time = new SimpleDateFormat("mm:ss:SSS");
+                Date now = new Date();
+                long millis = session.getExpiredTime().toEpochMilli() - Instant.now().toEpochMilli();
+                timerLBL.setText("Tempo rimasto: " + time.format(millis > 0 ? millis : 0));
+
+                if (millis < 10000) {
+                    timerLBL.setForeground(Color.red);
+                    if (millis < 5000) {
+//                        if( millis - millis/1000*1000 < 2) playSound(Sounds.TIMER);
+//                        timerLBL.setFont(timerLBL.getFont().deriveFont(20f - millis / 1000));
+                    }
+                } else {
+                    timerLBL.setForeground(new JLabel().getForeground());
+                    timerLBL.setFont(timerLBL.getFont().deriveFont(14f));
+                }
+            }
+        }, 0, 30);
+    }
+
+    protected void playSound(String soundName) {
+
+        try {
+            URL soundURL = this.getClass().getResource("/" + soundName);
+            AudioInputStream audioInputStream;
+            try {
+                audioInputStream = AudioSystem.getAudioInputStream(soundURL);
+            } catch (Exception e) {
+                audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
+            }
+
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.start();
+        } catch (Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
+        }
     }
 
     protected void setCustomIcon(JLabel label, String iconPath) {
@@ -177,24 +189,24 @@ public abstract class MainApp extends JFrame {
         }, 0, 1000);
     }
 
-    protected void playSound(String soundName) {
-
-        try {
-            URL soundURL = this.getClass().getResource("/" + soundName);
-            AudioInputStream audioInputStream = null;
-            try {
-                audioInputStream = AudioSystem.getAudioInputStream(soundURL);
-            } catch (Exception e) {
-                audioInputStream = AudioSystem.getAudioInputStream(new File(soundName).getAbsoluteFile());
-            }
-
-            Clip clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.start();
-        } catch (Exception ex) {
-            System.out.println("Error with playing sound.");
-            ex.printStackTrace();
+    private void sessionExpired() {
+        session = null;
+        location = this.getLocation();
+        System.out.println("Sessione Expired: waiting for user focus");
+        playSound(Sounds.EXPIRED_SESSION);
+        while (!isFocused()) {
+            //wait for user focus
         }
+
+        String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
+                "Verrai reindirizzato alla schermata di Login.";
+
+        String title = "Sessione Scaduta";
+        JOptionPane.showMessageDialog(getContentPane(), error_message, title, JOptionPane.ERROR_MESSAGE);
+        dispose();
+        timer.cancel();
+        System.out.println("open new login");
+        new LoginForm();
     }
 
     protected void setFieldOnError(JTextField... fields) {
@@ -247,24 +259,13 @@ public abstract class MainApp extends JFrame {
         }
     }
 
-    private void sessionExpired() {
-        session = null;
-        location = this.getLocation();
-        System.out.println("Sessione Expired: waiting for user focus");
+    public void SQLExceptionOccurred(SQLException ex) {
         playSound(Sounds.ERROR);
-        while (!isFocused()) {
-            //wait for user focus
-        }
+        String error = "SQL State : " + ex.getSQLState() + "\n" +
+                "ErrorCode : " + ex.getErrorCode() + "\n" +
+                ex.getMessage();
 
-        String error_message = "Sei rimasto inattivo per troppo tempo.\n" +
-                "Verrai reindirizzato alla schermata di Login.";
-
-        String title = "Sessione Scaduta";
-        JOptionPane.showMessageDialog(getContentPane(), error_message, title, JOptionPane.ERROR_MESSAGE);
-        dispose();
-        timer.cancel();
-        System.out.println("open new login");
-        new LoginForm();
+        JOptionPane.showMessageDialog(getContentPane(), error, "SQL Error", JOptionPane.ERROR_MESSAGE);
     }
 
     protected void setHandCursor(JButton... buttons) {
@@ -287,12 +288,15 @@ public abstract class MainApp extends JFrame {
         System.out.println();
     }
 
-    public void SQLExceptionOccurred(SQLException ex) {
-        String error = "SQL State : " + ex.getSQLState() + "\n" +
-                "ErrorCode : " + ex.getErrorCode() + "\n" +
-                ex.getMessage();
+    protected static class Sounds {
 
-        JOptionPane.showMessageDialog(getContentPane(), error, "SQL Error", JOptionPane.ERROR_MESSAGE);
+        protected static final String CASH = "sounds/cash.wav";
+        protected static final String PRELIEVO = "sounds/prelievo.wav";
+        protected static final String ERROR = "sounds/error.wav";
+        protected static final String ACCESS_GRANTED = "sounds/login1.wav";
+        protected static final String TIMER = "sounds/timer.wav";
+        protected static final String EXPIRED_SESSION = "sounds/expired_session.wav";
+        protected static final String REFRESH = "sounds/refresh.wav";
     }
 
     protected void exitAction() {

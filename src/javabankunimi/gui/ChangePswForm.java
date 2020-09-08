@@ -31,7 +31,7 @@ public class ChangePswForm extends MainApp {
     private JLabel timerLBL;
 
     public ChangePswForm() {
-        session.updateSessionCreation();
+        session.updateCreation();
         setContentPane(changePswPanel);
         pack();
         setLocation(location);
@@ -164,7 +164,6 @@ public class ChangePswForm extends MainApp {
 
     @Override
     protected void defaultAction() {
-        System.out.println("Save BTN pressed");
         try {
             session.changePassword(pswFLD.getPassword(),
                     newPswFLD.getPassword(),
@@ -173,11 +172,13 @@ public class ChangePswForm extends MainApp {
             displayHomeForm();
 
         } catch (IllegalArgumentException ex) {
+            playSound(Sounds.ERROR);
             newPswFLD.setText("");
             confirmNewPswFLD.setText("");
             JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
 
         } catch (CredentialException ex) {
+            playSound(Sounds.ERROR);
             pswFLD.setText("");
             newPswFLD.setText("");
             confirmNewPswFLD.setText("");

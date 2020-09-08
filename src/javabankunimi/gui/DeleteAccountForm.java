@@ -28,7 +28,7 @@ public class DeleteAccountForm extends MainApp {
     private JLabel timerLBL;
 
     public DeleteAccountForm() {
-        session.updateSessionCreation();
+        session.updateCreation();
         System.out.println(session);
         setContentPane(removePanel);
 
@@ -163,6 +163,7 @@ public class DeleteAccountForm extends MainApp {
                 dispose();
 
             } catch (IllegalArgumentException | CredentialException ex) {
+                playSound(Sounds.ERROR);
                 pswFLD.setText("");
                 confirmPswFLD.setText("");
                 JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());

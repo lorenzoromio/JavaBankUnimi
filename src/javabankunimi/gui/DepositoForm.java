@@ -29,7 +29,7 @@ public class DepositoForm extends MainApp {
 
 
     public DepositoForm() throws SQLException {
-        session.updateSessionCreation();
+        session.updateCreation();
         System.out.println(session);
         setContentPane(depositoPanel);
 
@@ -58,7 +58,7 @@ public class DepositoForm extends MainApp {
         balanceBTN.addActionListener((ActionEvent e) -> {
 
             try {
-                session.updateSessionCreation();
+                session.updateCreation();
 //                session.accountBalanceUpdate();
                 balance.setText(euro.format(session.getSaldo()));
 
@@ -106,8 +106,7 @@ public class DepositoForm extends MainApp {
     @Override
     protected void defaultAction() {
         try {
-//                Double amount = 0.0;
-            session.updateSessionCreation();
+            session.updateCreation();
             if (amountFLD.getText().isEmpty())
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {
@@ -121,6 +120,7 @@ public class DepositoForm extends MainApp {
 
 
         } catch (IllegalArgumentException ex) {
+            playSound(Sounds.ERROR);
             amountFLD.setText("");
             JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
 

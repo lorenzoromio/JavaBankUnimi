@@ -171,6 +171,7 @@ public class SignUpForm extends MainApp {
     @Override
     protected void defaultAction() {
         if (nomeFLD.getText().isEmpty() || cognomeFLD.getText().isEmpty() || String.valueOf(psw1FLD.getPassword()).isEmpty() || String.valueOf(psw2FLD.getPassword()).isEmpty()) {
+            playSound(Sounds.ERROR);
             JOptionPane.showMessageDialog(getContentPane(), "Tutti i campi devono essere compilati");
         } else if (String.valueOf(psw1FLD.getPassword()).equals(String.valueOf(psw2FLD.getPassword()))) {
             if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Sign Up?") == 0) {
@@ -184,21 +185,22 @@ public class SignUpForm extends MainApp {
                     } else {
                         displayLoginForm();
                         clearFields(nomeFLD, cognomeFLD, psw1FLD, psw2FLD);
-
                     }
 
                 } catch (IllegalArgumentException ex) {
+                    playSound(Sounds.ERROR);
                     JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
                     clearFields(psw1FLD, psw2FLD);
 
                 } catch (InvalidNameException ex) {
+                    playSound(Sounds.ERROR);
                     JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
                     clearFields(nomeFLD, cognomeFLD);
 
                 } catch (AccountException ex) {
+                    playSound(Sounds.ERROR);
                     JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
                     clearFields(nomeFLD, cognomeFLD, psw1FLD, psw2FLD);
-
 
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
@@ -209,8 +211,8 @@ public class SignUpForm extends MainApp {
             }
 
         } else {
+            playSound(Sounds.ERROR);
             clearFields(psw1FLD, psw2FLD);
-
             JOptionPane.showMessageDialog(getContentPane(), "Password non corrette");
         }
     }

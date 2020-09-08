@@ -67,7 +67,7 @@ public class LoginForm extends MainApp {
     protected void defaultAction() {
 
         if (session != null) {
-            playSound(Sounds.ACCESS_GRANTED);
+            playSound(Sounds.ERROR);
             JOptionPane.showMessageDialog(getContentPane(), "User already logged in this machine");
         } else if (userFLD.getText().isEmpty()) {
             playSound(Sounds.ERROR);
@@ -77,8 +77,8 @@ public class LoginForm extends MainApp {
             session = Bank.login(userFLD.getText(), pswFLD.getPassword());
             location = this.getLocation();
 
-            new HomeForm();
             playSound(Sounds.ACCESS_GRANTED);
+            new HomeForm();
             dispose();
 
         } catch (AccountNotFoundException ex) {

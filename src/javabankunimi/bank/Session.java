@@ -64,7 +64,7 @@ public class Session extends Account {
         return expiredTime;
     }
 
-    public void updateSessionCreation() {
+    public void updateCreation() {
         this.creation = Instant.now();
         this.expiredTime = Instant.ofEpochMilli((creation.toEpochMilli() + duration));
     }
@@ -78,7 +78,7 @@ public class Session extends Account {
 
     public void changePassword(char[] oldPsw, char[] newPsw, char[] checkPsw) throws IllegalArgumentException, SQLException, CredentialException {
 
-        updateSessionCreation();
+        updateCreation();
 
         if (!getHashPsw().equals(hash(oldPsw)))
             throw new CredentialException("Password Errata");
@@ -100,7 +100,7 @@ public class Session extends Account {
 
     public void deleteAccount(char[] psw, char[] confirmPsw) throws IllegalArgumentException, CredentialException, SQLException {
 
-        updateSessionCreation();
+        updateCreation();
 
         if (!psw.equals(confirmPsw))
             throw new IllegalArgumentException("Le password non coincidono");
@@ -121,7 +121,7 @@ public class Session extends Account {
 
     public void transfer(String iban, double amount) throws AccountNotFoundException, IllegalArgumentException, SQLException {
 
-        updateSessionCreation();
+        updateCreation();
 
         if (getSaldo() < amount)
             throw new IllegalArgumentException("Fondi Insufficenti");
@@ -160,7 +160,7 @@ public class Session extends Account {
 
     public void deposit(Double amount) throws SQLException, IllegalArgumentException {
 
-        updateSessionCreation();
+        updateCreation();
 
         if (amount <= 0)
             throw new IllegalArgumentException("Importo non valido");
@@ -170,7 +170,7 @@ public class Session extends Account {
     }
 
     public void prelievo(Double amount) throws IllegalArgumentException, SQLException {
-        updateSessionCreation();
+        updateCreation();
 
         if (getSaldo() < amount)
             throw new IllegalArgumentException("Fondi Insufficenti");
@@ -180,7 +180,7 @@ public class Session extends Account {
     }
 
     public List<Account> showContacts(String search) throws SQLException {
-        updateSessionCreation();
+        updateCreation();
         List<Account> accountsList = new ArrayList<>();
         String showContacts = "select USERNAME from accounts where USERNAME <> ? order by COGNOME";
 
@@ -212,7 +212,7 @@ public class Session extends Account {
 
     public List<Transaction> showTransactions() throws SQLException {
 
-        updateSessionCreation();
+        updateCreation();
         List<Transaction> transactionsList = new ArrayList<>();
 
         String showTransactions = "select * from transaction where ? IN ( IBAN_FROM, IBAN_DEST ) order by ID desc ";
@@ -261,7 +261,7 @@ public class Session extends Account {
 
     @Override
     public Double getSaldo() throws SQLException {
-        updateSessionCreation();
+        updateCreation();
         String update = "select * from accounts where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
         prepStmt.setString(1, getUsername());
@@ -277,7 +277,7 @@ public class Session extends Account {
 
     @Override
     protected void setSaldo(Double saldo) throws SQLException {
-        updateSessionCreation();
+        updateCreation();
         super.setSaldo(saldo);
         String update = "update accounts set SALDO = ? where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
@@ -289,7 +289,7 @@ public class Session extends Account {
 
     @Override
     protected void setPassword(char[] psw) throws SQLException {
-        updateSessionCreation();
+        updateCreation();
         super.setPassword(psw);
         Arrays.fill(psw, '0');
         String update = "update accounts set HASHPSW = ? where USERNAME = ?";
@@ -312,7 +312,7 @@ public class Session extends Account {
 
     @Override
     protected void setSalt(String salt) throws SQLException {
-        updateSessionCreation();
+        updateCreation();
         super.setSalt(salt);
         String update = "update accounts set SALT = ? where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
@@ -323,7 +323,7 @@ public class Session extends Account {
 
     @Override
     protected void setTimestamp(String timestamp) throws SQLException {
-        updateSessionCreation();
+        updateCreation();
         super.setTimestamp(timestamp);
         String update = "update accounts set TIMESTAMP = ? where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);

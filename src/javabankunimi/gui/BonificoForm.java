@@ -44,7 +44,7 @@ public class BonificoForm extends MainApp {
     private JLabel timerLBL;
 
     public BonificoForm() throws SQLException {
-        session.updateSessionCreation();
+        session.updateCreation();
         System.out.println(session);
         setContentPane(bonificoPanel);
 
@@ -146,7 +146,7 @@ public class BonificoForm extends MainApp {
         balanceBTN.addActionListener(e -> {
 
             try {
-                session.updateSessionCreation();
+                session.updateCreation();
                 balance.setText(euro.format(session.getSaldo()));
 
                 if (balance.isVisible()) {
@@ -223,18 +223,16 @@ public class BonificoForm extends MainApp {
     @Override
     protected void defaultAction() {
         try {
-            double amount;
-            session.updateSessionCreation();
-            if (amountFLD.getText().isEmpty())
+            session.updateCreation();
+            if (amountFLD.getText().isEmpty()) {
+                playSound(Sounds.ERROR);
                 JOptionPane.showInternalMessageDialog(getContentPane(), "Amount field can't be empty");
-
-            else {
-
-                amount = RegexChecker.checkValidAmount(amountFLD.getText());
+            } else {
                 if (ibanFLD.getText().isEmpty()) {
+                    playSound(Sounds.ERROR);
                     JOptionPane.showInternalMessageDialog(getContentPane(), "Iban field can't be empty");
                 } else {
-                    session.transfer(ibanFLD.getText().toUpperCase(), amount);
+                    session.transfer(ibanFLD.getText().toUpperCase(), RegexChecker.checkValidAmount(amountFLD.getText()));
                     playSound(Sounds.CASH);
                     amountFLD.setText("");
                     balance.setText(euro.format(session.getSaldo()));
@@ -243,18 +241,22 @@ public class BonificoForm extends MainApp {
             }
 
         } catch (NumberFormatException ex) {
+            playSound(Sounds.ERROR);
             amountFLD.setText("");
             JOptionPane.showInternalMessageDialog(getContentPane(), "Amount can be only numeric");
 
         } catch (IllegalArgumentException ex) {
+            playSound(Sounds.ERROR);
             amountFLD.setText("");
             JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
 
         } catch (AccountNotFoundException ex) {
+            playSound(Sounds.ERROR);
             ibanFLD.setText("");
             JOptionPane.showInternalMessageDialog(getContentPane(), ex.getMessage());
 
         } catch (SQLException ex) {
+            playSound(Sounds.ERROR);
             SQLExceptionOccurred(ex);
         }
     }

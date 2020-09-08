@@ -28,7 +28,7 @@ public class PrelievoForm extends MainApp {
 
     public PrelievoForm() throws SQLException {
 
-        session.updateSessionCreation();
+        session.updateCreation();
         System.out.println(session);
         setContentPane(prelievoPanel);
         pack();
@@ -57,7 +57,7 @@ public class PrelievoForm extends MainApp {
         balanceBTN.addActionListener((ActionEvent e) -> {
 
             try {
-                session.updateSessionCreation();
+                session.updateCreation();
                 balance.setText(euro.format(session.getSaldo()));
 
                 if (balance.isVisible()) {
@@ -104,7 +104,7 @@ public class PrelievoForm extends MainApp {
     @Override
     protected void defaultAction() {
         try {
-            session.updateSessionCreation();
+            session.updateCreation();
             if (amountFLD.getText().isEmpty())
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {
@@ -115,8 +115,8 @@ public class PrelievoForm extends MainApp {
                 JOptionPane.showMessageDialog(getContentPane(), "Prelievo effettuato Correttamente");
             }
 
-
         } catch (IllegalArgumentException ex) {
+            playSound(Sounds.ERROR);
             amountFLD.setText("");
             JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
 

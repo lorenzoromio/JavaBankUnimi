@@ -44,7 +44,7 @@ public class HomeForm extends MainApp {
     private JLabel timerLBL;
 
     public HomeForm() {
-        session.updateSessionCreation();
+        session.updateCreation();
         System.out.println(session);
         setContentPane(homePanel);
 
@@ -121,9 +121,11 @@ public class HomeForm extends MainApp {
 
         bonificoBTN.addActionListener(e -> defaultAction());
 
-        refreshBTN.addActionListener(e ->
-                         backgroundTask(setValue)
+        refreshBTN.addActionListener(e -> {
+                    playSound(Sounds.REFRESH);
+                    backgroundTask(setValue);
 //                        setValue()
+                }
         );
 
         removeBTN.addActionListener(this::deleteAccountForm);
@@ -275,7 +277,7 @@ public class HomeForm extends MainApp {
     private void deleteAllDatabase(ActionEvent e) {
         try {
             timer.cancel();
-            session.updateSessionCreation();
+            session.updateCreation();
             Session.deleteAllDatabase();
             dispose();
             new LoginForm();
