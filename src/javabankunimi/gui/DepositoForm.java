@@ -51,7 +51,7 @@ public class DepositoForm extends MainApp {
             setCustomIcon(balanceBTN, Icons.HIDEPSW);
         }
 
-        setHandCursor(balanceBTN,depositBTN,homeBTN,logoutBTN);
+        setHandCursor(balanceBTN, depositBTN, homeBTN, logoutBTN);
 
         SwingUtilities.invokeLater(amountFLD::requestFocus);
 
@@ -111,8 +111,12 @@ public class DepositoForm extends MainApp {
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {
 
-                session.deposit(RegexChecker.checkValidAmount(amountFLD.getText()));
-                playSound(Sounds.CASH);
+                Double amount = RegexChecker.checkValidAmount(amountFLD.getText());
+                session.deposit(amount);
+                if (amount == 420.0)
+                    playSound(Sounds.WEED);
+                else
+                    playSound(Sounds.CASH);
                 amountFLD.setText("");
                 balance.setText(euro.format(session.getSaldo()));
                 JOptionPane.showMessageDialog(getContentPane(), "Deposito Effettuato Correttamente");

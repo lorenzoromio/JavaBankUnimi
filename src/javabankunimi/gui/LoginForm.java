@@ -68,10 +68,11 @@ public class LoginForm extends MainApp {
 
         if (session != null) {
             playSound(Sounds.ERROR);
-            JOptionPane.showMessageDialog(getContentPane(), "User already logged in this machine");
+            JOptionPane.showMessageDialog(getContentPane(), "User already logged in this machine", "Duplicate Session", JOptionPane.ERROR_MESSAGE);
         } else if (userFLD.getText().isEmpty()) {
             playSound(Sounds.ERROR);
-            JOptionPane.showMessageDialog(getContentPane(), "Username can't be empty");
+            JOptionPane.showMessageDialog(getContentPane(), "Username can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+
         } else try {
             timer.cancel();
             session = Bank.login(userFLD.getText(), pswFLD.getPassword());
@@ -85,12 +86,12 @@ public class LoginForm extends MainApp {
             userFLD.setText("");
             pswFLD.setText("");
             playSound(Sounds.ERROR);
-            JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
+            JOptionPane.showMessageDialog(getContentPane(), ex.getMessage(), "Account Not Found", JOptionPane.ERROR_MESSAGE);
 
         } catch (CredentialException ex) {
             pswFLD.setText("");
             playSound(Sounds.ERROR);
-            JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
+            JOptionPane.showMessageDialog(getContentPane(), ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 
         } catch (SQLException ex) {
             switch (ex.getSQLState()) {
