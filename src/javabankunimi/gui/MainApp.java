@@ -37,18 +37,6 @@ public abstract class MainApp extends JFrame {
     protected final char echochar = '*'; //echochar for password
     private final boolean mute = false; //set to true to avoid any sound
 
-    protected static class Sounds {
-        public static final String WEED = "sounds/weed.wav";
-        //Static reference to sounds in sublasses
-        protected static final String CASH = "sounds/cash.wav";
-        protected static final String PRELIEVO = "sounds/prelievo.wav";
-        protected static final String ERROR = "sounds/error.wav";
-        protected static final String ACCESS_GRANTED = "sounds/login1.wav";
-        protected static final String TIMER = "sounds/timer.wav";
-        protected static final String EXPIRED_SESSION = "sounds/expired_session.wav";
-        protected static final String REFRESH = "sounds/refresh.wav";
-        protected static final String LOGOUT = "sounds/logout.wav";
-    }
     protected static class Icons {
         //Static reference to icons in sublasses
         public static final String WEED = "icons/weed.png";
@@ -65,10 +53,22 @@ public abstract class MainApp extends JFrame {
         protected static final String CHANGEPSW = "icons/changePsw.png";
         protected static final String BONIFICO_IN = "icons/bonificoIn2.png";
         protected static final String BONIFICO_OUT = "icons/bonificoOut2.png";
-
         protected static final String DELETE_ACCOUNT = "icons/deleteAccount.png";
 
 
+
+    }
+    protected static class Sounds {
+        public static final String WEED = "sounds/weed.wav";
+        //Static reference to sounds in sublasses
+        protected static final String CASH = "sounds/cash.wav";
+        protected static final String PRELIEVO = "sounds/prelievo.wav";
+        protected static final String ERROR = "sounds/error.wav";
+        protected static final String ACCESS_GRANTED = "sounds/login1.wav";
+        protected static final String TIMER = "sounds/timer.wav";
+        protected static final String EXPIRED_SESSION = "sounds/expired_session.wav";
+        protected static final String REFRESH = "sounds/refresh.wav";
+        protected static final String LOGOUT = "sounds/logout.wav";
     }
     public MainApp() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
