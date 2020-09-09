@@ -47,11 +47,11 @@ public abstract class MainApp extends JFrame {
         protected static final String SHOWPSW = "icons/showpsw.png";
         protected static final String HIDEPSW = "icons/hidepsw.png";
         protected static final String REFRESH = "icons/refresh.png";
-        protected static final String DEPOSITO = "icons/deposito2.png";
-        protected static final String PRELIEVO = "icons/prelievo2.png";
+        protected static final String DEPOSITO = "icons/deposito.png";
+        protected static final String PRELIEVO = "icons/prelievo.png";
         protected static final String CHANGEPSW = "icons/changePsw.png";
-        protected static final String BONIFICO_IN = "icons/bonificoIn2.png";
-        protected static final String BONIFICO_OUT = "icons/bonificoOut2.png";
+        protected static final String BONIFICO_IN = "icons/bonificoIn.png";
+        protected static final String BONIFICO_OUT = "icons/bonificoOut.png";
         protected static final String DELETE_ACCOUNT = "icons/deleteAccount.png";
 
 
