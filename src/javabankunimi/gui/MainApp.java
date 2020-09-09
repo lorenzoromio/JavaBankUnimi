@@ -70,6 +70,7 @@ public abstract class MainApp extends JFrame {
         protected static final String REFRESH = "sounds/refresh.wav";
         protected static final String LOGOUT = "sounds/logout.wav";
     }
+
     public MainApp() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
