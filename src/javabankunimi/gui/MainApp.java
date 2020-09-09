@@ -47,9 +47,22 @@ public abstract class MainApp extends JFrame {
         }
     }
 
-    protected void setHandCursor(JButton... buttons) {
-        for (JButton button : buttons) {
-            button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    protected void setCustomIcon(JButton button, String iconPath) {
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        int margin = 5;
+
+        Image icon;
+        try {
+            URL iconUrl = this.getClass().getResource("/" + iconPath);
+            icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
+        } catch (Exception e) {
+            icon = new ImageIcon(iconPath).getImage();
+        }
+
+        try {
+            button.setIcon(new ImageIcon(icon.getScaledInstance(button.getWidth() - margin, button.getHeight() - margin, Image.SCALE_SMOOTH)));
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -117,6 +130,80 @@ public abstract class MainApp extends JFrame {
         new LoginForm();
     }
 
+    protected void setCustomIcon(JLabel label, String iconPath) {
+        //Set Icon for JLabel
+        Image icon;
+
+        try {
+            URL iconUrl = this.getClass().getResource("/" + iconPath);
+            icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
+
+        } catch (Exception ex) {
+            icon = new ImageIcon(iconPath).getImage();
+        }
+        try {
+            label.setIcon(new ImageIcon(icon.getScaledInstance(label.getWidth() - 5, label.getHeight() - 5, Image.SCALE_SMOOTH)));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    protected void setHandCursor(JButton... buttons) {
+        for (JButton button : buttons) {
+            button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
+    }
+
+    protected void setFieldOnCorrect(JTextField... fields) {
+        //Set normal color and border
+
+        for (JTextField field : fields) {
+            field.setForeground(new JPasswordField().getForeground());
+            field.setBorder(new JPasswordField().getBorder());
+        }
+    }
+
+    protected void setFieldOnError(JTextField... fields) {
+        //Set red color and border
+
+        for (JTextField field : fields) {
+            field.setForeground(Color.red);
+            field.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
+        }
+    }
+
+    protected void clearFields(JTextField... fields) {
+        for (JTextField field : fields) {
+            field.setText("");
+            field.setForeground(new JLabel().getForeground());
+        }
+    }
+
+    protected void logOutAction() {
+        timer.cancel();
+
+        location = getLocation();
+        if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to LogOut?") == 0) {
+            playSound(Sounds.LOGOUT);
+            dispose();
+            session = null;
+            new LoginForm();
+        }
+    }
+
+    protected static class Sounds {
+        public static final String WEED = "sounds/weed.wav";
+        //Static reference to sounds in sublasses
+        protected static final String CASH = "sounds/cash.wav";
+        protected static final String PRELIEVO = "sounds/prelievo.wav";
+        protected static final String ERROR = "sounds/error.wav";
+        protected static final String ACCESS_GRANTED = "sounds/login1.wav";
+        protected static final String TIMER = "sounds/timer.wav";
+        protected static final String EXPIRED_SESSION = "sounds/expired_session.wav";
+        protected static final String REFRESH = "sounds/refresh.wav";
+        protected static final String LOGOUT = "sounds/logout.wav";
+    }
+
     protected void setSessionTimer(JLabel timerLBL) {
         //Display how much time remain before expired session
         timer.schedule(new TimerTask() {
@@ -162,68 +249,6 @@ public abstract class MainApp extends JFrame {
             }
     }
 
-    protected void setFieldOnCorrect(JTextField... fields) {
-        //Set normal color and border
-
-        for (JTextField field : fields) {
-            field.setForeground(new JPasswordField().getForeground());
-            field.setBorder(new JPasswordField().getBorder());
-        }
-    }
-
-    protected void setCustomIcon(JButton button, String iconPath) {
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        int margin = 5;
-
-        Image icon;
-        try {
-            URL iconUrl = this.getClass().getResource("/" + iconPath);
-            icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-        } catch (Exception e) {
-            icon = new ImageIcon(iconPath).getImage();
-        }
-
-        try {
-            button.setIcon(new ImageIcon(icon.getScaledInstance(button.getWidth() - margin, button.getHeight() - margin, Image.SCALE_SMOOTH)));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    protected void setCustomIcon(JLabel label, String iconPath) {
-        //Set Icon for JLabel
-        Image icon;
-
-        try {
-            URL iconUrl = this.getClass().getResource("/" + iconPath);
-            icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-
-        } catch (Exception ex) {
-            icon = new ImageIcon(iconPath).getImage();
-        }
-        try {
-            label.setIcon(new ImageIcon(icon.getScaledInstance(label.getWidth() - 5, label.getHeight() - 5, Image.SCALE_SMOOTH)));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    protected void setFieldOnError(JTextField... fields) {
-        //Set red color and border
-
-        for (JTextField field : fields) {
-            field.setForeground(Color.red);
-            field.setBorder(BorderFactory.createBevelBorder(BevelBorder.RAISED, Color.red, Color.red));
-        }
-    }
-
-    protected void clearFields(JTextField... fields) {
-        for (JTextField field : fields) {
-            field.setText("");
-            field.setForeground(new JLabel().getForeground());
-        }
-    }
-
     protected void backgroundTask(Runnable runnable) {
         Thread thread = new Thread(runnable);
         thread.start();
@@ -238,18 +263,6 @@ public abstract class MainApp extends JFrame {
         System.out.println();
     }
 
-    protected void logOutAction() {
-        timer.cancel();
-
-        location = getLocation();
-        if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to LogOut?") == 0) {
-            playSound(Sounds.LOGOUT);
-            dispose();
-            session = null;
-            new LoginForm();
-        }
-    }
-
     protected void displayClock(JLabel clockLBL, JLabel dateLBL) {
 
         timer.schedule(new TimerTask() {
@@ -262,26 +275,6 @@ public abstract class MainApp extends JFrame {
                 dateLBL.setText(date.format(now));
             }
         }, 0, 1000);
-    }
-
-    protected static class Icons {
-        //Static reference to icons in sublasses
-        public static final String WEED = "icons/weed.png";
-        protected static final String BANK = "icons/bank.png";
-        protected static final String NEXT = "icons/next.png";
-        protected static final String PREV = "icons/prev.png";
-        protected static final String MONEY = "icons/money.png";
-        protected static final String SIGNUP = "icons/signUp.png";
-        protected static final String SHOWPSW = "icons/showpsw.png";
-        protected static final String HIDEPSW = "icons/hidepsw.png";
-        protected static final String REFRESH = "icons/refresh.png";
-        protected static final String DEPOSITO = "icons/deposito2.png";
-        protected static final String PRELIEVO = "icons/prelievo2.png";
-        protected static final String CHANGEPSW = "icons/changePsw.png";
-        protected static final String BONIFICO_IN = "icons/bonificoIn2.png";
-        protected static final String BONIFICO_OUT = "icons/bonificoOut2.png";
-        protected static final String DELETE_ACCOUNT = "icons/deleteAccount.png";
-
     }
 
     private void sessionExpired() {
@@ -313,17 +306,26 @@ public abstract class MainApp extends JFrame {
         JOptionPane.showMessageDialog(getContentPane(), error, "SQL Error", JOptionPane.ERROR_MESSAGE);
     }
 
-    protected static class Sounds {
-        public static final String WEED = "sounds/weed.wav";
-        //Static reference to sounds in sublasses
-        protected static final String CASH = "sounds/cash.wav";
-        protected static final String PRELIEVO = "sounds/prelievo.wav";
-        protected static final String ERROR = "sounds/error.wav";
-        protected static final String ACCESS_GRANTED = "sounds/login1.wav";
-        protected static final String TIMER = "sounds/timer.wav";
-        protected static final String EXPIRED_SESSION = "sounds/expired_session.wav";
-        protected static final String REFRESH = "sounds/refresh.wav";
-        protected static final String LOGOUT = "sounds/logout.wav";
+    protected static class Icons {
+        //Static reference to icons in sublasses
+        public static final String WEED = "icons/weed.png";
+        protected static final String BANK = "icons/bank.png";
+        protected static final String NEXT = "icons/next.png";
+        protected static final String PREV = "icons/prev.png";
+        protected static final String MONEY = "icons/money.png";
+        protected static final String SIGNUP = "icons/signUp.png";
+        protected static final String SHOWPSW = "icons/showpsw.png";
+        protected static final String HIDEPSW = "icons/hidepsw.png";
+        protected static final String REFRESH = "icons/refresh.png";
+        protected static final String DEPOSITO = "icons/deposito2.png";
+        protected static final String PRELIEVO = "icons/prelievo2.png";
+        protected static final String CHANGEPSW = "icons/changePsw.png";
+        protected static final String BONIFICO_IN = "icons/bonificoIn2.png";
+        protected static final String BONIFICO_OUT = "icons/bonificoOut2.png";
+
+        protected static final String DELETE_ACCOUNT = "icons/deleteAccount.png";
+
+
     }
 
     protected void exitAction() {
