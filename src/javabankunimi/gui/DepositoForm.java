@@ -113,10 +113,7 @@ public class DepositoForm extends MainApp {
 
                 Double amount = RegexChecker.checkValidAmount(amountFLD.getText());
                 session.deposit(amount);
-                if (amount == 420.0)
-                    playSound(Sounds.WEED);
-                else
-                    playSound(Sounds.CASH);
+                playSound(Sounds.CASH);
                 amountFLD.setText("");
                 balance.setText(euro.format(session.getSaldo()));
                 JOptionPane.showMessageDialog(getContentPane(), "Deposito Effettuato Correttamente");

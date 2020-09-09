@@ -227,7 +227,6 @@ public class HomeForm extends MainApp {
                 ibanDest.setBounds(ibanFrom.getBounds());
                 type.setBounds(userFrom.getBounds());
 
-                if (x.getAmount().equals(420.0)) iconpath = Icons.WEED;
                 setCustomIcon(iconType, iconpath);
 
                 amount.setFont(new Font(amount.getFont().getName(), Font.BOLD, 20));
