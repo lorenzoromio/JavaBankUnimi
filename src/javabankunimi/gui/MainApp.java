@@ -39,7 +39,6 @@ public abstract class MainApp extends JFrame {
 
     protected static class Icons {
         //Static reference to icons in sublasses
-        public static final String WEED = "icons/weed.png";
         protected static final String BANK = "icons/bank.png";
         protected static final String NEXT = "icons/next.png";
         protected static final String PREV = "icons/prev.png";
@@ -59,7 +58,6 @@ public abstract class MainApp extends JFrame {
 
     }
     protected static class Sounds {
-        public static final String WEED = "sounds/weed.wav";
         //Static reference to sounds in sublasses
         protected static final String CASH = "sounds/cash.wav";
         protected static final String PRELIEVO = "sounds/prelievo.wav";
