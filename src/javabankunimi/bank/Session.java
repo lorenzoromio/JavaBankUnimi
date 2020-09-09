@@ -212,7 +212,7 @@ public class Session extends Account {
 
     public List<Transaction> showTransactions() throws SQLException {
 
-        updateCreation();
+//        updateCreation();
         List<Transaction> transactionsList = new ArrayList<>();
 
         String showTransactions = "select * from transaction where ? IN ( IBAN_FROM, IBAN_DEST ) order by ID desc ";
@@ -261,7 +261,7 @@ public class Session extends Account {
 
     @Override
     public Double getSaldo() throws SQLException {
-        updateCreation();
+//        updateCreation();
         String update = "select * from accounts where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
         prepStmt.setString(1, getUsername());

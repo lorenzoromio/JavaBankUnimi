@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.TimerTask;
 
 public class HomeForm extends MainApp {
 
@@ -42,6 +43,7 @@ public class HomeForm extends MainApp {
     private JLabel clockLBL;
     private JTextField timestampFLD;
     private JLabel timerLBL;
+    private List<Transaction> transactions;
 
     public HomeForm() {
         session.updateCreation();
@@ -68,6 +70,28 @@ public class HomeForm extends MainApp {
                 setValue();
             }
         };
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                backgroundTask(new Runnable() {
+                    @Override
+                    public synchronized void run() {
+                        try {
+                            if(transactions.size() != session.showTransactions().size()) {
+                                playSound(Sounds.NOTIFICATION);
+                                setValue(); }
+                        } catch (SQLException exception) {
+//                            SQLExceptionOccurred(exception);
+                        }
+                    }
+                });
+
+            }
+        },1000,1000);
+
+
+
 
         eraseBTN.setVisible(false);
         deleteAllBTN.setVisible(false);
@@ -122,6 +146,7 @@ public class HomeForm extends MainApp {
 
         refreshBTN.addActionListener(e -> {
                     playSound(Sounds.REFRESH);
+                    session.updateCreation();
                     backgroundTask(setValue);
 //                        setValue()
                 }
@@ -145,7 +170,7 @@ public class HomeForm extends MainApp {
         try {
             // print transaction
             transictionArea.removeAll();
-            List<Transaction> transactions;
+
             transactions = session.showTransactions();
 
             int num = (transactions != null) ? transactions.size() : 0;

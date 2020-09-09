@@ -59,6 +59,7 @@ public abstract class MainApp extends JFrame {
     }
     protected static class Sounds {
         //Static reference to sounds in sublasses
+        public static final String NOTIFICATION = "sounds/notification.wav";
         protected static final String CASH = "sounds/cash.wav";
         protected static final String PRELIEVO = "sounds/prelievo.wav";
         protected static final String ERROR = "sounds/error.wav";
