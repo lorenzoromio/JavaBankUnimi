@@ -62,7 +62,7 @@ public abstract class MainApp extends JFrame {
         protected static final String CASH = "sounds/cash.wav";
         protected static final String PRELIEVO = "sounds/prelievo.wav";
         protected static final String ERROR = "sounds/error.wav";
-        protected static final String ACCESS_GRANTED = "sounds/login1.wav";
+        protected static final String ACCESS_GRANTED = "sounds/login.wav";
         protected static final String TIMER = "sounds/timer.wav";
         protected static final String EXPIRED_SESSION = "sounds/expired_session.wav";
         protected static final String REFRESH = "sounds/refresh.wav";
