@@ -68,6 +68,7 @@ public abstract class MainApp extends JFrame {
         protected static final String EXPIRED_SESSION = "sounds/expired_session.wav";
         protected static final String REFRESH = "sounds/refresh.wav";
         protected static final String LOGOUT = "sounds/logout.wav";
+        protected static final String WELCOME = "sounds/welcome1.wav";
     }
 
     public MainApp() {
@@ -131,7 +132,7 @@ public abstract class MainApp extends JFrame {
     }
 
     public static void main(String[] args) {
-        new LoginForm();
+        new LoginForm().playSound(Sounds.WELCOME);
     }
 
     protected void setFrameIcon(String iconPath) {
