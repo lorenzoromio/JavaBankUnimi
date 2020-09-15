@@ -37,7 +37,7 @@ public class DepositoForm extends MainApp {
         setLocation(location);
         setTitle("Deposito - JavaBank");
         setFrameIcon(Icons.MONEY);
-        setCustomIcon(icon, Icons.MONEY);
+        setCustomIcon(Icons.MONEY, icon);
         setResizable(false);
 
         getRootPane().setDefaultButton(depositBTN);
@@ -47,10 +47,10 @@ public class DepositoForm extends MainApp {
         setSessionTimer(timerLBL);
 
         if (showInfo) {
-            setCustomIcon(balanceBTN, Icons.SHOWPSW);
+            setCustomIcon(Icons.SHOWPSW, balanceBTN);
             balance.setEchoChar(Echochar.SHOW);
         } else {
-            setCustomIcon(balanceBTN, Icons.HIDEPSW);
+            setCustomIcon(Icons.HIDEPSW, balanceBTN);
             balance.setEchoChar(Echochar.HIDE);
 
         }
@@ -67,11 +67,11 @@ public class DepositoForm extends MainApp {
                 balance.setText(euro.format(session.getSaldo()));
                 showInfo = !showInfo;
                 if (showInfo) {
-                    setCustomIcon(balanceBTN, Icons.SHOWPSW);
+                    setCustomIcon(Icons.SHOWPSW, balanceBTN);
                     balance.setEchoChar(Echochar.SHOW);
 
                 } else {
-                    setCustomIcon(balanceBTN, Icons.HIDEPSW);
+                    setCustomIcon(Icons.HIDEPSW, balanceBTN);
                     balance.setEchoChar(Echochar.HIDE);
 
                 }

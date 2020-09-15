@@ -159,43 +159,50 @@ public abstract class MainApp extends JFrame {
         }
     }
 
-    protected void setCustomIcon(JButton button, String iconPath) {
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        int margin = 5;
+    protected void setCustomIcon(String iconPath, JButton... buttons) {
+        for (JButton button : buttons) {
+            button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            int margin = 5;
 
-        Image icon;
-        try {
-            URL iconUrl = this.getClass().getResource("/" + iconPath);
-            icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
-        } catch (Exception e) {
-            icon = new ImageIcon(iconPath).getImage();
-        }
+            Image icon;
+            try {
+                URL iconUrl = this.getClass().getResource("/" + iconPath);
+                icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
+            } catch (Exception e) {
+                icon = new ImageIcon(iconPath).getImage();
+            }
 
-        try {
-            button.setIcon(new ImageIcon(icon.getScaledInstance(button.getWidth() - margin, button.getHeight() - margin, Image.SCALE_SMOOTH)));
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            try {
+                button.setIcon(new ImageIcon(icon.getScaledInstance(button.getWidth() - margin, button.getHeight() - margin, Image.SCALE_SMOOTH)));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
         }
     }
-    protected void setCustomIcon(JLabel label, String iconPath) {
-        //Set Icon for JLabel
-        Image icon;
+    protected void setCustomIcon(String iconPath, JLabel... labels) {
+        for (JLabel label : labels) {
+            //Set Icon for JLabel
+            Image icon;
 
-        try {
-            URL iconUrl = this.getClass().getResource("/" + iconPath);
-            icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
+            try {
+                URL iconUrl = this.getClass().getResource("/" + iconPath);
+                icon = Toolkit.getDefaultToolkit().getImage(iconUrl);
 
-        } catch (Exception ex) {
-            icon = new ImageIcon(iconPath).getImage();
+            } catch (Exception ex) {
+                icon = new ImageIcon(iconPath).getImage();
+            }
+            try {
+                label.setIcon(new ImageIcon(icon.getScaledInstance(label.getWidth() - 5, label.getHeight() - 5, Image.SCALE_SMOOTH)));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
-        try {
-            label.setIcon(new ImageIcon(icon.getScaledInstance(label.getWidth() - 5, label.getHeight() - 5, Image.SCALE_SMOOTH)));
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+
     }
 
     protected void setHandCursor(JButton... buttons) {
+
         for (JButton button : buttons) {
             button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         }
@@ -222,7 +229,7 @@ public abstract class MainApp extends JFrame {
     protected void clearFields(JTextField... fields) {
         for (JTextField field : fields) {
             field.setText("");
-            field.setForeground(new JLabel().getForeground());
+            setFieldOnCorrect(field);
         }
     }
     protected void clearFields(JLabel... labels) {
@@ -335,10 +342,11 @@ public abstract class MainApp extends JFrame {
     }
 
     protected void logOutAction() {
-        timer.cancel();
 
         location = getLocation();
         if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to LogOut?") == 0) {
+            timer.cancel();
+
             playSound(Sounds.LOGOUT);
             dispose();
             session = null;
@@ -347,9 +355,10 @@ public abstract class MainApp extends JFrame {
     }
 
     protected void exitAction() {
-        timer.cancel();
+
         location = getLocation();
         if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to exit?") == 0) {
+            timer.cancel();
             playSound(Sounds.LOGOUT);
             session = null;
             dispose();

@@ -60,8 +60,8 @@ public class BonificoForm extends MainApp {
 
         displayClock(clockLBL, dateLBL);
         setSessionTimer(timerLBL);
-        setCustomIcon(nextBTN, Icons.NEXT);
-        setCustomIcon(prevBTN, Icons.PREV);
+        setCustomIcon(Icons.NEXT, nextBTN);
+        setCustomIcon(Icons.PREV, prevBTN);
         setHandCursor(balanceBTN,clearBTN,contactsBTN,homeBTN,logoutBTN,nextBTN,prevBTN,searchBTN,transferBTN);
 
         setVisible(true);

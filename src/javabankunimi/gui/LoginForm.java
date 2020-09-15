@@ -46,7 +46,7 @@ public class LoginForm extends MainApp {
         setVisible(true);
         setTitle("LoginPage - JavaBank");
         setFrameIcon(Icons.BANK);
-        setCustomIcon(icon, Icons.BANK);
+        setCustomIcon(Icons.BANK, icon);
         getRootPane().setDefaultButton(loginBTN);               //SELEZIONA IL PULSANTE DI LOGIN
         SwingUtilities.invokeLater(userFLD::requestFocus);       //FOCUS SUL CAMPO USERNAME
         setHandCursor(exitBTN, loginBTN, signupBTN);

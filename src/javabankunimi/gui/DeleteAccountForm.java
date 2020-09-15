@@ -38,7 +38,7 @@ public class DeleteAccountForm extends MainApp {
         setLocation(location);
         setTitle("Delete Account - JavaBank");
         setFrameIcon(Icons.DELETE_ACCOUNT);
-        setCustomIcon(icon, Icons.DELETE_ACCOUNT);
+        setCustomIcon(Icons.DELETE_ACCOUNT, icon);
 
         setResizable(false);
         setVisible(true);
@@ -47,8 +47,7 @@ public class DeleteAccountForm extends MainApp {
 
         displayClock(clockLBL, dateLBL);
         setSessionTimer(timerLBL);
-        setCustomIcon(showHideBTN1, Icons.HIDEPSW);
-        setCustomIcon(showHideBTN2, Icons.HIDEPSW);
+        setCustomIcon(Icons.HIDEPSW, showHideBTN1, showHideBTN2);
         setHandCursor(backBTN, deleteBTN, logoutBTN, showHideBTN1, showHideBTN2);
         pswFLD.setEchoChar(Echochar.HIDE);
         confirmPswFLD.setEchoChar(Echochar.HIDE);
@@ -62,11 +61,11 @@ public class DeleteAccountForm extends MainApp {
                             || session.hash(pswFLD.getPassword()).equals(session.getHashPsw())) {
                         setFieldOnCorrect(pswFLD);
                         if (pswFLD.getPassword().length != 0) {
-                            setCustomIcon(pswCheckLBL, Icons.OK);
+                            setCustomIcon(Icons.OK, pswCheckLBL);
                         }
                     } else {
                         setFieldOnError(pswFLD);
-                        setCustomIcon(pswCheckLBL, null);
+                        setCustomIcon(null, pswCheckLBL);
                     }
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
@@ -91,9 +90,9 @@ public class DeleteAccountForm extends MainApp {
                     try {
                         if (session.hash(confirmPswFLD.getPassword()).equals(session.getHashPsw())) {
                             setFieldOnCorrect(confirmPswFLD);
-                            setCustomIcon(confirmPswCheckLBL, Icons.OK);
+                            setCustomIcon(Icons.OK, confirmPswCheckLBL);
                         } else {
-                            setCustomIcon(confirmPswCheckLBL, null);
+                            setCustomIcon(null, confirmPswCheckLBL);
                         }
                     } catch (SQLException ex) {
                         SQLExceptionOccurred(ex);
@@ -101,7 +100,7 @@ public class DeleteAccountForm extends MainApp {
 
                 } else {
                     setFieldOnError(confirmPswFLD);
-                    setCustomIcon(confirmPswCheckLBL, Icons.X);
+                    setCustomIcon(Icons.X, confirmPswCheckLBL);
                 }
             }
         });
@@ -112,13 +111,13 @@ public class DeleteAccountForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 pswFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
-                setCustomIcon(showHideBTN1, Icons.SHOWPSW);
+                setCustomIcon(Icons.SHOWPSW, showHideBTN1);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 pswFLD.setEchoChar(Echochar.HIDE);
-                setCustomIcon(showHideBTN1, Icons.HIDEPSW);
+                setCustomIcon(Icons.HIDEPSW, showHideBTN1);
             }
         });
 
@@ -127,13 +126,13 @@ public class DeleteAccountForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 confirmPswFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
-                setCustomIcon(showHideBTN2, Icons.SHOWPSW);
+                setCustomIcon(Icons.SHOWPSW, showHideBTN2);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 confirmPswFLD.setEchoChar(Echochar.HIDE);
-                setCustomIcon(showHideBTN2, Icons.HIDEPSW);
+                setCustomIcon(Icons.HIDEPSW, showHideBTN2);
             }
         });
 

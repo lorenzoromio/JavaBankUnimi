@@ -38,7 +38,7 @@ public class PrelievoForm extends MainApp {
         setFrameIcon(Icons.MONEY);
         displayClock(clockLBL, dateLBL);
         setSessionTimer(timerLBL);
-        setCustomIcon(icon, Icons.MONEY);
+        setCustomIcon(Icons.MONEY, icon);
         setResizable(false);
 
         setHandCursor(balanceBTN, homeBTN, logoutBTN, prelievoBTN);
@@ -48,10 +48,10 @@ public class PrelievoForm extends MainApp {
         balance.setBorder(BorderFactory.createEmptyBorder());
 
         if (showInfo) {
-            setCustomIcon(balanceBTN, Icons.HIDEPSW);
+            setCustomIcon(Icons.HIDEPSW, balanceBTN);
             balance.setEchoChar(Echochar.SHOW);
         } else {
-            setCustomIcon(balanceBTN, Icons.SHOWPSW);
+            setCustomIcon(Icons.SHOWPSW, balanceBTN);
             balance.setEchoChar(Echochar.HIDE);
         }
 
@@ -64,10 +64,10 @@ public class PrelievoForm extends MainApp {
                 balance.setText(euro.format(session.getSaldo()));
                 showInfo = !showInfo;
                 if (showInfo) {
-                    setCustomIcon(balanceBTN, Icons.HIDEPSW);
+                    setCustomIcon(Icons.HIDEPSW, balanceBTN);
                     balance.setEchoChar(Echochar.SHOW);
                 } else {
-                    setCustomIcon(balanceBTN, Icons.SHOWPSW);
+                    setCustomIcon(Icons.SHOWPSW, balanceBTN);
                     balance.setEchoChar(Echochar.HIDE);
 
                 }

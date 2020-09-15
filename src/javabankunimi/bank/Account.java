@@ -15,7 +15,6 @@ import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 
@@ -115,7 +114,7 @@ public class Account implements Comparable<Account> {
             for (byte aByte : bytes) {
                 sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
             }
-            Arrays.fill(psw, '0');
+//            Arrays.fill(psw, '0');
             return sb.toString();
 
         } catch (NoSuchAlgorithmException e) {
@@ -127,7 +126,7 @@ public class Account implements Comparable<Account> {
     protected void setPassword(char[] psw) throws SQLException, IllegalArgumentException {
         RegexChecker.validatePassword(psw);
         this.hashPsw = hash(psw);
-        Arrays.fill(psw, '0');
+//        Arrays.fill(psw, '0');
 
     }
 

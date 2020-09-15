@@ -59,12 +59,12 @@ public class HomeForm extends MainApp {
         setSessionTimer(timerLBL);
 
         if (showInfo) {
-            setCustomIcon(showHideBTN, Icons.HIDEPSW);
+            setCustomIcon(Icons.HIDEPSW, showHideBTN);
             balanceFLD.setEchoChar(Echochar.SHOW);
             incomeFLD.setEchoChar(Echochar.SHOW);
             outcomeFLD.setEchoChar(Echochar.SHOW);
         } else {
-            setCustomIcon(showHideBTN, Icons.SHOWPSW);
+            setCustomIcon(Icons.SHOWPSW, showHideBTN);
             balanceFLD.setEchoChar(Echochar.HIDE);
             incomeFLD.setEchoChar(Echochar.HIDE);
             outcomeFLD.setEchoChar(Echochar.HIDE);
@@ -109,7 +109,7 @@ public class HomeForm extends MainApp {
             deleteAllBTN.addActionListener(this::deleteAllDatabase);
         }
 
-        setCustomIcon(refreshBTN, Icons.REFRESH);
+        setCustomIcon(Icons.REFRESH, refreshBTN);
         setHandCursor(bonificoBTN, changePswBTN, deleteAllBTN, depositBTN, eraseBTN, logoutBTN, prelievoBTN, refreshBTN, removeBTN, showHideBTN);
 
 //        backgroundTask(setValue);
@@ -124,14 +124,14 @@ public class HomeForm extends MainApp {
                 transictionArea.setVisible(showInfo);
 
                 if (showInfo) {
-                    setCustomIcon(showHideBTN, Icons.HIDEPSW);
+                    setCustomIcon(Icons.HIDEPSW, showHideBTN);
                     balanceFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                     incomeFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                     outcomeFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                     backgroundTask(setValue);
 //                    setValue();
                 } else {
-                    setCustomIcon(showHideBTN, Icons.SHOWPSW);
+                    setCustomIcon(Icons.SHOWPSW, showHideBTN);
                     balanceFLD.setEchoChar(Echochar.HIDE); //* Echo Char
                     outcomeFLD.setEchoChar(Echochar.HIDE); //* Echo Char
                     incomeFLD.setEchoChar(Echochar.HIDE); //* Echo Char
@@ -252,7 +252,7 @@ public class HomeForm extends MainApp {
                 ibanDest.setBounds(ibanFrom.getBounds());
                 type.setBounds(userFrom.getBounds());
 
-                setCustomIcon(iconType, iconpath);
+                setCustomIcon(iconpath, iconType);
 
                 amount.setFont(new Font(amount.getFont().getName(), Font.BOLD, 20));
                 transictionArea.add(iconType);

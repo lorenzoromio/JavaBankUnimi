@@ -83,18 +83,21 @@ public class Session extends Account {
         if (!getHashPsw().equals(hash(oldPsw)))
             throw new CredentialException("Password Errata");
 
+        if (!Arrays.equals(newPsw, checkPsw)) {
+            System.out.println(newPsw);
+            System.out.println(checkPsw);
+            throw new IllegalArgumentException("Le password non coincidono");
+        }
+
         if (getHashPsw().equals(hash(newPsw)))
             throw new IllegalArgumentException("La nuova password non può essere uguale a quella precedente");
-
-        if (!newPsw.equals(checkPsw))
-            throw new IllegalArgumentException("Le password non coincidono");
 
 //        setTimestamp(String.valueOf(new Date().getTime()));
         setSalt(getTimestamp().concat(randomString(10)));
         setPassword(newPsw);
-        Arrays.fill(oldPsw, '0');
-        Arrays.fill(newPsw, '0');
-        Arrays.fill(checkPsw, '0');
+//        Arrays.fill(oldPsw, '0');
+//        Arrays.fill(newPsw, '0');
+//        Arrays.fill(checkPsw, '0');
 
     }
 
@@ -113,8 +116,8 @@ public class Session extends Account {
         prepStmt.setString(1, getUsername());
         prepStmt.setString(2, hash(psw));
         prepStmt.execute();
-        Arrays.fill(psw, '0');
-        Arrays.fill(confirmPsw, '0');
+//        Arrays.fill(psw, '0');
+//        Arrays.fill(confirmPsw, '0');
 
 
     }
@@ -220,18 +223,23 @@ public class Session extends Account {
         prepStmt.setString(1, getIban());
         ResultSet rs = prepStmt.executeQuery();
 
-        while (rs.next()) {
-            String ibanFrom = rs.getString("IBAN_FROM");
-            Date date = new Date(Long.parseLong(rs.getString("DATE")));
-            Double amount = rs.getDouble("AMOUNT");
-            String type = rs.getString("TYPE");
+        try {
+            while (rs.next()) {
+                String ibanFrom = rs.getString("IBAN_FROM");
+                Date date = new Date(Long.parseLong(rs.getString("DATE")));
+                Double amount = rs.getDouble("AMOUNT");
+                String type = rs.getString("TYPE");
 
-            if (type.equals("bonifico")) {
-                String ibanDest = rs.getString("IBAN_DEST");
-                transactionsList.add(new Transaction(ibanFrom, ibanDest, amount, date));
-            } else {
-                transactionsList.add(new Transaction(ibanFrom, amount, type, date));
+                if (type.equals("bonifico")) {
+                    String ibanDest = rs.getString("IBAN_DEST");
+                    transactionsList.add(new Transaction(ibanFrom, ibanDest, amount, date));
+                } else {
+                    transactionsList.add(new Transaction(ibanFrom, amount, type, date));
+                }
             }
+        } catch (NullPointerException ex) {
+            System.out.println("NULL POINTER!!!");
+            return showTransactions();
         }
         transactions = transactionsList;
         return transactionsList;
@@ -291,7 +299,7 @@ public class Session extends Account {
     protected void setPassword(char[] psw) throws SQLException {
         updateCreation();
         super.setPassword(psw);
-        Arrays.fill(psw, '0');
+//        Arrays.fill(psw, '0');
         String update = "update accounts set HASHPSW = ? where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
         prepStmt.setString(1, super.getHashPsw());

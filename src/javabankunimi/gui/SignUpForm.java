@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class SignUpForm extends MainApp {
     private JPanel signupPanel;
@@ -47,7 +48,7 @@ public class SignUpForm extends MainApp {
         setTitle("SignUP - JavaBank");
         displayClock(clockLBL, dateLBL);
         setFrameIcon(Icons.SIGNUP);
-        setCustomIcon(icon, Icons.SIGNUP);
+        setCustomIcon(Icons.SIGNUP, icon);
         setResizable(false);
         setVisible(true);
         getRootPane().setDefaultButton(signupBTN);
@@ -59,8 +60,8 @@ public class SignUpForm extends MainApp {
 
         SwingUtilities.invokeLater(nomeFLD::requestFocus);
 
-        setCustomIcon(showHideBTN1, Icons.HIDEPSW);
-        setCustomIcon(showHideBTN2, Icons.HIDEPSW);
+        setCustomIcon(Icons.HIDEPSW, showHideBTN1);
+        setCustomIcon(Icons.HIDEPSW, showHideBTN2);
         clearFields(nomeCheckLBL, cognomeCheckLBL, psw1CheckLBL, psw2CheckLBL);
         setHandCursor(backBTN, exitBTN, showHideBTN1, showHideBTN2, signupBTN);
 
@@ -72,14 +73,14 @@ public class SignUpForm extends MainApp {
             public void keyReleased(KeyEvent e) {
                 if (nomeFLD.getText().isEmpty()) {
                     setFieldOnCorrect(nomeFLD);
-                    setCustomIcon(nomeCheckLBL, null);
+                    setCustomIcon(null, nomeCheckLBL);
                 } else try {
                     RegexChecker.validateName(nomeFLD.getText());
                     setFieldOnCorrect(nomeFLD);
-                    setCustomIcon(nomeCheckLBL, Icons.OK);
+                    setCustomIcon(Icons.OK, nomeCheckLBL);
                 } catch (InvalidNameException ex) {
                     setFieldOnError(nomeFLD);
-                    setCustomIcon(nomeCheckLBL, Icons.X);
+                    setCustomIcon(Icons.X, nomeCheckLBL);
                 }
             }
         });
@@ -90,14 +91,14 @@ public class SignUpForm extends MainApp {
             public void keyReleased(KeyEvent e) {
                 if (cognomeFLD.getText().isEmpty()) {
                     setFieldOnCorrect(cognomeFLD);
-                    setCustomIcon(cognomeCheckLBL, null);
+                    setCustomIcon(null, cognomeCheckLBL);
                 } else try {
                     RegexChecker.validateName(cognomeFLD.getText());
                     setFieldOnCorrect(cognomeFLD);
-                    setCustomIcon(cognomeCheckLBL, Icons.OK);
+                    setCustomIcon(Icons.OK, cognomeCheckLBL);
                 } catch (InvalidNameException ex) {
                     setFieldOnError(cognomeFLD);
-                    setCustomIcon(cognomeCheckLBL, Icons.X);
+                    setCustomIcon(Icons.X, cognomeCheckLBL);
                 }
             }
         });
@@ -106,17 +107,17 @@ public class SignUpForm extends MainApp {
 
             @Override
             public void keyReleased(KeyEvent e) {
-                if (String.valueOf(psw1FLD.getPassword()).isEmpty()) {
+                if (psw1FLD.getPassword().length == 0) {
                     setFieldOnCorrect(psw1FLD);
-                    setCustomIcon(psw1CheckLBL, null);
+                    setCustomIcon(null, psw1CheckLBL);
                 } else try {
                     RegexChecker.validatePassword(psw1FLD.getPassword());
                     setFieldOnCorrect(psw1FLD);
-                    setCustomIcon(psw1CheckLBL, Icons.OK);
+                    setCustomIcon(Icons.OK, psw1CheckLBL);
                 } catch (IllegalArgumentException ex) {
                     pswInvalid.setMessage(ex.getMessage());
                     setFieldOnError(psw1FLD);
-                    setCustomIcon(psw1CheckLBL, null);
+                    setCustomIcon(null, psw1CheckLBL);
                 }
             }
         });
@@ -134,19 +135,19 @@ public class SignUpForm extends MainApp {
                 String subPsw1 = String.valueOf(psw1FLD.getPassword()).substring(0, lenghtPsw2);
 
 
-                if (String.valueOf(psw2FLD.getPassword()).isEmpty() || subPsw1.equals(String.valueOf(psw2FLD.getPassword()))) {
+                if (psw2FLD.getPassword().length == 0 || subPsw1.equals(String.valueOf(psw2FLD.getPassword()))) {
 
                     setFieldOnCorrect(psw2FLD);
 
                     if (lenghtPsw1 == lenghtPsw2 && lenghtPsw2 != 0) {
-                        setCustomIcon(psw2CheckLBL, Icons.OK);
+                        setCustomIcon(Icons.OK, psw2CheckLBL);
                     } else {
-                        setCustomIcon(psw2CheckLBL, null);
+                        setCustomIcon(null, psw2CheckLBL);
                     }
 
                 } else {
                     setFieldOnError(psw2FLD);
-                    setCustomIcon(psw2CheckLBL, Icons.X);
+                    setCustomIcon(Icons.X, psw2CheckLBL);
                 }
 
 
@@ -159,13 +160,13 @@ public class SignUpForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 psw1FLD.setEchoChar(Echochar.SHOW);  //Password Visibile
-                setCustomIcon(showHideBTN1, Icons.SHOWPSW);
+                setCustomIcon(Icons.SHOWPSW, showHideBTN1);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 psw1FLD.setEchoChar(Echochar.HIDE);
-                setCustomIcon(showHideBTN1, Icons.HIDEPSW);
+                setCustomIcon(Icons.HIDEPSW, showHideBTN1);
             }
 
         });
@@ -175,13 +176,13 @@ public class SignUpForm extends MainApp {
             @Override
             public void mousePressed(MouseEvent e) {
                 psw2FLD.setEchoChar(Echochar.SHOW);  //Password Visibile
-                setCustomIcon(showHideBTN2, Icons.SHOWPSW);
+                setCustomIcon(Icons.SHOWPSW, showHideBTN2);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
                 psw2FLD.setEchoChar(Echochar.HIDE);
-                setCustomIcon(showHideBTN2, Icons.HIDEPSW);
+                setCustomIcon(Icons.HIDEPSW, showHideBTN2);
             }
 
         });
@@ -197,10 +198,10 @@ public class SignUpForm extends MainApp {
 
     @Override
     protected void defaultAction() {
-        if (nomeFLD.getText().isEmpty() || cognomeFLD.getText().isEmpty() || String.valueOf(psw1FLD.getPassword()).isEmpty() || String.valueOf(psw2FLD.getPassword()).isEmpty()) {
+        if (nomeFLD.getText().isEmpty() || cognomeFLD.getText().isEmpty() || psw1FLD.getPassword().length == 0 || psw2FLD.getPassword().length == 0 ) {
             playSound(Sounds.ERROR);
             JOptionPane.showMessageDialog(getContentPane(), "Tutti i campi devono essere compilati");
-        } else if (String.valueOf(psw1FLD.getPassword()).equals(String.valueOf(psw2FLD.getPassword()))) {
+        } else if (Arrays.equals(psw1FLD.getPassword(), psw2FLD.getPassword())) {
             if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Sign Up?") == 0) {
 
                 try {
@@ -208,6 +209,7 @@ public class SignUpForm extends MainApp {
                     Bank.addAccount(account);
                     if (JOptionPane.showConfirmDialog(getContentPane(), "Do you want to Login as " + account.getNome() + " " + account.getCognome() + "?") == 0) {
                         session = Bank.login(account.getUsername(), psw1FLD.getPassword());
+                        playSound(Sounds.WELCOME);
                         displayHomeForm();
                     } else {
                         displayLoginForm();
