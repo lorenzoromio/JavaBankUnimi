@@ -53,6 +53,8 @@ public abstract class MainApp extends JFrame {
         protected static final String BONIFICO_IN = "icons/bonificoIn.png";
         protected static final String BONIFICO_OUT = "icons/bonificoOut.png";
         protected static final String DELETE_ACCOUNT = "icons/deleteAccount.png";
+        protected static final String OK = "icons/accept.png";
+        protected static final String X = "icons/x.png";
 
 
 
@@ -210,6 +212,12 @@ public abstract class MainApp extends JFrame {
         for (JTextField field : fields) {
             field.setText("");
             field.setForeground(new JLabel().getForeground());
+        }
+    }
+    protected void clearFields(JLabel... labels) {
+        for (JLabel label : labels) {
+            label.setText("");
+            label.setForeground(new JLabel().getForeground());
         }
     }
 

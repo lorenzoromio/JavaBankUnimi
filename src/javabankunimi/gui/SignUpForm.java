@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class SignUpForm extends MainApp {
     private JPanel signupPanel;
@@ -32,6 +33,10 @@ public class SignUpForm extends MainApp {
     private JButton showHideBTN2;
     private JLabel dateLBL;
     private JLabel clockLBL;
+    private JLabel nomeCheckLBL;
+    private JLabel cognomeCheckLBL;
+    private JLabel psw1CheckLBL;
+    private JLabel psw2CheckLBL;
 
     public SignUpForm() {
 
@@ -57,6 +62,7 @@ public class SignUpForm extends MainApp {
 
         setCustomIcon(showHideBTN1, Icons.HIDEPSW);
         setCustomIcon(showHideBTN2, Icons.HIDEPSW);
+        clearFields(nomeCheckLBL, cognomeCheckLBL, psw1CheckLBL, psw2CheckLBL);
         setHandCursor(backBTN, exitBTN, showHideBTN1, showHideBTN2, signupBTN);
 
         JOptionPane pswInvalid = new JOptionPane();
@@ -67,11 +73,14 @@ public class SignUpForm extends MainApp {
             public void keyReleased(KeyEvent e) {
                 if (nomeFLD.getText().isEmpty()) {
                     setFieldOnCorrect(nomeFLD);
+                    setCustomIcon(nomeCheckLBL, null);
                 } else try {
                     RegexChecker.checkValidName(nomeFLD.getText());
                     setFieldOnCorrect(nomeFLD);
+                    setCustomIcon(nomeCheckLBL, Icons.OK);
                 } catch (InvalidNameException ex) {
                     setFieldOnError(nomeFLD);
+                    setCustomIcon(nomeCheckLBL, Icons.X);
                 }
             }
         });
@@ -82,11 +91,14 @@ public class SignUpForm extends MainApp {
             public void keyReleased(KeyEvent e) {
                 if (cognomeFLD.getText().isEmpty()) {
                     setFieldOnCorrect(cognomeFLD);
+                    setCustomIcon(cognomeCheckLBL, null);
                 } else try {
                     RegexChecker.checkValidName(cognomeFLD.getText());
                     setFieldOnCorrect(cognomeFLD);
+                    setCustomIcon(cognomeCheckLBL, Icons.OK);
                 } catch (InvalidNameException ex) {
                     setFieldOnError(cognomeFLD);
+                    setCustomIcon(cognomeCheckLBL, Icons.X);
                 }
             }
         });
@@ -97,12 +109,15 @@ public class SignUpForm extends MainApp {
             public void keyReleased(KeyEvent e) {
                 if (String.valueOf(psw1FLD.getPassword()).isEmpty()) {
                     setFieldOnCorrect(psw1FLD);
+                    setCustomIcon(psw1CheckLBL, null);
                 } else try {
                     RegexChecker.checkValidPassword(psw1FLD.getPassword());
                     setFieldOnCorrect(psw1FLD);
+                    setCustomIcon(psw1CheckLBL, Icons.OK);
                 } catch (IllegalArgumentException ex) {
                     pswInvalid.setMessage(ex.getMessage());
                     setFieldOnError(psw1FLD);
+                    setCustomIcon(psw1CheckLBL, null);
                 }
             }
         });
@@ -118,11 +133,21 @@ public class SignUpForm extends MainApp {
 
                 String subPsw1 = String.valueOf(psw1FLD.getPassword()).substring(0, lenghtPsw2);
 
+
                 if (subPsw1.equals(String.valueOf(psw2FLD.getPassword())) || lenghtPsw2 > lenghtPsw1) {
                     setFieldOnCorrect(psw2FLD);
+
+                    if (Arrays.equals(psw1FLD.getPassword(), psw2FLD.getPassword()))
+                        setCustomIcon(psw2CheckLBL, Icons.OK);
+                    else
+                        setCustomIcon(psw2CheckLBL, null);
+
                 } else {
                     setFieldOnError(psw2FLD);
+                    setCustomIcon(psw2CheckLBL, Icons.X);
                 }
+
+
             }
         });
 
