@@ -54,13 +54,11 @@ public class RegexChecker {
 
         try {
             new RegexChecker(String.valueOf(password), pswRegex);
-//            Arrays.fill(password, '0');
         } catch (IllegalArgumentException ex) {
             throw new IllegalArgumentException("La password deve contenere un carattere minuscolo, uno maiuscolo, " +
                     "\nun numero, un carattere speciale e deve essere lunga almeno 8 caratteri");
         }
     }
-
 }
 
 

@@ -15,6 +15,7 @@ import java.security.SecureRandom;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
 
@@ -47,6 +48,7 @@ public class Account implements Comparable<Account> {
         this.timestamp = String.valueOf(new Date().getTime());
         this.salt = timestamp.concat(randomString(10));
         setPassword(psw);
+        Arrays.fill(psw,'0');
 
         StringBuilder sb = new StringBuilder();
         String[] nomi = nome.split(" ");
@@ -70,7 +72,6 @@ public class Account implements Comparable<Account> {
         this.num_conto = randomString(7);
         this.iban = String.format("IT%sF%s%s", Bank.getAbi(), Bank.getCab(), this.num_conto);
         this.saldo = 0.0;
-
     }
 
     //Create ad Account Obj from Database only by Username
@@ -114,7 +115,6 @@ public class Account implements Comparable<Account> {
             for (byte aByte : bytes) {
                 sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
             }
-//            Arrays.fill(psw, '0');
             return sb.toString();
 
         } catch (NoSuchAlgorithmException e) {
@@ -126,7 +126,6 @@ public class Account implements Comparable<Account> {
     protected void setPassword(char[] psw) throws SQLException, IllegalArgumentException {
         RegexChecker.validatePassword(psw);
         this.hashPsw = hash(psw);
-//        Arrays.fill(psw, '0');
 
     }
 

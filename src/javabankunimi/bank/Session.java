@@ -80,24 +80,21 @@ public class Session extends Account {
 
         updateCreation();
 
-        if (!getHashPsw().equals(hash(oldPsw)))
+        if (!hash(oldPsw).equals(getHashPsw()))
             throw new CredentialException("Password Errata");
 
-        if (!Arrays.equals(newPsw, checkPsw)) {
-            System.out.println(newPsw);
-            System.out.println(checkPsw);
-            throw new IllegalArgumentException("Le password non coincidono");
-        }
-
-        if (getHashPsw().equals(hash(newPsw)))
+        if (hash(newPsw).equals(getHashPsw()))
             throw new IllegalArgumentException("La nuova password non può essere uguale a quella precedente");
 
-//        setTimestamp(String.valueOf(new Date().getTime()));
+        if (!Arrays.equals(newPsw, checkPsw))
+            throw new IllegalArgumentException("Le password non coincidono");
+
         setSalt(getTimestamp().concat(randomString(10)));
         setPassword(newPsw);
-//        Arrays.fill(oldPsw, '0');
-//        Arrays.fill(newPsw, '0');
-//        Arrays.fill(checkPsw, '0');
+
+        Arrays.fill(oldPsw, '0');
+        Arrays.fill(newPsw, '0');
+        Arrays.fill(checkPsw, '0');
 
     }
 
@@ -105,7 +102,7 @@ public class Session extends Account {
 
         updateCreation();
 
-        if (!psw.equals(confirmPsw))
+        if (Arrays.equals(psw, confirmPsw))
             throw new IllegalArgumentException("Le password non coincidono");
 
         if (!getHashPsw().equals(hash(psw)))
@@ -116,8 +113,8 @@ public class Session extends Account {
         prepStmt.setString(1, getUsername());
         prepStmt.setString(2, hash(psw));
         prepStmt.execute();
-//        Arrays.fill(psw, '0');
-//        Arrays.fill(confirmPsw, '0');
+        Arrays.fill(psw, '0');
+        Arrays.fill(confirmPsw, '0');
 
 
     }
@@ -299,7 +296,6 @@ public class Session extends Account {
     protected void setPassword(char[] psw) throws SQLException {
         updateCreation();
         super.setPassword(psw);
-//        Arrays.fill(psw, '0');
         String update = "update accounts set HASHPSW = ? where USERNAME = ?";
         PreparedStatement prepStmt = DBConnect.getConnection().prepareStatement(update);
         prepStmt.setString(1, super.getHashPsw());
