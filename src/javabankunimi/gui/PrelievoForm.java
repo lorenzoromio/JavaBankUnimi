@@ -21,7 +21,7 @@ public class PrelievoForm extends MainApp {
     private JButton homeBTN;
     private JButton logoutBTN;
     private JLabel icon;
-    private JLabel balance;
+    private JPasswordField balance;
     private JLabel dateLBL;
     private JLabel clockLBL;
     private JLabel timerLBL;
@@ -45,11 +45,14 @@ public class PrelievoForm extends MainApp {
 
         getRootPane().setDefaultButton(prelievoBTN);
         balance.setText(euro.format(session.getSaldo()));
+        balance.setBorder(BorderFactory.createEmptyBorder());
 
-        if (balance.isVisible()) {
-            setCustomIcon(balanceBTN, Icons.SHOWPSW);
-        } else {
+        if (showInfo) {
             setCustomIcon(balanceBTN, Icons.HIDEPSW);
+            balance.setEchoChar(Echochar.SHOW);
+        } else {
+            setCustomIcon(balanceBTN, Icons.SHOWPSW);
+            balance.setEchoChar(Echochar.HIDE);
         }
 
         SwingUtilities.invokeLater(amountFLD::requestFocus);
@@ -59,14 +62,13 @@ public class PrelievoForm extends MainApp {
             try {
                 session.updateCreation();
                 balance.setText(euro.format(session.getSaldo()));
-
-                if (balance.isVisible()) {
+                showInfo = !showInfo;
+                if (showInfo) {
                     setCustomIcon(balanceBTN, Icons.HIDEPSW);
-                    balance.setVisible(false);
-
+                    balance.setEchoChar(Echochar.SHOW);
                 } else {
                     setCustomIcon(balanceBTN, Icons.SHOWPSW);
-                    balance.setVisible(true);
+                    balance.setEchoChar(Echochar.HIDE);
 
                 }
 
@@ -84,7 +86,7 @@ public class PrelievoForm extends MainApp {
                 if (amountFLD.getText().isEmpty()) {
                     setFieldOnCorrect(amountFLD);
                 } else try {
-                    RegexChecker.checkValidAmount(amountFLD.getText());
+                    RegexChecker.validateAmount(amountFLD.getText());
                     setFieldOnCorrect(amountFLD);
                 } catch (IllegalArgumentException ex) {
                     setFieldOnError(amountFLD);
@@ -108,7 +110,7 @@ public class PrelievoForm extends MainApp {
             if (amountFLD.getText().isEmpty())
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {
-                session.prelievo(RegexChecker.checkValidAmount(amountFLD.getText()));
+                session.prelievo(RegexChecker.validateAmount(amountFLD.getText()));
                 playSound(Sounds.CASH);
                 amountFLD.setText("");
                 balance.setText(euro.format(session.getSaldo()));

@@ -29,6 +29,9 @@ public class ChangePswForm extends MainApp {
     private JLabel dateLBL;
     private JLabel clockLBL;
     private JLabel timerLBL;
+    private JLabel pswCheckLBL;
+    private JLabel newPswCheckLBL;
+    private JLabel confirmNewPswCheckLBL;
 
     public ChangePswForm() {
         session.updateCreation();
@@ -47,21 +50,26 @@ public class ChangePswForm extends MainApp {
         setCustomIcon(showHideBTN2, Icons.HIDEPSW);
         setCustomIcon(showHideBTN3, Icons.HIDEPSW);
         setHandCursor(backBTN, logoutBTN, saveBTN, showHideBTN1, showHideBTN2, showHideBTN3);
+        clearFields(pswCheckLBL, newPswCheckLBL, confirmNewPswCheckLBL);
 
-        pswFLD.setEchoChar(echochar);
-        newPswFLD.setEchoChar(echochar);
-        confirmNewPswFLD.setEchoChar(echochar);
+        pswFLD.setEchoChar(Echochar.HIDE);
+        newPswFLD.setEchoChar(Echochar.HIDE);
+        confirmNewPswFLD.setEchoChar(Echochar.HIDE);
+        JOptionPane pswInvalid = new JOptionPane();
 
         pswFLD.addKeyListener(new KeyAdapter() {
-
             @Override
             public void keyReleased(KeyEvent e) {
                 try {
-                    if (String.valueOf(pswFLD.getPassword()).isEmpty()
+                    if (pswFLD.getPassword().length == 0
                             || session.hash(pswFLD.getPassword()).equals(session.getHashPsw())) {
                         setFieldOnCorrect(pswFLD);
+                        if (pswFLD.getPassword().length != 0) {
+                            setCustomIcon(pswCheckLBL, Icons.OK);
+                        }
                     } else {
                         setFieldOnError(pswFLD);
+                        setCustomIcon(pswCheckLBL, null);
                     }
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
@@ -75,22 +83,24 @@ public class ChangePswForm extends MainApp {
             public void keyReleased(KeyEvent e) {
                 if (String.valueOf(newPswFLD.getPassword()).isEmpty()) {
                     setFieldOnCorrect(newPswFLD);
-                } else {
-                    try {
-                        RegexChecker.checkValidPassword(newPswFLD.getPassword());
-                        setFieldOnCorrect(newPswFLD);
-                    } catch (IllegalArgumentException ex) {
-                        setFieldOnError(newPswFLD);
-                    }
+                    setCustomIcon(newPswCheckLBL, null);
+                } else try {
+                    RegexChecker.validatePassword(newPswFLD.getPassword());
+                    setFieldOnCorrect(newPswFLD);
+                    setCustomIcon(newPswCheckLBL, Icons.OK);
+                } catch (IllegalArgumentException ex) {
+                    pswInvalid.setMessage(ex.getMessage());
+                    setFieldOnError(newPswFLD);
+                    setCustomIcon(newPswCheckLBL, null);
                 }
             }
         });
 
         confirmNewPswFLD.addKeyListener(new KeyAdapter() {
 
-            @SuppressWarnings("ConstantConditions")
             @Override
             public void keyReleased(KeyEvent e) {
+
                 int lenghtPsw1 = newPswFLD.getPassword().length;
                 int lenghtPsw2 = confirmNewPswFLD.getPassword().length;
 
@@ -98,12 +108,20 @@ public class ChangePswForm extends MainApp {
 
                 String subPsw1 = String.valueOf(newPswFLD.getPassword()).substring(0, lenghtPsw2);
 
-                if (String.valueOf(confirmNewPswFLD.getPassword()).isEmpty()
-                        || (lenghtPsw2 > lenghtPsw1)
-                        || subPsw1.equals(String.valueOf(confirmNewPswFLD.getPassword()))) {
+
+                if (String.valueOf(confirmNewPswFLD.getPassword()).isEmpty() || subPsw1.equals(String.valueOf(confirmNewPswFLD.getPassword()))) {
+
                     setFieldOnCorrect(confirmNewPswFLD);
+
+                    if (lenghtPsw1 == lenghtPsw2 && lenghtPsw2 != 0) {
+                        setCustomIcon(confirmNewPswCheckLBL, Icons.OK);
+                    } else {
+                        setCustomIcon(confirmNewPswCheckLBL, null);
+                    }
+
                 } else {
                     setFieldOnError(confirmNewPswFLD);
+                    setCustomIcon(confirmNewPswCheckLBL, Icons.X);
                 }
             }
         });
@@ -112,13 +130,13 @@ public class ChangePswForm extends MainApp {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                pswFLD.setEchoChar('\u0000');  //Password Visibile
+                pswFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                 setCustomIcon(showHideBTN1, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                pswFLD.setEchoChar(echochar);
+                pswFLD.setEchoChar(Echochar.HIDE);
                 setCustomIcon(showHideBTN1, Icons.HIDEPSW);
             }
         });
@@ -127,13 +145,13 @@ public class ChangePswForm extends MainApp {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                newPswFLD.setEchoChar('\u0000');  //Password Visibile
+                newPswFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                 setCustomIcon(showHideBTN2, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                newPswFLD.setEchoChar(echochar);
+                newPswFLD.setEchoChar(Echochar.HIDE);
                 setCustomIcon(showHideBTN2, Icons.HIDEPSW);
             }
         });
@@ -142,14 +160,14 @@ public class ChangePswForm extends MainApp {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                confirmNewPswFLD.setEchoChar('\u0000');  //Password Visibile
+                confirmNewPswFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                 setCustomIcon(showHideBTN3, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                confirmNewPswFLD.setEchoChar(echochar);
-                setCustomIcon(showHideBTN1, Icons.HIDEPSW);
+                confirmNewPswFLD.setEchoChar(Echochar.HIDE);
+                setCustomIcon(showHideBTN3, Icons.HIDEPSW);
             }
         });
 
@@ -173,24 +191,19 @@ public class ChangePswForm extends MainApp {
 
         } catch (IllegalArgumentException ex) {
             playSound(Sounds.ERROR);
-            newPswFLD.setText("");
-            confirmNewPswFLD.setText("");
+            clearFields(newPswFLD,confirmNewPswFLD);
             JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
 
         } catch (CredentialException ex) {
             playSound(Sounds.ERROR);
-            pswFLD.setText("");
-            newPswFLD.setText("");
-            confirmNewPswFLD.setText("");
+            clearFields(pswFLD,newPswFLD,confirmNewPswFLD);
             JOptionPane.showMessageDialog(getContentPane(), ex.getMessage());
 
         } catch (SQLException ex) {
             SQLExceptionOccurred(ex);
 
         } finally {
-            setFieldOnCorrect(pswFLD);
-            setFieldOnCorrect(newPswFLD);
-            setFieldOnCorrect(confirmNewPswFLD);
+            setFieldOnCorrect(pswFLD, newPswFLD, confirmNewPswFLD);
         }
     }
 }

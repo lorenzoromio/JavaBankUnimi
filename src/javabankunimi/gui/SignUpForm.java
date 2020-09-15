@@ -17,7 +17,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 public class SignUpForm extends MainApp {
     private JPanel signupPanel;
@@ -55,8 +54,8 @@ public class SignUpForm extends MainApp {
 
         setHandCursor(signupBTN, exitBTN, backBTN);
 
-        psw1FLD.setEchoChar(echochar);
-        psw2FLD.setEchoChar(echochar);
+        psw1FLD.setEchoChar(Echochar.HIDE);
+        psw2FLD.setEchoChar(Echochar.HIDE);
 
         SwingUtilities.invokeLater(nomeFLD::requestFocus);
 
@@ -75,7 +74,7 @@ public class SignUpForm extends MainApp {
                     setFieldOnCorrect(nomeFLD);
                     setCustomIcon(nomeCheckLBL, null);
                 } else try {
-                    RegexChecker.checkValidName(nomeFLD.getText());
+                    RegexChecker.validateName(nomeFLD.getText());
                     setFieldOnCorrect(nomeFLD);
                     setCustomIcon(nomeCheckLBL, Icons.OK);
                 } catch (InvalidNameException ex) {
@@ -93,7 +92,7 @@ public class SignUpForm extends MainApp {
                     setFieldOnCorrect(cognomeFLD);
                     setCustomIcon(cognomeCheckLBL, null);
                 } else try {
-                    RegexChecker.checkValidName(cognomeFLD.getText());
+                    RegexChecker.validateName(cognomeFLD.getText());
                     setFieldOnCorrect(cognomeFLD);
                     setCustomIcon(cognomeCheckLBL, Icons.OK);
                 } catch (InvalidNameException ex) {
@@ -111,7 +110,7 @@ public class SignUpForm extends MainApp {
                     setFieldOnCorrect(psw1FLD);
                     setCustomIcon(psw1CheckLBL, null);
                 } else try {
-                    RegexChecker.checkValidPassword(psw1FLD.getPassword());
+                    RegexChecker.validatePassword(psw1FLD.getPassword());
                     setFieldOnCorrect(psw1FLD);
                     setCustomIcon(psw1CheckLBL, Icons.OK);
                 } catch (IllegalArgumentException ex) {
@@ -126,6 +125,7 @@ public class SignUpForm extends MainApp {
 
             @Override
             public void keyReleased(KeyEvent e) {
+
                 int lenghtPsw1 = psw1FLD.getPassword().length;
                 int lenghtPsw2 = psw2FLD.getPassword().length;
 
@@ -134,13 +134,15 @@ public class SignUpForm extends MainApp {
                 String subPsw1 = String.valueOf(psw1FLD.getPassword()).substring(0, lenghtPsw2);
 
 
-                if (subPsw1.equals(String.valueOf(psw2FLD.getPassword())) || lenghtPsw2 > lenghtPsw1) {
+                if (String.valueOf(psw2FLD.getPassword()).isEmpty() || subPsw1.equals(String.valueOf(psw2FLD.getPassword()))) {
+
                     setFieldOnCorrect(psw2FLD);
 
-                    if (Arrays.equals(psw1FLD.getPassword(), psw2FLD.getPassword()))
+                    if (lenghtPsw1 == lenghtPsw2 && lenghtPsw2 != 0) {
                         setCustomIcon(psw2CheckLBL, Icons.OK);
-                    else
+                    } else {
                         setCustomIcon(psw2CheckLBL, null);
+                    }
 
                 } else {
                     setFieldOnError(psw2FLD);
@@ -156,13 +158,13 @@ public class SignUpForm extends MainApp {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                psw1FLD.setEchoChar('\u0000');  //Password Visibile
+                psw1FLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                 setCustomIcon(showHideBTN1, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                psw1FLD.setEchoChar(echochar);
+                psw1FLD.setEchoChar(Echochar.HIDE);
                 setCustomIcon(showHideBTN1, Icons.HIDEPSW);
             }
 
@@ -172,13 +174,13 @@ public class SignUpForm extends MainApp {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                psw2FLD.setEchoChar('\u0000');  //Password Visibile
+                psw2FLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                 setCustomIcon(showHideBTN2, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                psw2FLD.setEchoChar(echochar);
+                psw2FLD.setEchoChar(Echochar.HIDE);
                 setCustomIcon(showHideBTN2, Icons.HIDEPSW);
             }
 

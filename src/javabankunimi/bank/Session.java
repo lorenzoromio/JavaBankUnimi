@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.concurrent.TimeoutException;
 
 public class Session extends Account {
-    private static final long duration = 60 * 1000;
+    private static final long duration = 3 * 60 * 1000;
     private Instant creation;
     private Instant expiredTime;
     private List<Transaction> transactions;

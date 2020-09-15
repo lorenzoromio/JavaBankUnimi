@@ -34,7 +34,7 @@ public abstract class MainApp extends JFrame {
     protected final Timer timer = new Timer();
     protected final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
     protected final DecimalFormat euro = new DecimalFormat("0.00 €");
-    protected final char echochar = '*'; //echochar for password
+    protected static boolean showInfo = false;
     private final boolean mute = false; //set to true to avoid any sound
 
     protected static class Icons {
@@ -61,7 +61,7 @@ public abstract class MainApp extends JFrame {
     }
     protected static class Sounds {
         //Static reference to sounds in sublasses
-        public static final String NOTIFICATION = "sounds/notification.wav";
+        protected static final String NOTIFICATION = "sounds/notification.wav";
         protected static final String CASH = "sounds/cash.wav";
         protected static final String PRELIEVO = "sounds/prelievo.wav";
         protected static final String ERROR = "sounds/error.wav";
@@ -71,6 +71,11 @@ public abstract class MainApp extends JFrame {
         protected static final String REFRESH = "sounds/refresh.wav";
         protected static final String LOGOUT = "sounds/logout.wav";
         protected static final String WELCOME = "sounds/welcome1.wav";
+    }
+    protected static class Echochar {
+        protected static final char HIDE = '*';
+        protected static final char SHOW = '\u0000';
+
     }
 
     public MainApp() {
@@ -115,7 +120,14 @@ public abstract class MainApp extends JFrame {
                 System.out.println("gain focus");
                 //UPDATE SESSION CREATION WHEN USER FOCUS WINDOW
                 if (session != null) {
-//                    session.updateCreation();
+                    try {
+                        session.isValid();
+                        session.updateCreation();
+                        System.out.println("updated");
+                    } catch (TimeoutException timeoutException) {
+                        System.out.println("session already expired");
+                    }
+
                 }
             }
 
@@ -165,7 +177,6 @@ public abstract class MainApp extends JFrame {
             ex.printStackTrace();
         }
     }
-
     protected void setCustomIcon(JLabel label, String iconPath) {
         //Set Icon for JLabel
         Image icon;

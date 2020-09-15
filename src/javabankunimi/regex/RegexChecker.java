@@ -21,7 +21,7 @@ public class RegexChecker {
         if (!m.matches()) throw new IllegalArgumentException("String does not match regex");
     }
 
-    public static Double checkValidAmount(String amount) throws IllegalArgumentException {
+    public static Double validateAmount(String amount) throws IllegalArgumentException {
         //language=RegExp
         String amountRegex = "^\\$?[0-9]+(\\.([0-9]{1,2}))?$";
 
@@ -34,7 +34,7 @@ public class RegexChecker {
         return Double.parseDouble(amount);
     }
 
-    public static void checkValidName(String name) throws InvalidNameException {
+    public static void validateName(String name) throws InvalidNameException {
         //language=RegExp
         String nameRegex = "^[A-Za-z]+((s)?(('|-|.)?([A-Za-z])+))*$"; //nomi singoli, doppi nomi con spazio, apostrofi
 
@@ -45,7 +45,7 @@ public class RegexChecker {
         }
     }
 
-    public static void checkValidPassword(char[] password) throws IllegalArgumentException {
+    public static void validatePassword(char[] password) throws IllegalArgumentException {
         //language=RegExp
         String pswRegex = "^(?=.*[0-9])"                //un numero
                 + "(?=.*[a-z])"                 //una lettere minuscola

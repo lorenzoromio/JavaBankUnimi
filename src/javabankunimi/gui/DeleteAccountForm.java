@@ -26,6 +26,8 @@ public class DeleteAccountForm extends MainApp {
     private JLabel dateLBL;
     private JLabel clockLBL;
     private JLabel timerLBL;
+    private JLabel pswCheckLBL;
+    private JLabel confirmPswCheckLBL;
 
     public DeleteAccountForm() {
         session.updateCreation();
@@ -48,17 +50,23 @@ public class DeleteAccountForm extends MainApp {
         setCustomIcon(showHideBTN1, Icons.HIDEPSW);
         setCustomIcon(showHideBTN2, Icons.HIDEPSW);
         setHandCursor(backBTN, deleteBTN, logoutBTN, showHideBTN1, showHideBTN2);
-        pswFLD.setEchoChar(echochar);
-        confirmPswFLD.setEchoChar(echochar);
+        pswFLD.setEchoChar(Echochar.HIDE);
+        confirmPswFLD.setEchoChar(Echochar.HIDE);
+        clearFields(pswCheckLBL, confirmPswCheckLBL);
 
         pswFLD.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 try {
-                    if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(pswFLD.getPassword()).equals(session.getHashPsw())) {
+                    if (pswFLD.getPassword().length == 0
+                            || session.hash(pswFLD.getPassword()).equals(session.getHashPsw())) {
                         setFieldOnCorrect(pswFLD);
+                        if (pswFLD.getPassword().length != 0) {
+                            setCustomIcon(pswCheckLBL, Icons.OK);
+                        }
                     } else {
                         setFieldOnError(pswFLD);
+                        setCustomIcon(pswCheckLBL, null);
                     }
                 } catch (SQLException ex) {
                     SQLExceptionOccurred(ex);
@@ -78,10 +86,22 @@ public class DeleteAccountForm extends MainApp {
 
                 String subPsw1 = String.valueOf(pswFLD.getPassword()).substring(0, lenghtPsw2);
 
-                if (String.valueOf(confirmPswFLD.getPassword()).isEmpty() || (lenghtPsw2 > lenghtPsw1) || subPsw1.equals(String.valueOf(confirmPswFLD.getPassword()))) {
+                if (confirmPswFLD.getPassword().length == 0 || (lenghtPsw2 > lenghtPsw1) || subPsw1.equals(String.valueOf(confirmPswFLD.getPassword()))) {
                     setFieldOnCorrect(confirmPswFLD);
+                    try {
+                        if (session.hash(confirmPswFLD.getPassword()).equals(session.getHashPsw())) {
+                            setFieldOnCorrect(confirmPswFLD);
+                            setCustomIcon(confirmPswCheckLBL, Icons.OK);
+                        } else {
+                            setCustomIcon(confirmPswCheckLBL, null);
+                        }
+                    } catch (SQLException ex) {
+                        SQLExceptionOccurred(ex);
+                    }
+
                 } else {
                     setFieldOnError(confirmPswFLD);
+                    setCustomIcon(confirmPswCheckLBL, Icons.X);
                 }
             }
         });
@@ -91,13 +111,13 @@ public class DeleteAccountForm extends MainApp {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                pswFLD.setEchoChar('\u0000');  //Password Visibile
+                pswFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                 setCustomIcon(showHideBTN1, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                pswFLD.setEchoChar(echochar);
+                pswFLD.setEchoChar(Echochar.HIDE);
                 setCustomIcon(showHideBTN1, Icons.HIDEPSW);
             }
         });
@@ -106,13 +126,13 @@ public class DeleteAccountForm extends MainApp {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                confirmPswFLD.setEchoChar('\u0000');  //Password Visibile
+                confirmPswFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                 setCustomIcon(showHideBTN2, Icons.SHOWPSW);
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                confirmPswFLD.setEchoChar(echochar);
+                confirmPswFLD.setEchoChar(Echochar.HIDE);
                 setCustomIcon(showHideBTN2, Icons.HIDEPSW);
             }
         });
@@ -122,34 +142,7 @@ public class DeleteAccountForm extends MainApp {
         logoutBTN.addActionListener(e -> logOutAction());
         backBTN.addActionListener(e -> displayHomeForm());
 
-        pswFLD.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-
-                System.out.println("Psw1: " + session.hash(pswFLD.getPassword()));
-                try {
-                    System.out.println("Psw2: " + session.getHashPsw());
-                    System.out.println();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                }
-
-                try {
-
-                    if (String.valueOf(pswFLD.getPassword()).isEmpty() || session.hash(pswFLD.getPassword()).equals(session.getHashPsw())) {
-                        setFieldOnCorrect(pswFLD);
-                    } else {
-                        setFieldOnError(pswFLD);
-                    }
-                } catch (SQLException ex) {
-                    SQLExceptionOccurred(ex);
-                }
-            }
-
-
-        });
     }
-
     @Override
     protected void defaultAction() {
         System.out.println("Save BTN pressed");
@@ -172,7 +165,7 @@ public class DeleteAccountForm extends MainApp {
                 SQLExceptionOccurred(ex);
 
             } finally {
-                setFieldOnCorrect(pswFLD,confirmPswFLD);
+                setFieldOnCorrect(pswFLD, confirmPswFLD);
             }
         }
     }

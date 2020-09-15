@@ -18,7 +18,7 @@ public class DepositoForm extends MainApp {
     private JPanel depositoPanel;
     private JLabel icon;
     private JTextField amountFLD;
-    private JLabel balance;
+    private JPasswordField balance;
     private JButton depositBTN;
     private JButton balanceBTN;
     private JButton homeBTN;
@@ -45,13 +45,18 @@ public class DepositoForm extends MainApp {
 
         displayClock(clockLBL, dateLBL);
         setSessionTimer(timerLBL);
-        if (balance.isVisible()) {
+
+        if (showInfo) {
             setCustomIcon(balanceBTN, Icons.SHOWPSW);
+            balance.setEchoChar(Echochar.SHOW);
         } else {
             setCustomIcon(balanceBTN, Icons.HIDEPSW);
+            balance.setEchoChar(Echochar.HIDE);
+
         }
 
         setHandCursor(balanceBTN, depositBTN, homeBTN, logoutBTN);
+        balance.setBorder(BorderFactory.createEmptyBorder());
 
         SwingUtilities.invokeLater(amountFLD::requestFocus);
 
@@ -59,16 +64,15 @@ public class DepositoForm extends MainApp {
 
             try {
                 session.updateCreation();
-//                session.accountBalanceUpdate();
                 balance.setText(euro.format(session.getSaldo()));
-
-                if (balance.isVisible()) {
-                    setCustomIcon(balanceBTN, Icons.HIDEPSW);
-                    balance.setVisible(false);
+                showInfo = !showInfo;
+                if (showInfo) {
+                    setCustomIcon(balanceBTN, Icons.SHOWPSW);
+                    balance.setEchoChar(Echochar.SHOW);
 
                 } else {
-                    setCustomIcon(balanceBTN, Icons.SHOWPSW);
-                    balance.setVisible(true);
+                    setCustomIcon(balanceBTN, Icons.HIDEPSW);
+                    balance.setEchoChar(Echochar.HIDE);
 
                 }
 
@@ -92,7 +96,7 @@ public class DepositoForm extends MainApp {
                 if (amountFLD.getText().isEmpty()) {
                     setFieldOnCorrect(amountFLD);
                 } else try {
-                    RegexChecker.checkValidAmount(amountFLD.getText());
+                    RegexChecker.validateAmount(amountFLD.getText());
                     setFieldOnCorrect(amountFLD);
                 } catch (IllegalArgumentException ex) {
                     setFieldOnError(amountFLD);
@@ -111,7 +115,7 @@ public class DepositoForm extends MainApp {
                 JOptionPane.showMessageDialog(getContentPane(), "Amount field can't be empty");
             else {
 
-                Double amount = RegexChecker.checkValidAmount(amountFLD.getText());
+                Double amount = RegexChecker.validateAmount(amountFLD.getText());
                 session.deposit(amount);
                 playSound(Sounds.CASH);
                 amountFLD.setText("");

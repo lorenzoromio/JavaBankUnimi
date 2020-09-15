@@ -56,13 +56,19 @@ public class HomeForm extends MainApp {
         setTitle("Home - JavaBank");
         setFrameIcon(Icons.BANK);
         displayClock(clockLBL, dateLBL);
-
-        final char visibleChar = '\u0000';
-        balanceFLD.setEchoChar(visibleChar);
-        incomeFLD.setEchoChar(visibleChar);
-        outcomeFLD.setEchoChar(visibleChar);
-
         setSessionTimer(timerLBL);
+
+        if (showInfo) {
+            setCustomIcon(showHideBTN, Icons.HIDEPSW);
+            balanceFLD.setEchoChar(Echochar.SHOW);
+            incomeFLD.setEchoChar(Echochar.SHOW);
+            outcomeFLD.setEchoChar(Echochar.SHOW);
+        } else {
+            setCustomIcon(showHideBTN, Icons.SHOWPSW);
+            balanceFLD.setEchoChar(Echochar.HIDE);
+            incomeFLD.setEchoChar(Echochar.HIDE);
+            outcomeFLD.setEchoChar(Echochar.HIDE);
+        }
 
         Runnable setValue = new Runnable() {
             @Override
@@ -78,9 +84,10 @@ public class HomeForm extends MainApp {
                     @Override
                     public synchronized void run() {
                         try {
-                            if(transactions.size() != session.showTransactions().size()) {
+                            if (session.showTransactions().size() > transactions.size()) {
                                 playSound(Sounds.NOTIFICATION);
-                                setValue(); }
+                                setValue();
+                            }
                         } catch (SQLException exception) {
 //                            SQLExceptionOccurred(exception);
                         }
@@ -88,9 +95,7 @@ public class HomeForm extends MainApp {
                 });
 
             }
-        },1000,1000);
-
-
+        }, 1000, 1000);
 
 
         eraseBTN.setVisible(false);
@@ -104,7 +109,6 @@ public class HomeForm extends MainApp {
             deleteAllBTN.addActionListener(this::deleteAllDatabase);
         }
 
-        setCustomIcon(showHideBTN, Icons.SHOWPSW);
         setCustomIcon(refreshBTN, Icons.REFRESH);
         setHandCursor(bonificoBTN, changePswBTN, deleteAllBTN, depositBTN, eraseBTN, logoutBTN, prelievoBTN, refreshBTN, removeBTN, showHideBTN);
 
@@ -116,25 +120,21 @@ public class HomeForm extends MainApp {
         showHideBTN.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                showInfo = !showInfo;
+                transictionArea.setVisible(showInfo);
 
-                if (balanceFLD.getEchoChar() == visibleChar) {
-
-                    balanceFLD.setEchoChar(echochar); //* Echo Char
-                    outcomeFLD.setEchoChar(echochar); //* Echo Char
-                    incomeFLD.setEchoChar(echochar); //* Echo Char
-                    transictionArea.setVisible(false);
-
+                if (showInfo) {
                     setCustomIcon(showHideBTN, Icons.HIDEPSW);
-
-                } else {
-                    balanceFLD.setEchoChar(visibleChar);  //Password Visibile
-                    incomeFLD.setEchoChar(visibleChar);  //Password Visibile
-                    outcomeFLD.setEchoChar(visibleChar);  //Password Visibile
-                    transictionArea.setVisible(true);
+                    balanceFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
+                    incomeFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
+                    outcomeFLD.setEchoChar(Echochar.SHOW);  //Password Visibile
                     backgroundTask(setValue);
 //                    setValue();
+                } else {
                     setCustomIcon(showHideBTN, Icons.SHOWPSW);
-
+                    balanceFLD.setEchoChar(Echochar.HIDE); //* Echo Char
+                    outcomeFLD.setEchoChar(Echochar.HIDE); //* Echo Char
+                    incomeFLD.setEchoChar(Echochar.HIDE); //* Echo Char
 
                 }
             }
@@ -152,15 +152,15 @@ public class HomeForm extends MainApp {
                 }
         );
 
-        removeBTN.addActionListener(this::deleteAccountForm);
+        removeBTN.addActionListener(e -> deleteAccountForm());
 
-        depositBTN.addActionListener(this::depositoForm);
+        depositBTN.addActionListener(e -> depositoForm());
 
-        prelievoBTN.addActionListener(this::prelievoForm);
+        prelievoBTN.addActionListener(e -> prelievoForm());
 
         logoutBTN.addActionListener(e -> logOutAction());
 
-        changePswBTN.addActionListener(this::changePswForm);
+        changePswBTN.addActionListener(e -> changePswForm());
 
 
     }
@@ -268,6 +268,8 @@ public class HomeForm extends MainApp {
             scrollPane.setVisible(false);
             scrollPane.setVisible(true);
 
+            transictionArea.setVisible(showInfo);
+
             //set value
 
             nomeFLD.setText(session.getNome());
@@ -310,7 +312,7 @@ public class HomeForm extends MainApp {
         }
     }
 
-    private void changePswForm(ActionEvent e) {
+    private void changePswForm() {
         timer.cancel();
         location = getLocation();
         new ChangePswForm();
@@ -319,7 +321,7 @@ public class HomeForm extends MainApp {
 
     }
 
-    private void prelievoForm(ActionEvent e) {
+    private void prelievoForm() {
         try {
             timer.cancel();
             location = getLocation();
@@ -332,7 +334,7 @@ public class HomeForm extends MainApp {
 
     }
 
-    private void depositoForm(ActionEvent e) {
+    private void depositoForm() {
         try {
 
             timer.cancel();
@@ -347,7 +349,7 @@ public class HomeForm extends MainApp {
 
     }
 
-    private void deleteAccountForm(ActionEvent e) {
+    private void deleteAccountForm() {
 
         timer.cancel();
         location = getLocation();

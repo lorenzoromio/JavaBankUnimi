@@ -34,13 +34,13 @@ public class Account implements Comparable<Account> {
     //Create a new Account
     public Account(String nome, String cognome, char[] psw) throws SQLException, InvalidNameException, IllegalArgumentException {
         try {
-            RegexChecker.checkValidName(nome);
+            RegexChecker.validateName(nome);
         } catch (InvalidNameException ex) {
             throw new InvalidNameException("Nome non valido");
         }
 
         try {
-            RegexChecker.checkValidName(cognome);
+            RegexChecker.validateName(cognome);
         } catch (InvalidNameException ex) {
             throw new InvalidNameException("Cognome non valido");
         }
@@ -125,7 +125,7 @@ public class Account implements Comparable<Account> {
 
     //SETTER
     protected void setPassword(char[] psw) throws SQLException, IllegalArgumentException {
-        RegexChecker.checkValidPassword(psw);
+        RegexChecker.validatePassword(psw);
         this.hashPsw = hash(psw);
         Arrays.fill(psw, '0');
 

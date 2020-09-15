@@ -36,8 +36,7 @@ public class BonificoForm extends MainApp {
     private JTextField searchFLD;
     private JButton searchBTN;
     private JButton clearBTN;
-    private JLabel balance;
-    private JLabel balanceLBL;
+    private JPasswordField balance;
     private JLabel results;
     private JLabel dateLBL;
     private JLabel clockLBL;
@@ -63,6 +62,7 @@ public class BonificoForm extends MainApp {
         setSessionTimer(timerLBL);
         setCustomIcon(nextBTN, Icons.NEXT);
         setCustomIcon(prevBTN, Icons.PREV);
+        setHandCursor(balanceBTN,clearBTN,contactsBTN,homeBTN,logoutBTN,nextBTN,prevBTN,searchBTN,transferBTN);
 
         setVisible(true);
 
@@ -77,6 +77,15 @@ public class BonificoForm extends MainApp {
 
         ibanFLD.setText("");
         balance.setText(euro.format(session.getSaldo()));
+        balance.setBorder(BorderFactory.createEmptyBorder());
+
+        if (showInfo) {
+            balance.setEchoChar(Echochar.SHOW);
+            balanceBTN.setText("Nascondi Saldo");
+        } else {
+            balance.setEchoChar(Echochar.HIDE);
+            balanceBTN.setText("Mostra Saldo");
+        }
 
         contactsBTN.addActionListener(e -> {
 
@@ -109,7 +118,7 @@ public class BonificoForm extends MainApp {
                 if (searchFLD.getText().isEmpty()) {
                     setFieldOnCorrect(searchFLD);
                 } else try {
-                    RegexChecker.checkValidName(searchFLD.getText());
+                    RegexChecker.validateName(searchFLD.getText());
                     setFieldOnCorrect(searchFLD);
                 } catch (InvalidNameException ex) {
                     setFieldOnError(searchFLD);
@@ -148,18 +157,20 @@ public class BonificoForm extends MainApp {
             try {
                 session.updateCreation();
                 balance.setText(euro.format(session.getSaldo()));
+                showInfo = !showInfo;
 
-                if (balance.isVisible()) {
-                    balanceBTN.setText("Mostra Saldo");
-                    System.out.println(balanceBTN.getWidth());
-                    balanceLBL.setVisible(false);
-                    balance.setVisible(false);
+
+                if (showInfo) {
+                    balanceBTN.setText("Nascondi Saldo");
+                    balance.setEchoChar(Echochar.SHOW);
+//                    balanceLBL.setVisible(false);
+//                    balance.setVisible(false);
 
                 } else {
-                    balanceBTN.setText("Nascondi Saldo");
-                    System.out.println(balanceBTN.getWidth());
-                    balanceLBL.setVisible(true);
-                    balance.setVisible(true);
+                    balanceBTN.setText("Mostra Saldo");
+                    balance.setEchoChar(Echochar.HIDE);
+//                    balanceLBL.setVisible(true);
+//                    balance.setVisible(true);
                 }
 
             } catch (SQLException ex) {
@@ -175,7 +186,7 @@ public class BonificoForm extends MainApp {
                 if (amountFLD.getText().isEmpty()) {
                     setFieldOnCorrect(amountFLD);
                 } else try {
-                    RegexChecker.checkValidAmount(amountFLD.getText());
+                    RegexChecker.validateAmount(amountFLD.getText());
                     setFieldOnCorrect(amountFLD);
                 } catch (IllegalArgumentException ex) {
                     setFieldOnError(amountFLD);
@@ -232,7 +243,7 @@ public class BonificoForm extends MainApp {
                     playSound(Sounds.ERROR);
                     JOptionPane.showInternalMessageDialog(getContentPane(), "Iban field can't be empty");
                 } else {
-                    session.transfer(ibanFLD.getText().toUpperCase(), RegexChecker.checkValidAmount(amountFLD.getText()));
+                    session.transfer(ibanFLD.getText().toUpperCase(), RegexChecker.validateAmount(amountFLD.getText()));
                     playSound(Sounds.CASH);
                     amountFLD.setText("");
                     balance.setText(euro.format(session.getSaldo()));
