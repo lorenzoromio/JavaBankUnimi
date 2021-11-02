@@ -11,8 +11,8 @@ import java.sql.SQLException;
 
 public class DBConnect {
     private static final String driver = "com.mysql.cj.jdbc.Driver";
-    private static final String user = "sql11423061";
-    private static final String psw = "Zqp8B6Wm3p";
+    private static final String user = "sql11448440";
+    private static final String psw = "ghaIdIz1Hh";
     private static final String DBUrl = "jdbc:mysql://sql11.freemysqlhosting.net:3306/" + user +
                                         "?autoReconnect=true&useUnicode=yes";
     private static Connection connection = null;
